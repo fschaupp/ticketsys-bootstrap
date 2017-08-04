@@ -1,0 +1,41 @@
+DROP DATABASE IF EXISTS ticketsys;
+CREATE DATABASE ticketsys;
+USE ticketsys;
+
+CREATE TABLE IF NOT EXISTS users(
+  UUID      BIGINT       NOT NULL AUTO_INCREMENT,
+  email     VARCHAR(128) NOT NULL,
+  password  VARCHAR(128) NOT NULL,
+
+  firstname VARCHAR(128) NOT NULL,
+  surname   VARCHAR(128) NOT NULL,
+
+  rank			ENUM('administrator', 'worker', 'user') NOT NULL,
+
+  isActivated		 tinyint  NOT NULL,
+  activationcode int,
+
+  PRIMARY KEY(UUID)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS movies(
+  UMID     BIGINT       NOT NULL AUTO_INCREMENT,
+  name     VARCHAR(128) NOT NULL,
+  date     DATETIME     NOT NULL,
+  workerID BIGINT       DEFAULT NULL,
+
+  PRIMARY KEY(UMID),
+  FOREIGN KEY (workerID) REFERENCES users(UUID) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS bookings(
+  UBID BIGINT NOT NULL AUTO_INCREMENT,
+  UUID BIGINT NOT NULL,
+  UMID BIGINT NOT NULL,
+
+  count INT NOT NULL check(number >= 0 and number <= 20),
+
+  PRIMARY KEY(UBID),
+  FOREIGN KEY (UUID) REFERENCES users(UUID) ON DELETE CASCADE,
+  FOREIGN KEY (UMID) REFERENCES movies(UMID) ON DELETE CASCADE
+) ENGINE=InnoDB;
