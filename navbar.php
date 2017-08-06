@@ -162,7 +162,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">Editiere deine Angaben</h4>
+                            <h4 class="modal-title">Ändere deine Angaben</h4>
                         </div>
                         <form action="./logic/editAccount.php" method="GET">
                             <div class="modal-body">
@@ -202,7 +202,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-danger" data-dismiss="modal">Abbrechen</button>
-                                <button type="submit" class="btn btn-success">Editieren</button>
+                                <button type="submit" class="btn btn-success">Speichern</button>
                             </div>
                         </form>
                     </div>
@@ -233,7 +233,7 @@
                     <div class="panel-heading">Und wo hole ich die Karten wenn ich schon pünktlich sein muss?</div>
                     <div class="panel-body">Ganz einfach, warte vor dem Eisentor der Kanzlerwiese.
                         Damit du auch ganz sicher hinfindest, hier die Koordinaten:
-                        <a target="_blank" href="https://www.google.at/maps/place/48%C2%B038\'38.1%22N+15%C2%B048\'52.8%22E/@48.643908,15.8124843,17z/data=!3m1!4b1!4m5!3m4!1s0x0:0x0!8m2!3d48.643908!4d15.814673">
+                        <a target="_blank" href="https://www.google.at/maps/place/48%C2%B038'38.1%22N+15%C2%B048'52.8%22E/@48.643908,15.8124843,17z/data=!3m1!4b1!4m5!3m4!1s0x0:0x0!8m2!3d48.643908!4d15.814673">
                             48.643908, 15.814673
                         </a>
                     </div>
