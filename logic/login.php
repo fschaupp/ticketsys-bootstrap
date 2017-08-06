@@ -11,8 +11,9 @@ $password = $_REQUEST['inputPassword'];
 
 session_start();
 
-if(isset($_SESSION['UUID'])) {
-    header('Location: ../index.php');
+if(isset($_SESSION['email'])) {
+    header('Location: ../index.php?alert=alreadyLoggedIn');
+    die();
 }
 
 if(!isset($email) OR empty($email)) {
@@ -28,7 +29,9 @@ if(!isset($password) OR empty($password)) {
 
 $hashed_password = hash('sha512', $password);
 
-include 'connectToDatabase.php';
+if(!isset($conn)) {
+    include "./connectToDatabase.php";
+}
 
 $login_was_successful = false;
 
@@ -36,6 +39,7 @@ foreach ($conn->query('SELECT UUID, email, password, rank, firstname FROM users'
     if($item[1] == $email && $item[2] == $hashed_password) {
         //Session registrieren
         $_SESSION['UUID'] = $item[0];
+        $_SESSION['email'] = $item[1];
         $_SESSION['rank'] = $item[3];
         $_SESSION['firstname'] = $item[4];
 

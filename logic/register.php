@@ -8,7 +8,7 @@
 
 session_start();
 
-if(isset($_SESSION['UUID'])) {
+if(isset($_SESSION['email'])) {
     //TODO: Add alert alreadyLoggedIn
     header('Location: ../index.php?alert=alreadyLoggedIn');
 }
@@ -48,7 +48,18 @@ if($inputPassword != $inputPassword_again) {
 
 $hashed_password = hash('sha512', $inputPassword);
 
-include 'connectToDatabase.php';
+if(!isset($conn)) {
+    include "./connectToDatabase.php";
+}
+
+foreach ($conn->query('SELECT email FROM users WHERE email="'.$inputEmail.'";') as $item) {
+    if($item[0] == $inputEmail) {
+        //TODO: Add alert accountAlreadyExists
+        header('Location: ../index.php?alert=accountAlreadyExists');
+        die();
+    }
+    break;
+}
 
 $conn->query('
   INSERT INTO users(firstname, surname, password, email, rank, isActivated)
