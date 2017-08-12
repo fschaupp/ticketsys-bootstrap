@@ -10,19 +10,17 @@ CREATE TABLE IF NOT EXISTS users(
   firstname VARCHAR(128) NOT NULL,
   surname   VARCHAR(128) NOT NULL,
 
-  rank			ENUM('administrator', 'worker', 'user') NOT NULL,
-
-  isActivated		 tinyint  NOT NULL,
-  activationcode int,
+  rank			ENUM('administrator', 'user') NOT NULL,
 
   PRIMARY KEY(UUID)
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS movies(
-  UMID     BIGINT       NOT NULL AUTO_INCREMENT,
-  name     VARCHAR(128) NOT NULL,
-  date     DATETIME     NOT NULL,
-  workerID BIGINT       DEFAULT NULL,
+  UMID        BIGINT       NOT NULL AUTO_INCREMENT,
+  name        VARCHAR(128) NOT NULL,
+  date        DATETIME     NOT NULL,
+  trailerLink VARCHAR(256),
+  workerID    BIGINT       DEFAULT NULL,
 
   PRIMARY KEY(UMID),
   FOREIGN KEY (workerID) REFERENCES users(UUID) ON DELETE CASCADE
