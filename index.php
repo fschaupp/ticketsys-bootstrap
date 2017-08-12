@@ -12,6 +12,16 @@
 <body>
     <?php include 'navbar.php'; ?>
 
+    <?php
+    if(!isset($conn)) {
+        include "./logic/connectToDatabase.php";
+    }
+
+    foreach ($conn->query('SELECT UUID, email, firstname, surname FROM users') as $item) {
+
+    }
+    ?>
+
     <?php include 'endScripts.php'; ?>
 </body>
 </html>
