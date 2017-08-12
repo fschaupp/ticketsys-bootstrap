@@ -6,7 +6,9 @@
  * Time: 18:00
  */
 
-session_start();
+if(!isset($_SESSION)) {
+    session_start();
+}
 
 if(!isset($_SESSION['email'])) {
     //TODO: Add Alert loginFirst

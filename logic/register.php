@@ -6,11 +6,14 @@
  * Time: 16:20
  */
 
-session_start();
+if(!isset($_SESSION)) {
+    session_start();
+}
 
 if(isset($_SESSION['email'])) {
     //TODO: Add alert alreadyLoggedIn
     header('Location: ../index.php?alert=alreadyLoggedIn');
+    die();
 }
 
 $inputFirstname = $_REQUEST['inputFirstname'];
@@ -62,8 +65,8 @@ foreach ($conn->query('SELECT email FROM users WHERE email="'.$inputEmail.'";') 
 }
 
 $conn->query('
-  INSERT INTO users(firstname, surname, password, email, rank, isActivated)
-    VALUES ("' . $inputFirstname . '" , "' . $inputSurname . '" , "' . $hashed_password . '", "' . $inputEmail . '", "user", 1)
+  INSERT INTO users(firstname, surname, password, email, rank)
+    VALUES ("' . $inputFirstname . '" , "' . $inputSurname . '" , "' . $hashed_password . '", "' . $inputEmail . '", "user")
 ');
 
 //TODO: Add alert registrationSuccessful

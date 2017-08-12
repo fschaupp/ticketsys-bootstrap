@@ -9,7 +9,9 @@
 $email = $_REQUEST['inputEmail'];
 $password = $_REQUEST['inputPassword'];
 
-session_start();
+if(!isset($_SESSION)) {
+    session_start();
+}
 
 if(isset($_SESSION['email'])) {
     header('Location: ../index.php?alert=alreadyLoggedIn');

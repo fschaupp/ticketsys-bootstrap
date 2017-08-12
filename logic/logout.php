@@ -6,7 +6,9 @@
  * Time: 17:29
  */
 
-session_start();
+if(!isset($_SESSION)) {
+    session_start();
+}
 session_destroy();
 
 //TODO: add alert logoutSuccessful
