@@ -7,7 +7,7 @@
  */
 ?>
 
-<nav class="navbar navbar-default navbar-fixed-top">
+<nav class="navbar navbar-default">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
@@ -23,14 +23,22 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <?php
-                session_start();
+                if(!isset($_SESSION)) {
+                    session_start();
+                }
 
-                if(isset($_SESSION['UUID'])) {
+                if(isset($_SESSION['email'])) {
+                    echo '
+                        <ul class="nav navbar-nav">
+                           <li><a href="#">Meine Reservierungen</a></li>
+                        </ul>
+                    ';
+
                     if($_SESSION['rank'] == "administrator") {
                         echo '
                             <ul class="nav navbar-nav">
-                                <li><a href="#">Filmverwaltung</a></li>
-                                <li><a href="#">Userverwaltung</a></li>
+                                <li><a href="./movieManagement.php">Filmverwaltung</a></li>
+                                <li><a href="./userManagement.php">Userverwaltung</a></li>
                             </ul>
                         ';
                     }
@@ -47,7 +55,9 @@
             </div>
             <div class="navbar-form navbar-right">
                 <?php
-                    session_start();
+                    if(!isset($_SESSION)) {
+                        session_start();
+                    }
 
                     if(!isset($_SESSION['UUID']) OR empty($_SESSION['UUID'])) {
                         echo '
@@ -87,11 +97,17 @@
                             <div class="modal-body">
                                 <div class="form-group">
                                     <label for="inputEmail_l">Email-Adresse:</label>
-                                    <input required type="email" class="form-control" id="inputEmail_l" name="inputEmail">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                        <input required type="email" class="form-control" id="inputEmail_l" name="inputEmail" placeholder="Email-Adresse eingeben">
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputPassword_l">Passwort:</label>
-                                    <input required type="password" class="form-control" id="inputPassword_l" name="inputPassword">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                        <input required type="password" class="form-control" id="inputPassword_l" name="inputPassword" placeholder="Passwort eingeben">
+                                    </div>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -115,23 +131,38 @@
                             <div class="modal-body">
                                 <div class="form-group">
                                     <label for="inputFirstname">Vorname:</label>
-                                    <input required type="text" class="form-control" id="inputFirstname" name="inputFirstname">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                        <input required type="text" class="form-control" id="inputFirstname" name="inputFirstname" placeholder="Vorname eingeben">
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputSurname">Nachname:</label>
-                                    <input required type="text" class="form-control" id="inputSurname" name="inputSurname">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                        <input required type="text" class="form-control" id="inputSurname" name="inputSurname" placeholder="Nachname eingeben">
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputEmail">Email-Adresse:</label>
-                                    <input required type="email" class="form-control" id="inputEmail" name="inputEmail">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                        <input required type="email" class="form-control" id="inputEmail" name="inputEmail" placeholder="Email-Adresse eingeben">
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputPassword">Passwort:</label>
-                                    <input required type="password" class="form-control" id="inputPassword" name="inputPassword">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                        <input required type="password" class="form-control" id="inputPassword" name="inputPassword" placeholder="Passwort eingeben">
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputPassword_again">Passwort wiederholen:</label>
-                                    <input required type="password" class="form-control" id="inputPassword_again" name="inputPassword_again">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                        <input required type="password" class="form-control" id="inputPassword_again" name="inputPassword_again" placeholder="Passwort wiederholen">
+                                    </div>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -174,30 +205,45 @@
 
                                 <div class="form-group">
                                     <label for="inputFirstname">Vorname:</label>
-                                    <input required type="text" class="form-control" id="inputFirstname" name="inputFirstname"
-                                        value="'.$firstname.'">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                        <input required type="text" class="form-control" id="inputFirstname" name="inputFirstname" value="'.$firstname.'">
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputSurname">Nachname:</label>
-                                    <input required type="text" class="form-control" id="inputSurname" name="inputSurname"
-                                        value="'.$surname.'">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                        <input required type="text" class="form-control" id="inputSurname" name="inputSurname" value="'.$surname.'">
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputEmail">Email-Adresse:</label>
-                                    <input required type="email" class="form-control" id="inputEmail" name="inputEmail"
-                                        value="'.$email.'">
+                                     <div class="input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                        <input required type="email" class="form-control" id="inputEmail" name="inputEmail" value="'.$email.'">
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="inputPassword_current">Momentanes Passwort:</label>
-                                    <input required type="password" class="form-control" id="inputPassword_current" name="inputPassword_current">
+                                    <label for="inputPassword_current">Derzeitiges Passwort:</label>
+                                     <div class="input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                        <input required type="password" class="form-control" id="inputPassword_current" name="inputPassword_current" placeholder="Derzeitiges Passwort eingeben">
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputPassword">Neues Passwort:</label>
-                                    <input type="password" class="form-control" id="inputPassword" name="inputPassword">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                        <input type="password" class="form-control" id="inputPassword" name="inputPassword" placeholder="Neues Passwort eingeben">
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputPassword_again">Neues Passwort wiederholen:</label>
-                                    <input type="password" class="form-control" id="inputPassword_again" name="inputPassword_again">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                        <input type="password" class="form-control" id="inputPassword_again" name="inputPassword_again" placeholder="Neues Passwort wiederholen">
+                                    </div>
                                 </div>
                             </div>
                             <div class="modal-footer">
