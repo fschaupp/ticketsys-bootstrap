@@ -17,7 +17,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">BKE Ticketsystem</a>
+            <a class="navbar-brand" href="index.php">BKE Ticketsystem</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
