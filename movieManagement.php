@@ -6,7 +6,7 @@ if (!isset($_SESSION)) {
 if (!isset($_SESSION['email'])) {
     header('Location: ../index.php?alert=loginFirst');
     die();
-
+} else {
     if ($_SESSION['rank'] != "administrator") {
         header('Location: ../index.php?alert=permissionDenied');
         die();
@@ -27,6 +27,7 @@ if (!isset($_SESSION['email'])) {
 </head>
 <body>
 <?php include 'navbar.php'; ?>
+
 <div class="container">
     <h1>Alle Filme</h1>
     <button type="button" class="btn btn-success pull-right" data-toggle="modal" data-target="#modal_createMovie"
