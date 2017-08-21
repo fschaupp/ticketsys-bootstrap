@@ -3,7 +3,7 @@ CREATE DATABASE ticketsys;
 USE ticketsys;
 
 CREATE TABLE IF NOT EXISTS users(
-  UUID      BIGINT       NOT NULL AUTO_INCREMENT,
+  UUID      INT          NOT NULL AUTO_INCREMENT,
   email     VARCHAR(128) NOT NULL,
   password  VARCHAR(128) NOT NULL,
 
@@ -16,11 +16,13 @@ CREATE TABLE IF NOT EXISTS users(
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS movies(
-  UMID        BIGINT       NOT NULL AUTO_INCREMENT,
+  UMID        INT          NOT NULL AUTO_INCREMENT,
   name        VARCHAR(128) NOT NULL,
   date        DATETIME     NOT NULL,
   trailerLink VARCHAR(256),
-  workerID    BIGINT       DEFAULT NULL,
+  workerID    INT       DEFAULT NULL,
+
+  bookedCards TINYINT NOT NULL check(number >= 0 and number <= 20),
 
   PRIMARY KEY(UMID),
   FOREIGN KEY (workerID) REFERENCES users(UUID) ON DELETE CASCADE
@@ -28,10 +30,10 @@ CREATE TABLE IF NOT EXISTS movies(
 
 CREATE TABLE IF NOT EXISTS bookings(
   UBID BIGINT NOT NULL AUTO_INCREMENT,
-  UUID BIGINT NOT NULL,
-  UMID BIGINT NOT NULL,
+  UUID INT    NOT NULL,
+  UMID INT    NOT NULL,
 
-  count INT NOT NULL check(number >= 0 and number <= 20),
+  count TINYINT NOT NULL check(number >= 0 and number <= 20),
 
   PRIMARY KEY(UBID),
   FOREIGN KEY (UUID) REFERENCES users(UUID) ON DELETE CASCADE,

@@ -40,6 +40,7 @@ if (!isset($_SESSION['email'])) {
             <thead>
             <tr>
                 <th>Filmname</th>
+                <th>Gebuchte Karten</th>
                 <th>Datum</th>
                 <th>Trailer</th>
                 <th>Arbeiter</th>
@@ -52,7 +53,7 @@ if (!isset($_SESSION['email'])) {
                 include "./logic/connectToDatabase.php";
             }
 
-            foreach ($conn->query('SELECT UMID, name, date, trailerLink, workerID FROM movies ORDER BY date') as $item) {
+            foreach ($conn->query('SELECT UMID, name, date, trailerLink, workerID, bookedCards FROM movies ORDER BY date') as $item) {
                 $workerName = "Nicht eingeteilt";
                 if (isset($item[4])) {
                     foreach ($conn->query('SELECT firstname, surname, UUID FROM users WHERE UUID=' . $item[4]) as $users) {
@@ -74,6 +75,7 @@ if (!isset($_SESSION['email'])) {
                 echo '<tr>';
 
                 echo '<td>' . $del . $item[1] . $delend . '</td>';
+                echo '<td>' . $del . $item[5] . $delend . '</td>';
                 echo '<td>' . $del . $formattedDate . $delend . '</td>';
                 echo '<td><a href="'. $item[3] . '" target="_blank" style="margin-right: 5px;"><button type="button" class="btn btn-primary">Trailer</button></a>' . $del . $item[3] . $delend . '</td>';
                 echo '<td>' . $del . $workerName . $delend . '</td>';

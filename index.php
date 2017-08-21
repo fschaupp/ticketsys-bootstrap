@@ -8,20 +8,275 @@
     <title>Tickets</title>
 
     <?php include 'header.php'; ?>
+
+    <style>
+        @media (min-width: 776px) {
+            ul.nav-pills {
+                top: 132px;
+                position: fixed;
+            }
+        }
+        @media (min-width: 1342px) {
+            ul.nav-pills {
+                top: 92px;
+                position: fixed;
+            }
+        }
+    </style>
 </head>
-<body>
-    <?php include 'navbar.php'; ?>
+<body data-spy="scroll" data-target="#scrollSpy" data-offset="20">
 
-    <?php
-    if(!isset($conn)) {
-        include "./logic/connectToDatabase.php";
+<?php include 'navbar.php'; ?>
+<div class="myContainer" style="margin-left: 10px; margin-right: 10px;">
+    <div class="row">
+        <div class="col-sm-10 col-md-10 col-lg-10">
+            <?php
+            if (!isset($conn)) {
+                include "./logic/connectToDatabase.php";
+            }
+
+            $loggedIn = false;
+            if (isset($_SESSION['email'])) {
+                $loggedIn = true;
+            }
+
+            $count = 0;
+            $rowcount = 1;
+
+            foreach ($conn->query('SELECT UMID, name, date, trailerLink, workerID, bookedCards FROM movies  ORDER BY date') as $item) {
+                $workerName = null;
+                if (isset($item[4])) {
+                    foreach ($conn->query('SELECT firstname, surname, UUID FROM users WHERE UUID=' . $item[4]) as $users) {
+                        $workerUUID = $users[2];
+                        $workerName = $users[0] . ' ' . $users[1];
+                        break;
+                    }
+                }
+
+                $date = DateTime::createFromFormat('Y-m-d H:i:s', $item[2]);
+                $formattedDate = $date->format('D, d M Y');
+
+                $availableCards = 20 - $item[5];
+
+                if($count == 0) {
+                    echo '<div id="week'.$rowcount.'">';
+                    echo '<div class="row">';
+                }
+
+                echo '
+                    <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                        <div class="panel panel-default">
+                            <div class="panel-heading" style="font-size: 20px">'.$item[1].'</div>
+                            <div class="panel-body">
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-xs-6 col-sm-6 col-md-5 col-lg-5">Datum:</div>
+                                            <div class="col-xs-6 col-sm-6 col-md-7 col-lg-7">'.$formattedDate.'</div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-xs-6 col-sm-6 col-md-5 col-lg-5">Trailer:</div>
+                                            <div class="col-xs-6 col-sm-6 col-md-7 col-lg-7">
+                                                <a href="'. $item[3] . '" target="_blank" data-toggle="tooltip" data-placement="top" title="Link zum Trailer">
+                                                    <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-new-window" aria-label="Öffnen"></span></button>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-xs-6 col-sm-6 col-md-5 col-lg-5">Kinodienst:</div>
+                ';
+
+                if($workerName == null) {
+                    echo '
+                                            <div class="col-xs-6 col-sm-6 col-md-7 col-lg-7">
+                    ';
+
+                    if($loggedIn) {
+                        echo '<a href="#modal_getInTouch" class="btn btn-info" data-toggle="modal" data-target="#modal_getInTouch" 
+                            data-movie-id="' . $item[0] . '" data-movie-name="'. $item[1] .'">Melden</a>';
+                    } else {
+                        echo 'Nicht eingeteilt';
+                    }
+                    echo '
+                                            </div>
+                    ';
+                } else {
+                    echo '
+                                            <div class="col-xs-6 col-sm-6 col-md-7 col-lg-7">
+                                                '.$workerName;
+
+                    if(isset($_SESSION['email'])) {
+                        if ($workerUUID == $_SESSION['UUID']) {
+                            echo ' <a href="./logic/cancelGetInTouchWithMovie.php?UMID=' . $item[0] . '" class="btn btn-default"
+                                        data-toggle="tooltip" data-placement="right" title="Entferne dich vom Kinodienst"><span class="glyphicon glyphicon-remove"></span></a>';
+                        }
+                    }
+                    echo '
+                                            </div>
+                    ';
+                }
+
+                echo '
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-xs-6 col-sm-6 col-md-5 col-lg-5">Freie Karten:</div>
+                                            <div class="col-xs-6 col-sm-6 col-md-7 col-lg-7">'.$availableCards.'</div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="panel-footer">
+                ';
+
+                if($loggedIn) {
+                    if($availableCards == 0) {
+                        echo '<button class="btn btn-success disabled">Es gibt keine freien Karten</button>';
+                    } else {
+                        echo '<a href="#modal_bookCards"  class="btn btn-success" data-toggle="modal" data-target="#modal_bookCards" 
+                        data-movie-id="' . $item[0] . '" data-availablecards="' . $availableCards . '">Karten reservieren</a>';
+                    }
+                } else {
+                    echo '<button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal_login">Karten reservieren</button>';
+                }
+
+                echo ' 
+                            </div>
+                        </div>
+                    </div>
+                ';
+
+                if($count == 3) {
+                    echo '</div>';
+                    echo '</div>';
+                    $rowcount++;
+                    $count = 0;
+                } else {
+                    $count++;
+                }
+            }
+            if($count != 4) {
+                echo '</div>';
+                echo '</div>';
+            }
+            ?>
+        </div>
+        <nav class="col-sm-2 col-md-1 col-lg-1 hidden-xs" id="scrollSpy">
+            <ul class="nav nav-pills nav-stacked">
+                <?php
+                for($i = 0; $i < $rowcount; $i++) {
+                    $currentWeek = $i+1;
+                    if($i == 0) {
+                        echo '<li class="active"><a href="#week'.$currentWeek.'">'.$currentWeek.'. Woche</a></li>';
+                    } else {
+                        echo '<li><a href="#week'.$currentWeek.'">'.$currentWeek.'. Woche</a></li>';
+                    }
+                }
+                ?>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<div class="modal fade" id="modal_bookCards" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" id="availableCardsHEAD"></h4>
+            </div>
+            <form action="./logic/bookCards.php" method="GET">
+                <div class="modal-body">
+                    <input type="text" name="UMID" hidden value=""/>
+
+                    <div class="form-group">
+                        <label for="inputCount">Kartenanzahl:</label>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-play"></i></span>
+                            <input required type="text" class="form-control" id="inputCount" name="inputCount" placeholder="-2,147,483,648" min="0" max="20" onchange="checkValue()">
+                        </div>
+                    </div>
+
+                    <div id="maxinput" hidden></div>
+
+                    <b id="availableCardsDIV"></b>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Abbrechen</button>
+                    <button type="submit" class="btn btn-success" autofocus>Reservieren</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal_getInTouch">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" id="movieNameHEAD"></h4>
+            </div>
+            <form method="GET" action="./logic/getInTouchWithMovie.php">
+                <div class="modal-body">
+                    <input type="text" name="UMID" hidden value=""/>
+                    <div class="alert alert-info">
+                        <strong>Info!</strong> Du kannst diesen Schritt jederzeit rückgängig machen!
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="reset" class="btn btn-danger" data-dismiss="modal">Abbrechen</button>
+                    <button type="register" class="btn btn-success" autofocus>Melden</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<?php include 'endScripts.php'; ?>
+
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+
+    $('#modal_bookCards').on('show.bs.modal', function (e) {
+        var movieId = $(e.relatedTarget).data('movie-id');
+        $(e.currentTarget).find('input[name="UMID"]').val(movieId);
+
+        var avcards = $(e.relatedTarget).data('availablecards');
+
+        document.getElementById('availableCardsDIV').innerText = "Freie Karten: " + avcards;
+        document.getElementById('availableCardsHEAD').innerText = "Reserviere Karten - Freie Karten: " + avcards;
+
+        document.getElementById('inputCount').setAttribute('max', avcards);
+        document.getElementById('maxinput').innerText = avcards;
+    });
+
+    $('#modal_getInTouch').on('show.bs.modal', function (e) {
+        var movieId = $(e.relatedTarget).data('movie-id');
+        $(e.currentTarget).find('input[name="UMID"]').val(movieId);
+
+        var movieName = $(e.relatedTarget).data('movie-name');
+        document.getElementById('movieNameHEAD').innerText = "Willst du dich wirklich für "+ movieName + " melden?";
+    });
+
+    function checkValue() {
+        var max = parseInt(document.getElementById('maxinput').innerText);
+        var value = document.getElementById("inputCount").value;
+        if (value > max) {
+            document.getElementById("inputCount").value = max;
+        }
+        if (value < 1) {
+            document.getElementById("inputCount").value = 1;
+        }
     }
-
-    foreach ($conn->query('SELECT UUID, email, firstname, surname FROM users') as $item) {
-
-    }
-    ?>
-
-    <?php include 'endScripts.php'; ?>
+</script>
 </body>
 </html>

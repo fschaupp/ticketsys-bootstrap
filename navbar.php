@@ -99,7 +99,7 @@
                                     <label for="inputEmail_l">Email-Adresse:</label>
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                        <input required type="email" class="form-control" id="inputEmail_l" name="inputEmail" placeholder="Email-Adresse eingeben">
+                                        <input required type="email" class="form-control" id="inputEmail_l" name="inputEmail" autofocus placeholder="Email-Adresse eingeben">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -133,7 +133,7 @@
                                     <label for="inputFirstname">Vorname:</label>
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                        <input required type="text" class="form-control" id="inputFirstname" name="inputFirstname" placeholder="Vorname eingeben">
+                                        <input required type="text" class="form-control" id="inputFirstname" name="inputFirstname" placeholder="Vorname eingeben" autofocus>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -179,7 +179,7 @@
             include "./logic/connectToDatabase.php";
         }
 
-        foreach ($conn->query('SELECT UUID, email, firstname, surname FROM users') as $item) {
+        foreach ($conn->query('SELECT UUID, email, firstname, surname FROM users WHERE UUID='.$_SESSION['UUID']) as $item) {
             $UUID = $item[0];
             $email = $item[1];
             $firstname = $item[2];
@@ -207,7 +207,7 @@
                                     <label for="inputFirstname">Vorname:</label>
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                        <input required type="text" class="form-control" id="inputFirstname" name="inputFirstname" value="'.$firstname.'">
+                                        <input required type="text" class="form-control" id="inputFirstname" name="inputFirstname" value="'.$firstname.'" autofocus>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -289,7 +289,7 @@
                 <a href="http://lmgtfy.com/?q=Lesen+lernen" target="_blank">
                     <button class="btn btn-warning">Ich kann nicht lesen</button>
                 </a>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Verstanden oder zumindest durchgelesen</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" autofocus>Verstanden oder zumindest durchgelesen</button>
             </div>
         </div>
     </div>

@@ -44,8 +44,8 @@ if(!isset($conn)) {
 }
 
 $conn->query('
-  INSERT INTO movies(name, date, trailerLink)
-    VALUES ("' . $inputMoviename . '" , "' . $inputDate . '" , "' . $inputTrailer . '")
+  INSERT INTO movies(name, date, trailerLink, bookedCards)
+    VALUES ("' . $inputMoviename . '" , "' . $inputDate . '" , "' . $inputTrailer . '", 0)
 ');
 
 //TODO: Add alert movieSuccessfulCreated
