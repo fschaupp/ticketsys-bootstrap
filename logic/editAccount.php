@@ -44,6 +44,12 @@ if(!isset($inputPassword_current) OR empty($inputPassword_current)) {
     header('Location: ../index.php?alert=inputIsNotCorrect');
     die();
 }
+
+$inputFirstname = preg_replace("/[^a-zA-Z0-9]/", "", $inputFirstname);
+$inputSurname = preg_replace("/[^a-zA-Z0-9]/", "", $inputSurname);
+$inputEmail = preg_replace("/[^a-zA-Z0-9]/", "", $inputEmail);
+
+
 $change_password = true;
 if(!isset($inputPassword) OR empty($inputPassword)) {
     $change_password = false;
@@ -61,7 +67,7 @@ if(!isset($conn)) {
     include "./connectToDatabase.php";
 }
 
-foreach ($conn->query('SELECT UUID, password FROM users WHERE UUID="'.$UUID.'"') as $item) {
+foreach ($conn->query('SELECT UUID, password FROM users WHERE UUID="'.$UUID.'";') as $item) {
     if($item[1] != $hashed_password_current) {
         //TODO: Add Alert passwordIsWrong
         header('Location: ../index.php?alert=passwordIsWrong');
