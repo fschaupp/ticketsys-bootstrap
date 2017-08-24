@@ -12,6 +12,10 @@ if (!isset($_SESSION['email'])) {
         die();
     }
 }
+
+if (!isset($conn)) {
+    include "./logic/connectToDatabase.php";
+}
 ?>
 
 <!DOCTYPE html>
@@ -43,17 +47,14 @@ if (!isset($_SESSION['email'])) {
             </thead>
             <tbody>
             <?php
-            if (!isset($conn)) {
-                include "./logic/connectToDatabase.php";
-            }
-
             foreach ($conn->query('SELECT UUID, firstname, surname, email, rank FROM users ORDER BY surname') as $item) {
                 echo '<tr>';
 
                 echo '<td>'. $item[1] . ' ' . $item[2] .'</td>';
                 echo '<td><a href="mailto:'.$item[3].'">'. $item[3] .'</a></td>';
                 echo '<td>'. $item[4] .
-                        '<a href="#editRank" data-toggle="modal" data-target="#modal_editRank" class="btn btn-default btn-md" data-user-id="'.$item[0].'" style="margin-left: 5px;">
+                        '<a href="#editRank" data-toggle="modal" data-target="#modal_editRank" class="btn btn-default btn-md" data-user-id="'.$item[0].'" 
+                            style="margin-left: 5px;">
                             <span class="glyphicon glyphicon-pencil"></span></a>
                       </td>';
                 echo '<td>

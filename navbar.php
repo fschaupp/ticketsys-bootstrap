@@ -5,9 +5,14 @@
  * Date: 06.08.17
  * Time: 18:25
  */
+
+if(!isset($conn)) {
+    include './logic/connectToDatabase.php';
+}
+
 ?>
 
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default" style="margin-right: 0px;">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
@@ -31,25 +36,31 @@
                     echo '
                         <ul class="nav navbar-nav">
                            <li><a href="#">Meine Reservierungen</a></li>
-                        </ul>
                     ';
+
+                    foreach ($conn->query('SELECT UMID FROM movies WHERE workerID='.$_SESSION['UUID']) as $item) {
+                        echo '<li><a href="#">Kartendienst</a></li>';
+                        break;
+                    }
+
+                    echo '</ul>';
 
                     if($_SESSION['rank'] == "administrator") {
                         echo '
                             <ul class="nav navbar-nav">
-                                <li><a href="./movieManagement.php">Filmverwaltung</a></li>
-                                <li><a href="./userManagement.php">Userverwaltung</a></li>
+                                <li class="dropdown">
+                                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administration 
+                                    <span class="caret"></span></a>
+                                  <ul class="dropdown-menu">
+                                    <li><a href="./movieManagement.php">Filmverwaltung</a></li>
+                                    <li><a href="./userManagement.php">Userverwaltung</a></li>
+                                  </ul>
+                                </li>   
                             </ul>
                         ';
                     }
                 }
             ?>
-            <form class="navbar-form navbar-left">
-                <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Film suchen">
-                </div>
-                <button type="submit" class="btn btn-default">Suchen</button>
-            </form>
             <div class="navbar-form navbar-left">
                 <button  class="btn btn-info" data-toggle="modal" data-target="#modal_cardsinfo">Karten abholen!?</button>
             </div>
@@ -175,10 +186,6 @@
             </div>
         ';
     } else {
-        if(!isset($conn)) {
-            include "./logic/connectToDatabase.php";
-        }
-
         foreach ($conn->query('SELECT UUID, email, firstname, surname FROM users WHERE UUID='.$_SESSION['UUID']) as $item) {
             $UUID = $item[0];
             $email = $item[1];
@@ -289,7 +296,7 @@
                 <a href="http://lmgtfy.com/?q=Lesen+lernen" target="_blank">
                     <button class="btn btn-warning">Ich kann nicht lesen</button>
                 </a>
-                <button type="button" class="btn btn-primary" data-dismiss="modal" autofocus>Verstanden oder zumindest durchgelesen</button>
+                <button class="btn btn-primary" data-dismiss="modal" autofocus>Verstanden oder zumindest durchgelesen</button>
             </div>
         </div>
     </div>

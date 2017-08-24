@@ -12,6 +12,10 @@ if (!isset($_SESSION['email'])) {
         die();
     }
 }
+
+if (!isset($conn)) {
+    include "./logic/connectToDatabase.php";
+}
 ?>
 
 <!DOCTYPE html>
@@ -49,10 +53,6 @@ if (!isset($_SESSION['email'])) {
             </thead>
             <tbody>
             <?php
-            if (!isset($conn)) {
-                include "./logic/connectToDatabase.php";
-            }
-
             foreach ($conn->query('SELECT UMID, name, date, trailerLink, workerID, bookedCards FROM movies ORDER BY date') as $item) {
                 $workerName = "Nicht eingeteilt";
                 if (isset($item[4])) {
@@ -111,7 +111,7 @@ if (!isset($_SESSION['email'])) {
                         <label for="inputcMoviename">Filmname:</label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-film"></i></span>
-                            <input required type="text" class="form-control" id="inputcMoviename" name="inputcMoviename" placeholder="Filmname">
+                            <input required type="text" class="form-control" id="inputcMoviename" name="inputcMoviename" placeholder="Filmname" autofocus>
                         </div>
                     </div>
                     <div class="form-group">
@@ -192,7 +192,7 @@ if (!isset($_SESSION['email'])) {
                 <input type="text" name="UMID" hidden value=""/>
                 <div class="modal-footer">
                     <button type="reset" class="btn btn-danger" data-dismiss="modal">Abbrechen</button>
-                    <button type="delete" class="btn btn-success" name="edit">Löschen</button>
+                    <button type="submit" class="btn btn-success" name="edit">Löschen</button>
                 </div>
             </form>
         </div>
