@@ -37,7 +37,7 @@ if(!isset($conn)) {
 
 $login_was_successful = false;
 
-foreach ($conn->query('SELECT UUID, email, password, rank, firstname FROM users') as $item) {
+foreach ($conn->query('SELECT UUID, email, password, rank, firstname FROM users;') as $item) {
     if($item[1] == $email && $item[2] == $hashed_password) {
         //Session registrieren
         $_SESSION['UUID'] = $item[0];
