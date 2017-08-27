@@ -25,7 +25,7 @@ if (!isset($conn)) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Tickets - Movie management</title>
+    <title>Tickets - Filmverwaltung</title>
 
     <?php include 'header.php'; ?>
 </head>
@@ -35,8 +35,7 @@ if (!isset($conn)) {
 <div class="container">
     <h1>Alle Filme</h1>
     <button type="button" class="btn btn-success pull-right" data-toggle="modal" data-target="#modal_createMovie"
-            style="margin-top: -30px">Film anlegen
-    </button>
+            style="margin-top: -30px">Film anlegen</button>
     <p>Hier findest du alle gespeicherten Filme</p>
 
     <div class="table-responsive">

@@ -39,7 +39,7 @@ if(!isset($conn)) {
                     ';
 
                     foreach ($conn->query('SELECT UMID FROM movies WHERE workerID='.$_SESSION['UUID']) as $item) {
-                        echo '<li><a href="#">Kartendienst</a></li>';
+                        echo '<li><a href="./cardService.php">Kinodienst</a></li>';
                         break;
                     }
 
@@ -53,7 +53,7 @@ if(!isset($conn)) {
                                     <span class="caret"></span></a>
                                   <ul class="dropdown-menu">
                                     <li><a href="./movieManagement.php">Filmverwaltung</a></li>
-                                    <li><a href="./userManagement.php">Userverwaltung</a></li>
+                                    <li><a href="./userManagement.php">Benutzerverwaltung</a></li>
                                   </ul>
                                 </li>   
                             </ul>
@@ -278,7 +278,7 @@ if(!isset($conn)) {
                 <div class="panel panel-primary">
                     <div class="panel-heading">Wann hole ich meine frisch bestellten Karten?</div>
                     <div class="panel-body">Sobald du Karten bestellt hast und der große Tag gekommen ist holst
-                        du die Karten einfach um 20:45 (UTC+01:00) ab.
+                        du die Karten einfach zwischen 20:40 - 20:45 ab.
                     </div>
                 </div>
 
