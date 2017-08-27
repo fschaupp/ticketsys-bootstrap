@@ -1,3 +1,18 @@
+<?php
+if (!isset($conn)) {
+    include "./logic/connectToDatabase.php";
+}
+
+if (!isset($_SESSION)) {
+    session_start();
+}
+
+$loggedIn = false;
+if (isset($_SESSION['email'])) {
+    $loggedIn = true;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,26 +39,17 @@
         }
     </style>
 </head>
-<body data-spy="scroll" data-target="#scrollSpy" data-offset="20">
-
+<body data-spy="scroll" data-target="#scrollSpy" data-offset="20" style="margin: 0px; padding: 0px">
 <?php include 'navbar.php'; ?>
+
 <div class="myContainer" style="margin-left: 10px; margin-right: 10px;">
     <div class="row">
         <div class="col-sm-10 col-md-10 col-lg-10">
             <?php
-            if (!isset($conn)) {
-                include "./logic/connectToDatabase.php";
-            }
-
-            $loggedIn = false;
-            if (isset($_SESSION['email'])) {
-                $loggedIn = true;
-            }
-
             $count = 0;
             $rowcount = 1;
 
-            foreach ($conn->query('SELECT UMID, name, date, trailerLink, workerID, bookedCards FROM movies  ORDER BY date') as $item) {
+            foreach ($conn->query('SELECT UMID, name, date, trailerLink, workerID, bookedCards FROM movies ORDER BY date') as $item) {
                 $workerName = null;
                 if (isset($item[4])) {
                     foreach ($conn->query('SELECT firstname, surname, UUID FROM users WHERE UUID=' . $item[4]) as $users) {
@@ -96,8 +102,9 @@
                     ';
 
                     if($loggedIn) {
-                        echo '<a href="#modal_getInTouch" class="btn btn-info" data-toggle="modal" data-target="#modal_getInTouch" 
-                            data-movie-id="' . $item[0] . '" data-movie-name="'. $item[1] .'">Melden</a>';
+                        echo '<a href="#modal_getInTouch" data-toggle="tooltip" data-placement="bottom" title="Melde dich für den Kinodienst">
+                                <button class="btn btn-info" data-toggle="modal" data-target="#modal_getInTouch" data-movie-id="' . $item[0] . '" data-movie-name="'. $item[1] .'"
+                                >Melden</button></a>';
                     } else {
                         echo 'Nicht eingeteilt';
                     }
@@ -109,10 +116,13 @@
                                             <div class="col-xs-6 col-sm-6 col-md-7 col-lg-7">
                                                 '.$workerName;
 
-                    if(isset($_SESSION['email'])) {
-                        if ($workerUUID == $_SESSION['UUID']) {
-                            echo ' <a href="./logic/cancelGetInTouchWithMovie.php?UMID=' . $item[0] . '" class="btn btn-default"
-                                        data-toggle="tooltip" data-placement="right" title="Entferne dich vom Kinodienst"><span class="glyphicon glyphicon-remove"></span></a>';
+                    if($loggedIn) {
+                        if(isset($workerUUID)) {
+                            if ($workerUUID == $_SESSION['UUID']) {
+                                echo '<a href="#modal_cancelGetInTouch" data-toggle="tooltip" data-placement="right" title="Entferne dich vom Kinodienst">
+                                    <button class="btn btn-default" data-toggle="modal" data-target="#modal_cancelGetInTouch" data-movie-id="' . $item[0] . '" data-movie-name="'. $item[1] .'">
+                                    <span class="glyphicon glyphicon-remove"></span></button></a>';
+                            }
                         }
                     }
                     echo '
@@ -129,6 +139,32 @@
                                             <div class="col-xs-6 col-sm-6 col-md-7 col-lg-7">'.$availableCards.'</div>
                                         </div>
                                     </li>
+                ';
+
+                if($loggedIn) {
+                    $hasBookedForThisMovie = false;
+                    foreach ($conn->query('SELECT UBID, count FROM bookings WHERE UUID=' . $_SESSION['UUID'] . ' AND UMID=' . $item[0] . ';') as $bookings) {
+                        $UBID = $bookings[0];
+                        $bookedCardsCount = $bookings[1];
+                        $hasBookedForThisMovie = true;
+                        break;
+                    }
+
+                    if ($hasBookedForThisMovie) {
+                        if(isset($bookedCardsCount)) {
+                            echo '
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-xs-6 col-sm-6 col-md-5 col-lg-5">Geb. Karten:</div>
+                                            <div class="col-xs-6 col-sm-6 col-md-7 col-lg-7">' . $bookedCardsCount . '</div>
+                                        </div>
+                                    </li>        
+                    ';
+                        }
+                    }
+                }
+
+                echo '
                                 </ul>
                             </div>
                             <div class="panel-footer">
@@ -136,13 +172,25 @@
 
                 if($loggedIn) {
                     if($availableCards == 0) {
-                        echo '<button class="btn btn-success disabled">Es gibt keine freien Karten</button>';
+                        echo '<button class="btn btn-success disabled" data-toggle="tooltip" data-placement="bottom"
+                                    title="Es sind keine freien Karten zur Reservierung verfügbar">Ausgebucht</button>';
                     } else {
                         echo '<a href="#modal_bookCards"  class="btn btn-success" data-toggle="modal" data-target="#modal_bookCards" 
-                        data-movie-id="' . $item[0] . '" data-availablecards="' . $availableCards . '">Karten reservieren</a>';
+                        data-movie-id="' . $item[0] . '" data-availablecards="' . $availableCards . '">Reservieren</a>';
                     }
                 } else {
-                    echo '<button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal_login">Karten reservieren</button>';
+                    echo '<a href="#" data-toggle="tooltip" data-placement="bottom" title="Du bist noch nicht eingeloggt">
+                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal_login">Reservieren</button></a>';
+                }
+
+                if($loggedIn) {
+                    if(isset($hasBookedForThisMovie)) {
+                        if ($hasBookedForThisMovie) {
+                            echo '<a href="#modal_cancelBookedCards" class="btn btn-warning" data-toggle="modal" data-target="#modal_cancelBookedCards" 
+                                    data-movie-id="' . $item[0] . '" data-movie-name="' . $item[1] . '" style="float: right">Buchung stornieren</a>';
+                            $UBID = null;
+                        }
+                    }
                 }
 
                 echo ' 
@@ -189,23 +237,27 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title" id="availableCardsHEAD"></h4>
+                <h4 class="modal-title" id="modal_bookCards_availableCardsHEAD"></h4>
             </div>
             <form action="./logic/bookCards.php" method="GET">
                 <div class="modal-body">
                     <input type="text" name="UMID" hidden value=""/>
-
+                    <div class="alert alert-info">
+                        <strong>Info!</strong> Karten sind in erster Linie für Vereinsmitglieder. Sollten kurz vor Kinobeginn noch Karten frei sein, können diese jederzeit an Freunde
+                            oder Familienmitglieder weitergeben werden!
+                    </div>
                     <div class="form-group">
                         <label for="inputCount">Kartenanzahl:</label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-play"></i></span>
-                            <input required type="text" class="form-control" id="inputCount" name="inputCount" placeholder="-2,147,483,648" min="0" max="20" onchange="checkValue()">
+                            <input required type="text" class="form-control" id="inputCount" name="inputCount" placeholder="-2,147,483,648" min="0" max="20"
+                                   onchange="checkValue()" autofocus>
                         </div>
                     </div>
 
                     <div id="maxinput" hidden></div>
 
-                    <b id="availableCardsDIV"></b>
+                    <b id="modal_bookCards_availableCardsDIV"></b>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Abbrechen</button>
@@ -221,7 +273,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title" id="movieNameHEAD"></h4>
+                <h4 class="modal-title" id="modal_getInTouch_movieNameHEAD"></h4>
             </div>
             <form method="GET" action="./logic/getInTouchWithMovie.php">
                 <div class="modal-body">
@@ -232,7 +284,49 @@
                 </div>
                 <div class="modal-footer">
                     <button type="reset" class="btn btn-danger" data-dismiss="modal">Abbrechen</button>
-                    <button type="register" class="btn btn-success" autofocus>Melden</button>
+                    <button type="submit" class="btn btn-success">Melden</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal_cancelGetInTouch">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" id="modal_cancelGetInTouch_movieNameHEAD"></h4>
+            </div>
+            <form method="GET" action="./logic/cancelGetInTouchWithMovie.php">
+                <input type="text" name="UMID" hidden value=""/>
+                <div class="modal-footer">
+                    <button type="reset" class="btn btn-success" data-dismiss="modal">Abbrechen</button>
+                    <button type="submit" class="btn btn-danger">Abmelden</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal_cancelBookedCards">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" id="modal_cancelBooking_movieNameHEAD"></h4>
+            </div>
+            <form method="GET" action="./logic/cancelBookedCards.php">
+                <div class="modal-body">
+                    <input type="text" name="UMID" hidden value="">
+                    <div class="alert alert-info">
+                        <strong>Info!</strong> Wenn du mehrere Karten reserviert hast, werden diese auch storniert!
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="reset" class="btn btn-success" data-dismiss="modal">Abbrechen</button>
+                    <button type="submit" class="btn btn-danger">Stornieren</button>
                 </div>
             </form>
         </div>
@@ -252,11 +346,11 @@
 
         var avcards = $(e.relatedTarget).data('availablecards');
 
-        document.getElementById('availableCardsDIV').innerText = "Freie Karten: " + avcards;
-        document.getElementById('availableCardsHEAD').innerText = "Reserviere Karten - Freie Karten: " + avcards;
+        document.getElementById('modal_bookCards_availableCardsDIV').innerText = "Freie Karten: " + avcards;
+        document.getElementById('modal_bookCards_availableCardsHEAD').innerText = "Reserviere Karten - Freie Karten: " + avcards;
 
-        document.getElementById('inputCount').setAttribute('max', avcards);
-        document.getElementById('maxinput').innerText = avcards;
+        document.getElementById('inputCount').setAttribute('max', "" + avcards);
+        document.getElementById('maxinput').innerText = "" + avcards;
     });
 
     $('#modal_getInTouch').on('show.bs.modal', function (e) {
@@ -264,7 +358,23 @@
         $(e.currentTarget).find('input[name="UMID"]').val(movieId);
 
         var movieName = $(e.relatedTarget).data('movie-name');
-        document.getElementById('movieNameHEAD').innerText = "Willst du dich wirklich für "+ movieName + " melden?";
+        document.getElementById('modal_getInTouch_movieNameHEAD').innerText = "Willst du dich wirklich für "+ movieName + " melden?";
+    });
+
+    $('#modal_cancelGetInTouch').on('show.bs.modal', function (e) {
+        var movieId = $(e.relatedTarget).data('movie-id');
+        $(e.currentTarget).find('input[name="UMID"]').val(movieId);
+
+        var movieName = $(e.relatedTarget).data('movie-name');
+        document.getElementById('modal_cancelGetInTouch_movieNameHEAD').innerText = "Willst du dich wirklich für "+ movieName + " abmelden?";
+    });
+
+    $('#modal_cancelBookedCards').on('show.bs.modal', function (e) {
+        var movieId = $(e.relatedTarget).data('movie-id');
+        $(e.currentTarget).find('input[name="UMID"]').val(movieId);
+
+        var movieName = $(e.relatedTarget).data('movie-name');
+        document.getElementById('modal_cancelBooking_movieNameHEAD').innerText = "Willst du die Reservierungen für "+ movieName + " stornieren?";
     });
 
     function checkValue() {
