@@ -5,7 +5,7 @@ USE ticketsys;
 CREATE TABLE IF NOT EXISTS users(
   UUID      INT          NOT NULL AUTO_INCREMENT,
   email     VARCHAR(128) NOT NULL,
-  password  VARCHAR(128) NOT NULL,
+  password  VARCHAR(512) NOT NULL,
 
   firstname VARCHAR(128) NOT NULL,
   surname   VARCHAR(128) NOT NULL,

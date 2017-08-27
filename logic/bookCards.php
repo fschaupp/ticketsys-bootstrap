@@ -28,6 +28,24 @@ if(!isset($inputCount) OR empty($inputCount)) {
     die();
 }
 
+if(!is_int($inputCount)) {
+    //TODO: Add Alert pleaseEnterANumber
+    header('Location: ../index.php?alert=pleaseEnterANumber');
+    die();
+}
+
+$filter_options = array(
+    'options' => array(
+        'min_range' => 1,
+        'max_range' => 20)
+);
+
+if(!(filter_var($inputCount, FILTER_VALIDATE_INT, $filter_options ) !== FALSE)) {
+    //TODO: Add Alert pleaseEnterAValidNumber
+    header('Location: ../index.php?alert=pleaseEnterAValidNumber');
+    die();
+}
+
 if(!isset($conn)) {
     include 'connectToDatabase.php';
 }
@@ -39,8 +57,8 @@ foreach ($conn->query('SELECT bookedCards FROM movies WHERE UMID='.$UMID.';') as
 
 if(isset($alreadyBookedCards)) {
     if (($alreadyBookedCards + $inputCount) > 20) {
-        //TODO: Add Alert bookedToManyCards
-        header('Location: ../index.php?alert=bookedToManyCards');
+        //TODO: Add Alert bookedTooManyCards
+        header('Location: ../index.php?alert=bookedTooManyCards');
         die();
     }
 } else {

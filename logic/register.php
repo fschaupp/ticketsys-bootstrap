@@ -26,18 +26,42 @@ if(!isset($inputFirstname) OR empty($inputFirstname)) {
     header('Location: ../index.php?alert=inputIsNotCorrect');
     die();
 }
+if(strlen($inputFirstname) > 128) {
+    //TODO: Add Alert firstnameOnly128Characters
+    header('Location: ../index.php?alert=firstnameOnly128Characters');
+    die();
+}
+
 if(!isset($inputSurname) OR empty($inputSurname)) {
     header('Location: ../index.php?alert=inputIsNotCorrect');
     die();
 }
+if(strlen($inputSurname) > 128) {
+    //TODO: Add Alert surnameOnly128Characters
+    header('Location: ../index.php?alert=surnameOnly128Characters');
+    die();
+}
+
 if(!isset($inputEmail) OR empty($inputEmail)) {
     header('Location: ../index.php?alert=inputIsNotCorrect');
     die();
 }
+if(strlen($inputEmail) > 128) {
+    //TODO: Add Alert emailOnly128Characters
+    header('Location: ../index.php?alert=emailOnly128Characters');
+    die();
+}
+
 if(!isset($inputPassword) OR empty($inputPassword)) {
     header('Location: ../index.php?alert=inputIsNotCorrect');
     die();
 }
+if(strlen($inputPassword) > 512) {
+    //TODO: Add Alert passwordOnly128Characters
+    header('Location: ../index.php?alert=passwordOnly512Characters');
+    die();
+}
+
 if(!isset($inputPassword_again) OR empty($inputPassword_again)) {
     header('Location: ../index.php?alert=inputIsNotCorrect');
     die();
