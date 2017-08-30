@@ -52,7 +52,7 @@ if (!isset($conn)) {
             </thead>
             <tbody>
             <?php
-            foreach ($conn->query('SELECT UMID, name, date, trailerLink, workerID, bookedCards FROM movies ORDER BY date') as $item) {
+            foreach ($conn->query('SELECT UMID, name, date, trailerLink, workerUUID, bookedCards FROM movies ORDER BY date') as $item) {
                 $workerName = "Nicht eingeteilt";
                 if (isset($item[4])) {
                     foreach ($conn->query('SELECT firstname, surname, UUID FROM users WHERE UUID=' . $item[4]) as $users) {

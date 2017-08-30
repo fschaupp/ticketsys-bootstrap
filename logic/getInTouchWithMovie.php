@@ -26,7 +26,7 @@ if(!isset($conn)) {
     include 'connectToDatabase.php';
 }
 
-$sql='UPDATE movies SET workerID='.$_SESSION['UUID'].' WHERE UMID='.$UMID.';';
+$sql='UPDATE movies SET workerUUID='.$_SESSION['UUID'].' WHERE UMID='.$UMID.';';
 $conn->exec($sql);
 
 //TODO: Add Alert successfulGetInTouch

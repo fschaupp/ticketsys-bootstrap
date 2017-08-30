@@ -20,7 +20,7 @@ if (!isset($conn)) {
 }
 
 $isWorker = false;
-foreach ($conn->query('SELECT UMID FROM movies WHERE workerID='.$_SESSION['UUID']) as $item) {
+foreach ($conn->query('SELECT UMID FROM movies WHERE workerUUID='.$_SESSION['UUID']) as $item) {
     $isWorker = true;
     break;
 }
@@ -51,7 +51,7 @@ if(!$isWorker) {
 
     <?php
 
-    foreach ($conn->query('SELECT UMID, name, date FROM movies WHERE workerID='.$_SESSION['UUID']. ' ORDER BY date;') as $movies) {
+    foreach ($conn->query('SELECT UMID, name, date FROM movies WHERE workerUUID='.$_SESSION['UUID']. ' ORDER BY date;') as $movies) {
         if($movies[2] > date("Y-m-d H:i:s")) {
             $bookingsExists = false;
             foreach ($conn->query('SELECT users.firstname FROM users, bookings WHERE bookings.UMID=' . $movies[0] . ' AND bookings.UUID=users.UUID;') as $bookings) {

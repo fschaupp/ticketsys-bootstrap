@@ -26,7 +26,7 @@ if(!isset($conn)) {
     include 'connectToDatabase.php';
 }
 
-$sql='UPDATE movies SET workerID=NULL WHERE UMID='.$UMID.';';
+$sql='UPDATE movies SET workerUUID=NULL WHERE UMID='.$UMID.';';
 $conn->exec($sql);
 
 //TODO: Add Alert successfulCancelGetInTouch
