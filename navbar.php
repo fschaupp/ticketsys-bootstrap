@@ -10,6 +10,14 @@ if(!isset($conn)) {
     include './logic/connectToDatabase.php';
 }
 
+if(!isset($_SESSION)) {
+    session_start();
+}
+
+$loggedIn = false;
+if(isset($_SESSION['email'])) {
+    $loggedIn = true;
+}
 ?>
 
 <nav class="navbar navbar-default" style="margin-right: 0px;">
@@ -28,17 +36,13 @@ if(!isset($conn)) {
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <?php
-                if(!isset($_SESSION)) {
-                    session_start();
-                }
-
-                if(isset($_SESSION['email'])) {
+                if($loggedIn) {
                     echo '
                         <ul class="nav navbar-nav">
                            <li><a href="#">Meine Reservierungen</a></li>
                     ';
 
-                    foreach ($conn->query('SELECT UMID FROM movies WHERE workerID='.$_SESSION['UUID']) as $item) {
+                    foreach ($conn->query('SELECT UMID FROM movies WHERE workerUUID='.$_SESSION['UUID']) as $item) {
                         echo '<li><a href="./cardService.php">Kinodienst</a></li>';
                         break;
                     }
@@ -66,16 +70,7 @@ if(!isset($conn)) {
             </div>
             <div class="navbar-form navbar-right">
                 <?php
-                    if(!isset($_SESSION)) {
-                        session_start();
-                    }
-
-                    if(!isset($_SESSION['UUID']) OR empty($_SESSION['UUID'])) {
-                        echo '
-                            <button class="btn btn-primary" data-toggle="modal" data-target="#modal_login">Anmelden</button>
-                            <button class="btn btn-success" data-toggle="modal" data-target="#modal_registration">Registrieren</button>
-                        ';
-                    } else {
+                    if($loggedIn) {
                         echo '
                             Hallo, '.$_SESSION['firstname'].'
                             <button class="btn btn-default" data-toggle="modal" data-target="#modal_editAccount">
@@ -84,6 +79,11 @@ if(!isset($conn)) {
                             <a href="./logic/logout.php">
                                 <button type="submit" class="btn btn-danger">Abmelden</button>
                             </a>
+                        ';
+                    } else {
+                        echo '
+                            <button class="btn btn-primary" data-toggle="modal" data-target="#modal_login">Anmelden</button>
+                            <button class="btn btn-success" data-toggle="modal" data-target="#modal_registration">Registrieren</button>
                         ';
                     }
                 ?>
@@ -94,7 +94,84 @@ if(!isset($conn)) {
 
 <!-- Modal -->
 <?php
-    if(!isset($_SESSION['UUID'])) {
+    if($loggedIn) {
+        foreach ($conn->query('SELECT UUID, email, firstname, surname FROM users WHERE UUID='.$_SESSION['UUID']) as $item) {
+            $UUID = $item[0];
+            $email = $item[1];
+            $firstname = $item[2];
+            $surname = $item[3];
+        }
+
+        echo '
+            <div class="modal fade" id="modal_editAccount" role="dialog">
+                <div class="modal-dialog">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Ändere deine Angaben</h4>
+                        </div>
+                        <form action="./logic/editAccount.php" method="GET">
+                            <div class="modal-body">
+                                <div class="alert alert-info">
+                                  <strong>Info!</strong> Wenn das "Neues Passwort" Feld leer ist, wird sich dein Passwort nicht ändern.
+                                </div>
+                                
+                                <input type="hidden" id="UUID" name="UUID" value="'.$UUID.'">
+
+                                <div class="form-group">
+                                    <label for="inputFirstname">Vorname:</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                        <input required type="text" class="form-control" id="inputFirstname" name="inputFirstname" value="'.$firstname.'" autofocus>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputSurname">Nachname:</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                        <input required type="text" class="form-control" id="inputSurname" name="inputSurname" value="'.$surname.'">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEmail">Email-Adresse:</label>
+                                     <div class="input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                        <input required type="email" class="form-control" id="inputEmail" name="inputEmail" value="'.$email.'">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputPassword_current">Derzeitiges Passwort:</label>
+                                     <div class="input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                        <input required type="password" class="form-control" id="inputPassword_current" name="inputPassword_current" placeholder="Derzeitiges Passwort eingeben">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputPassword">Neues Passwort:</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                        <input type="password" class="form-control" id="inputPassword" name="inputPassword" placeholder="Neues Passwort eingeben">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputPassword_again">Neues Passwort wiederholen:</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                        <input type="password" class="form-control" id="inputPassword_again" name="inputPassword_again" placeholder="Neues Passwort wiederholen">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Abbrechen</button>
+                                <button type="submit" class="btn btn-success">Speichern</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        ';
+    } else {
         echo '
             <div class="modal fade" id="modal_login" role="dialog">
                 <div class="modal-dialog">
@@ -185,83 +262,6 @@ if(!isset($conn)) {
                 </div>
             </div>
         ';
-    } else {
-        foreach ($conn->query('SELECT UUID, email, firstname, surname FROM users WHERE UUID='.$_SESSION['UUID']) as $item) {
-            $UUID = $item[0];
-            $email = $item[1];
-            $firstname = $item[2];
-            $surname = $item[3];
-        }
-
-        echo '
-            <div class="modal fade" id="modal_editAccount" role="dialog">
-                <div class="modal-dialog">
-                    <!-- Modal content-->
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">Ändere deine Angaben</h4>
-                        </div>
-                        <form action="./logic/editAccount.php" method="GET">
-                            <div class="modal-body">
-                                <div class="alert alert-info">
-                                  <strong>Info!</strong> Wenn das "Neues Passwort" Feld leer ist, wird sich dein Passwort nicht ändern.
-                                </div>
-                                
-                                <input type="hidden" id="UUID" name="UUID" value="'.$UUID.'">
-
-                                <div class="form-group">
-                                    <label for="inputFirstname">Vorname:</label>
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                        <input required type="text" class="form-control" id="inputFirstname" name="inputFirstname" value="'.$firstname.'" autofocus>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="inputSurname">Nachname:</label>
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                        <input required type="text" class="form-control" id="inputSurname" name="inputSurname" value="'.$surname.'">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="inputEmail">Email-Adresse:</label>
-                                     <div class="input-group">
-                                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                        <input required type="email" class="form-control" id="inputEmail" name="inputEmail" value="'.$email.'">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="inputPassword_current">Derzeitiges Passwort:</label>
-                                     <div class="input-group">
-                                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                                        <input required type="password" class="form-control" id="inputPassword_current" name="inputPassword_current" placeholder="Derzeitiges Passwort eingeben">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="inputPassword">Neues Passwort:</label>
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                                        <input type="password" class="form-control" id="inputPassword" name="inputPassword" placeholder="Neues Passwort eingeben">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="inputPassword_again">Neues Passwort wiederholen:</label>
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                                        <input type="password" class="form-control" id="inputPassword_again" name="inputPassword_again" placeholder="Neues Passwort wiederholen">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Abbrechen</button>
-                                <button type="submit" class="btn btn-success">Speichern</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        ';
     }
 ?>
 
@@ -296,7 +296,7 @@ if(!isset($conn)) {
                 <a href="http://lmgtfy.com/?q=Lesen+lernen" target="_blank">
                     <button class="btn btn-warning">Ich kann nicht lesen</button>
                 </a>
-                <button class="btn btn-primary" data-dismiss="modal" autofocus>Verstanden oder zumindest durchgelesen</button>
+                <button class="btn btn-primary" data-dismiss="modal">Verstanden oder zumindest durchgelesen</button>
             </div>
         </div>
     </div>
