@@ -69,7 +69,6 @@ if(!isset($inputPassword_again) OR empty($inputPassword_again)) {
 
 $inputFirstname = preg_replace("/[^a-zA-Z0-9]/", "", $inputFirstname);
 $inputSurname = preg_replace("/[^a-zA-Z0-9]/", "", $inputSurname);
-$inputEmail = preg_replace("/[^a-zA-Z0-9]/", "", $inputEmail);
 
 if($inputPassword != $inputPassword_again) {
     //TODO: Add alert passwordsAreNotEqual
