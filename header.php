@@ -11,3 +11,5 @@
 
 <script src="js/html5shiv.min.js"></script>
 <script src="js/respond.min.js"></script>
+
+<link href="css/main.css" rel="stylesheet">

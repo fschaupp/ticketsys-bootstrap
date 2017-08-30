@@ -23,33 +23,15 @@ if (isset($_SESSION['email'])) {
     <title>Tickets</title>
 
     <?php include 'header.php'; ?>
-
-    <style>
-        @media (min-width: 776px) {
-            ul.nav-pills {
-                top: 132px;
-                position: fixed;
-            }
-        }
-        @media (min-width: 1342px) {
-            ul.nav-pills {
-                top: 92px;
-                position: fixed;
-            }
-        }
-    </style>
 </head>
-<body data-spy="scroll" data-target="#scrollSpy" data-offset="20" style="margin: 0px; padding: 0px">
+<body style="margin: 0px; padding: 0px">
 <?php include 'navbar.php'; ?>
 
-<div class="myContainer" style="margin-left: 10px; margin-right: 10px;">
-    <div class="row">
-        <div class="col-sm-10 col-md-10 col-lg-10">
+<div class="mycontainer" style="padding-left: 25px; padding-right: 25px">
             <?php
-            $count = 0;
-            $rowcount = 1;
+            $row_count = 0;
 
-            foreach ($conn->query('SELECT UMID, name, date, trailerLink, workerID, bookedCards FROM movies ORDER BY date') as $item) {
+            foreach ($conn->query('SELECT UMID, name, date, trailerLink, workerUUID, bookedCards FROM movies ORDER BY date') as $item) {
                 $workerName = null;
                 if (isset($item[4])) {
                     foreach ($conn->query('SELECT firstname, surname, UUID FROM users WHERE UUID=' . $item[4]) as $users) {
@@ -64,8 +46,7 @@ if (isset($_SESSION['email'])) {
 
                 $availableCards = 20 - $item[5];
 
-                if($count == 0) {
-                    echo '<div id="week'.$rowcount.'">';
+                if($row_count == 0) {
                     echo '<div class="row">';
                 }
 
@@ -179,7 +160,7 @@ if (isset($_SESSION['email'])) {
                         data-movie-id="' . $item[0] . '" data-availablecards="' . $availableCards . '">Reservieren</a>';
                     }
                 } else {
-                    echo '<a href="#" data-toggle="tooltip" data-placement="bottom" title="Du bist noch nicht eingeloggt">
+                    echo '<a href="#" data-toggle="tooltip" data-placement="bottom" title="Du bist noch nicht angemeldet">
                             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal_login">Reservieren</button></a>';
                 }
 
@@ -199,36 +180,17 @@ if (isset($_SESSION['email'])) {
                     </div>
                 ';
 
-                if($count == 3) {
+                if($row_count == 3) {
                     echo '</div>';
-                    echo '</div>';
-                    $rowcount++;
-                    $count = 0;
+                    $row_count = 0;
                 } else {
-                    $count++;
+                    $row_count++;
                 }
             }
-            if($count != 4) {
-                echo '</div>';
+            if($row_count != 3) {
                 echo '</div>';
             }
             ?>
-        </div>
-        <nav class="col-sm-2 col-md-1 col-lg-1 hidden-xs" id="scrollSpy">
-            <ul class="nav nav-pills nav-stacked">
-                <?php
-                for($i = 0; $i < $rowcount; $i++) {
-                    $currentWeek = $i+1;
-                    if($i == 0) {
-                        echo '<li class="active"><a href="#week'.$currentWeek.'">'.$currentWeek.'. Woche</a></li>';
-                    } else {
-                        echo '<li><a href="#week'.$currentWeek.'">'.$currentWeek.'. Woche</a></li>';
-                    }
-                }
-                ?>
-            </ul>
-        </nav>
-    </div>
 </div>
 
 <div class="modal fade" id="modal_bookCards" role="dialog">
@@ -250,7 +212,7 @@ if (isset($_SESSION['email'])) {
                         <label for="inputCount">Kartenanzahl:</label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-play"></i></span>
-                            <input required type="text" class="form-control" id="inputCount" name="inputCount" placeholder="-2,147,483,648" min="0" max="20"
+                            <input required type="text" class="form-control" id="inputCount" name="inputCount" placeholder="1" min="0" max="20"
                                    onchange="checkValue()" autofocus>
                         </div>
                     </div>
