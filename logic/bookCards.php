@@ -28,7 +28,7 @@ if(!isset($inputCount) OR empty($inputCount)) {
     die();
 }
 
-if(!is_int($inputCount)) {
+if(!is_numeric ($inputCount)) {
     //TODO: Add Alert pleaseEnterANumber
     header('Location: ../index.php?alert=pleaseEnterANumber');
     die();
