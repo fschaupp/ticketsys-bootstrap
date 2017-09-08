@@ -39,7 +39,6 @@ if(isset($_SESSION['email'])) {
                 if($loggedIn) {
                     echo '
                         <ul class="nav navbar-nav">
-                           <li><a href="#">Meine Reservierungen</a></li>
                     ';
 
                     foreach ($conn->query('SELECT UMID FROM movies WHERE workerUUID='.$_SESSION['UUID']) as $item) {
@@ -77,7 +76,7 @@ if(isset($_SESSION['email'])) {
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </button>
                             <a href="./logic/logout.php">
-                                <button type="submit" class="btn btn-danger">Abmelden</button>
+                                <button type="submit" class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Abmelden"><span class="glyphicon glyphicon-log-out"></span></button>
                             </a>
                         ';
                     } else {

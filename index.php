@@ -298,10 +298,6 @@ if (isset($_SESSION['email'])) {
 <?php include 'endScripts.php'; ?>
 
 <script>
-    $(document).ready(function(){
-        $('[data-toggle="tooltip"]').tooltip();
-    });
-
     $('#modal_bookCards').on('show.bs.modal', function (e) {
         var movieId = $(e.relatedTarget).data('movie-id');
         $(e.currentTarget).find('input[name="UMID"]').val(movieId);
