@@ -8,7 +8,7 @@
 
 $host = 'localhost';
 $dbName = 'ticketsys';
-$user = 'ticketsys';
-$password = 'ticketsys';
+$user = 'root';
+$password = 'root';
 $conn = new PDO ("mysql:host=$host;dbname=$dbName", $user, $password);
 

@@ -61,9 +61,10 @@ if (!isset($conn)) {
                     }
                 }
 
+                $date_minus_eins = date('Y-m-d H:i:s', strtotime($date_minus_eins . ' -1 day'));
                 $del = "";
                 $delend = "";
-                if (date("Y-m-d H:i:s") > $item[2]) {
+                if ($date_minus_eins > $item[2]) {
                     $del = "<del>";
                     $delend = "</del>";
                 }

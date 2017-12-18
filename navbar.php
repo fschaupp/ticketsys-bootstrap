@@ -20,7 +20,7 @@ if(isset($_SESSION['email'])) {
 }
 ?>
 
-<nav class="navbar navbar-default" style="margin-right: 0px;">
+<nav class="navbar navbar-default navbar-fixed-top" style="margin-right: 0px;">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
@@ -31,10 +31,13 @@ if(isset($_SESSION['email'])) {
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="index.php">BKE Ticketsystem</a>
+            <a class="navbar-brand" href="#" data-toggle="tooltip" data-placement="bottom" title="Es kann zu Bugs, Datenverlusten und Offlinezeiten kommen!">
+                <span class="label label-warning">BETA</span>
+            </a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <div class="collapse navbar-collapse">
             <?php
                 if($loggedIn) {
                     echo '
@@ -88,6 +91,19 @@ if(isset($_SESSION['email'])) {
                 ?>
             </div>
         </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+<nav class="navbar navbar-default navbar-fixed-bottom" style="margin-right: 0px;">
+    <div class="container-fluid">
+
+        <ul class="nav navbar-nav">
+            <li><a target="_blank" href="https://getbootstrap.com/">Made with Bootstrapv3</a></li>
+        </ul>
+
+        <ul class=" nav navbar-nav navbar-right">
+            <li><a href="#" data-toggle="modal" data-target="#modal_help" >Hilfe</a></li>
+        </ul>
     </div><!-- /.container-fluid -->
 </nav>
 
@@ -296,6 +312,51 @@ if(isset($_SESSION['email'])) {
                     <button class="btn btn-warning">Ich kann nicht lesen</button>
                 </a>
                 <button class="btn btn-primary" data-dismiss="modal">Verstanden oder zumindest durchgelesen</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal_help" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Informationen</h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Bibliotheken</div>
+
+                    <ul class="list-group">
+                        <li class="list-group-item"><a target="_blank" href="https://getbootstrap.com/">Bootstrapv3</a></li>
+                    </ul>
+
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">Mitwirkende</div>
+
+                    <ul class="list-group">
+                        <li class="list-group-item">Idee & Entwicklung der ersten Version: <a target="_blank" href="#">Florian Schaupp</a></li>
+                        <li class="list-group-item">Aktueller Entwickler: <a target="_blank" href="https://dafnik.me/">Dominik Dafert</a></li>
+                    </ul>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">Lizenz: GPL-3.0</div>
+
+                    <ul class="list-group">
+                        <li class="list-group-item">Version: <?php include "version.php"; echo $version; ?></li>
+                        <li class="list-group-item">Source Code: <a target="_blank" href="https://github.com/Dafnik/ticketsys-bootstrap/">GitHub</a></li>
+                    </ul>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" data-dismiss="modal">Schließen</button>
             </div>
         </div>
     </div>
