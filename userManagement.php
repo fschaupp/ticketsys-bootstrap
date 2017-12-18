@@ -31,7 +31,7 @@ if (!isset($conn)) {
 </head>
 <body>
 <?php include 'navbar.php'; ?>
-<div class="container">
+<div class="mycontainer">
     <h1>Alle Benutzer</h1>
     <p>Hier findest du alle gespeicherten Benutzer</p>
 

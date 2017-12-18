@@ -45,7 +45,7 @@ if (!$isWorker) {
 <body>
 
 <?php include 'navbar.php'; ?>
-<div class="container">
+<div class="mycontainer">
     <h1>Kinodienst</h1>
     <p>Hier findest du alle Reservierungen in welchen du Kinodienst hast.</p>
 

@@ -32,7 +32,7 @@ if (!isset($conn)) {
 <body>
 <?php include 'navbar.php'; ?>
 
-<div class="container">
+<div class="mycontainer">
     <h1>Alle Filme</h1>
     <button type="button" class="btn btn-success pull-right" data-toggle="modal" data-target="#modal_createMovie"
             style="margin-top: -30px">Film anlegen</button>

@@ -24,7 +24,7 @@ if(isset($_SESSION['email'])) {
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1" aria-expanded="false">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -37,7 +37,7 @@ if(isset($_SESSION['email'])) {
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse">
+        <div class="collapse navbar-collapse" id="navbar-collapse-1">
             <?php
                 if($loggedIn) {
                     echo '
@@ -94,18 +94,14 @@ if(isset($_SESSION['email'])) {
     </div><!-- /.container-fluid -->
 </nav>
 
-<nav class="navbar navbar-default navbar-fixed-bottom" style="margin-right: 0px;">
-    <div class="container-fluid">
+<div class="navbar navbar-default navbar-fixed-bottom">
+    <div class="container">
+        <p class="navbar-text pull-left">© Dominik Dafert 2017</p>
 
-        <ul class="nav navbar-nav">
-            <li><a target="_blank" href="https://getbootstrap.com/">Made with Bootstrapv3</a></li>
-        </ul>
+        <p class="navbar-text pull-right"><a href="#" data-toggle="modal" data-target="#modal_help" >Hilfe</a></p>
+    </div>
+</div>
 
-        <ul class=" nav navbar-nav navbar-right">
-            <li><a href="#" data-toggle="modal" data-target="#modal_help" >Hilfe</a></li>
-        </ul>
-    </div><!-- /.container-fluid -->
-</nav>
 
 <!-- Modal -->
 <?php

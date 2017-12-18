@@ -10,11 +10,5 @@ body {
 .mycontainer {
     padding-left: 25px;
     padding-right: 25px;
-}
-
-footer {
-    position: fixed;
-    height: 100px;
-    bottom: 0;
-    width: 100%;
+    margin-bottom: 70px;
 }
