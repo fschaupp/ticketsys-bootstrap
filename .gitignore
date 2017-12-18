@@ -2,3 +2,5 @@
 \.idea/
 
 adminer\.php
+
+logic/connectToDatabase\.php

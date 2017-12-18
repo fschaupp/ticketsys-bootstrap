@@ -12,3 +12,4 @@ $user = 'root';
 $password = 'root';
 $conn = new PDO ("mysql:host=$host;dbname=$dbName", $user, $password);
 
+//Will be added to gitignore
