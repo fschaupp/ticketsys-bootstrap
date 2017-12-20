@@ -75,9 +75,11 @@ if(isset($_SESSION['email'])) {
                     if($loggedIn) {
                         echo '
                             Hallo, '.$_SESSION['firstname'].'
+                            <a href="#" data-toggle="tooltip" data-placement="bottom" title="Angaben editieren">
                             <button class="btn btn-default" data-toggle="modal" data-target="#modal_editAccount">
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </button>
+                            </a>
                             <a href="./logic/logout.php">
                                 <button type="submit" class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Abmelden"><span class="glyphicon glyphicon-log-out"></span></button>
                             </a>
