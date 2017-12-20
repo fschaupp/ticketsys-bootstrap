@@ -212,7 +212,7 @@ if (isset($_SESSION['email'])) {
             }
 
         } else {
-            echo '<a href="#" data-toggle="tooltip" data-placement="bottom" title="Du bist noch nicht angemeldet">
+            echo '<a href="#" data-toggle="tooltip" data-placement="bottom" title="Du bist noch nicht angemeldet!">
                             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal_login">Reservieren</button></a>';
         }
 
