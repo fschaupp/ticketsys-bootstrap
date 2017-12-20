@@ -324,21 +324,31 @@ if(isset($_SESSION['email'])) {
 
             <div class="modal-body">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Bibliotheken</div>
-
-                    <ul class="list-group">
-                        <li class="list-group-item"><a target="_blank" href="https://getbootstrap.com/">Bootstrapv3</a></li>
-                    </ul>
-
-                </div>
-
-                <div class="panel panel-default">
                     <div class="panel-heading">Mitwirkende</div>
 
                     <ul class="list-group">
                         <li class="list-group-item">Idee & Entwicklung der ersten Version: <a target="_blank" href="#">Florian Schaupp</a></li>
                         <li class="list-group-item">Aktueller Entwickler: <a target="_blank" href="https://dafnik.me/">Dominik Dafert</a></li>
                     </ul>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">Hilfe und Verbesserungsvorschläge</div>
+
+                    <ul class="list-group">
+                        <li class="list-group-item">Per email an: <a href="mailto:ticketsys@dafnik.me">ticketsys@dafnik.me</a></li>
+                        <li class="list-group-item">Natürlich kann man mir (Dominik Dafert) auch persönlich oder per Message bescheid geben.</li>
+                    </ul>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">Bibliotheken</div>
+
+                    <ul class="list-group">
+                        <li class="list-group-item"><a target="_blank" href="https://getbootstrap.com/">Bootstrapv3</a></li>
+                        <li class="list-group-item"><a target="_blank" href="https://jquery.com/">jQuery</a></li>
+                    </ul>
+
                 </div>
 
                 <div class="panel panel-default">
