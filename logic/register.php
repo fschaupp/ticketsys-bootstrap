@@ -57,7 +57,7 @@ if(!isset($inputPassword) OR empty($inputPassword)) {
     die();
 }
 if(strlen($inputPassword) > 512) {
-    //TODO: Add Alert passwordOnly128Characters
+    //TODO: Add Alert passwordOnly512Characters
     header('Location: ../index.php?alert=passwordOnly512Characters');
     die();
 }
