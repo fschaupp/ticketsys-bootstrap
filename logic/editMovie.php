@@ -46,6 +46,14 @@ if(!isset($conn)) {
     include "./connectToDatabase.php";
 }
 
+str_replace("ß", "&szlig;", $inputMoviename);
+str_replace("ä", "&auml;", $inputMoviename);
+str_replace("Ä", "&Auml;", $inputMoviename);
+str_replace("ü", "&uuml;", $inputMoviename);
+str_replace("Ü", "&Uuml;", $inputMoviename);
+str_replace("ö", "&ouml;", $inputMoviename);
+str_replace("Ö", "&Ouml;", $inputMoviename);
+
 $sql = 'UPDATE movies SET name="'.$inputMoviename.'", date="'.$inputDate.'", trailerLink="'.$inputTrailerlink.'" WHERE UMID='. $UMID.';';
 
 $conn->exec($sql);
