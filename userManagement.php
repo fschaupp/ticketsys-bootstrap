@@ -42,7 +42,7 @@ if (!isset($conn)) {
                 <th>Name</th>
                 <th>Email-Adresse</th>
                 <th>Rang</th>
-                <th>Aktion</th>
+                <th>Aktionen</th>
             </tr>
             </thead>
             <tbody>

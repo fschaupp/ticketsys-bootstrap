@@ -47,7 +47,7 @@ if (!isset($conn)) {
                 <th>Datum</th>
                 <th>Trailer</th>
                 <th>Arbeiter</th>
-                <th>Aktion</th>
+                <th>Aktionen</th>
             </tr>
             </thead>
             <tbody>
