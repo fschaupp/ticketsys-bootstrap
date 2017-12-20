@@ -203,8 +203,8 @@ if (isset($_SESSION['email'])) {
                         data-movie-id="' . $item[0] . '" data-availablecards="' . $availableCards . '">Reservieren</a>';
             }
 
-            if (isset($hasBookedForThisMovie)) {
-                if ($hasBookedForThisMovie) {
+            if (isset($userHasBookedForThisMovie)) {
+                if ($userHasBookedForThisMovie) {
                     echo '<a href="#modal_cancelBookedCards" class="btn btn-warning" data-toggle="modal" data-target="#modal_cancelBookedCards" 
                                     data-movie-id="' . $item[0] . '" data-movie-name="' . $item[1] . '" style="float: right">Buchung stornieren</a>';
                     $UBID = null;
