@@ -31,7 +31,7 @@ if(isset($_SESSION['email'])) {
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="index.php">BKE Ticketsystem</a>
-            <a class="navbar-brand" href="#" data-toggle="tooltip" data-placement="bottom" title="Es kann zu Bugs, Datenverlusten und Offlinezeiten kommen!">
+            <a class="navbar-brand" href="#" data-toggle="tooltip" data-placement="bottom" title="Es kann zu Bugs, Datenverlusten und Offline-Zeiten kommen!">
                 <span class="label label-warning">BETA</span>
             </a>
         </div>
