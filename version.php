@@ -1,2 +1,2 @@
 <?php
-$version = "BETA-0.1-18.12.2017";
+$version = "BETA-0.2-21.12.2017";
