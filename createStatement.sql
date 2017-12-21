@@ -52,5 +52,5 @@ INSERT INTO movies(name, date, trailerLink) VALUE ("Kevin allein zuhause 2", "20
 INSERT INTO movies(name, date, trailerLink) VALUE ("Kevin allein zuhause 3", "2018-03-03 00:00:00", "https://google.com");
 INSERT INTO movies(name, date, trailerLink) VALUE ("Zur&uuml;ck in die Zukunft 1", "2018-03-04 00:00:00", "https://google.com");
 
-INSERT INTO movies(name, date, trailerLink) VALUE ("Zur&uuml;ck in die Zukunft 2", "2018-03-11 00:00:00", "https://google.com");
-INSERT INTO movies(name, date, trailerLink) VALUE ("Zur&uuml;ck in die Zukunft 3", "2018-03-12 00:00:00", "https://google.com");
+INSERT INTO movies(name, date, trailerLink) VALUE ("Zur&uuml;ck in die Zukunft 2", "2018-03-08 00:00:00", "https://google.com");
+INSERT INTO movies(name, date, trailerLink) VALUE ("Zur&uuml;ck in die Zukunft 3", "2018-03-09 00:00:00", "https://google.com");
