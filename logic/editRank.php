@@ -10,7 +10,7 @@ if(!isset($_SESSION)) {
     session_start();
 }
 
-if(!isset($_SESSION['email'])) {
+if(!isset($_SESSION['email']) OR !isset($_SESSION['rank'])) {
     header('Location: ../index.php?alert=loginFirst');
     die();
 } else {

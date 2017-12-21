@@ -17,6 +17,7 @@ if(!isset($_SESSION['email'])) {
 
 $UMID = $_REQUEST['UMID'];
 
+
 if(!isset($UMID) OR empty($UMID)) {
     header('Location: ../index.php?alert=inputIsNotCorrect');
     die();
@@ -26,9 +27,9 @@ if(!isset($conn)) {
     include 'connectToDatabase.php';
 }
 
-$sql='UPDATE movies SET workerUUID='.$_SESSION['UUID'].' WHERE UMID='.$UMID.';';
+$sql = 'UPDATE movies SET workerUUID=' . $_SESSION['UUID'] . ' WHERE UMID=' . $UMID . ';';
 $conn->exec($sql);
 
-//TODO: Add Alert successfulGetInTouch
-header('Location: ../index.php?alert=successfulGetInTouch');
+//TODO: Add Alert successfulNormalWorkerGetInTouch
+header('Location: ../index.php?alert=successfulNormalWorkerGetInTouch');
 die();

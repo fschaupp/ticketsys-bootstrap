@@ -32,16 +32,19 @@ if (isset($_SESSION['email'])) {
     <?php
     $row_count = 0;
 
-    foreach ($conn->query('SELECT UMID, name, date, trailerLink, workerUUID, bookedCards FROM movies ORDER BY date') as $item) {
+    foreach ($conn->query('SELECT UMID, name, date, trailerLink, workerUUID, bookedCards, emergencyWorkerUUID FROM movies ORDER BY date') as $item) {
         $UMID = $item[0];
         $movieName = $item[1];
         $movieDate = $item[2];
         $movieTrailerLink = $item[3];
         $workerUUID = $item[4];
         $bookedCards = $item[5];
+        $emergencyWorkerUUID = $item[6];
 
         $workerName = null;
         $movieHasWorker = false;
+        $emergencyWorkerName = null;
+        $movieHasEmergencyWorker = false;
 
         $movieAlreadyShowed = false;
 
@@ -54,10 +57,18 @@ if (isset($_SESSION['email'])) {
         $del = "";
         $delend = "";
 
-        if (isset($item[4])) {
+        if (isset($workerUUID)) {
             foreach ($conn->query('SELECT firstname, surname, UUID FROM users WHERE UUID=' . $workerUUID) as $users) {
                 $workerName = $users[0] . ' ' . $users[1];
                 $movieHasWorker = true;
+                break;
+            }
+        }
+
+        if (isset($emergencyWorkerUUID)) {
+            foreach ($conn->query('SELECT firstname, surname, UUID FROM users WHERE UUID=' . $emergencyWorkerUUID) as $users) {
+                $emergencyWorkerName = $users[0] . ' ' . $users[1];
+                $movieHasEmergencyWorker = true;
                 break;
             }
         }
@@ -113,8 +124,64 @@ if (isset($_SESSION['email'])) {
                                 <button class="btn btn-info disabled" data-toggle="tooltip" data-placement="bottom"
                                     title="Der Film wurde bereits gezeigt!">Melden</button>';
                 } else {
-                    echo '<a href="#modal_getInTouch" data-toggle="tooltip" data-placement="bottom" title="Melde dich für den Kinodienst">
-                                <button class="btn btn-info" data-toggle="modal" data-target="#modal_getInTouch" data-movie-id="' . $item[0] . '" data-movie-name="' . $item[1] . '"
+                    echo '<a href="#modal_getNormalWorkerInTouch" data-toggle="tooltip" data-placement="bottom" title="Melde dich für den Kinodienst">
+                                <button class="btn btn-info" data-toggle="modal" data-target="#modal_getNormalWorkerInTouch" data-movie-id="' . $item[0] . '" data-movie-name="' . $item[1] . '"
+                                >Melden</button></a>';
+                }
+            } else {
+                echo 'Nicht eingeteilt';
+            }
+            echo '
+                                            </div>
+                    ';
+            //If movie has worker the name is displayed and if you are logged in and the worker is you you can cancel it
+        } else {
+            echo '
+                                            <div class="col-xs-6 col-sm-6 col-md-7 col-lg-7">'
+                . $workerName;
+
+            if ($loggedIn) {
+                if ($workerUUID == $_SESSION['UUID']) {
+                    echo '
+                                                <a href="#modal_cancelNormalWorkerGetInTouchWithMovie" 
+                                                    data-toggle="tooltip" data-placement="right" title="Entferne dich vom Kinodienst">
+                                                    <button class="btn btn-default" 
+                                                        data-toggle="modal" data-target="#modal_cancelNormalWorkerGetInTouchWithMovie" 
+                                                        data-movie-id="' . $UMID . '" data-movie-name="' . $movieName . '">
+                                                            
+                                                        <span class="glyphicon glyphicon-remove"></span>
+                                                    </button>
+                                                </a>';
+                }
+
+            }
+            echo '
+                                            </div>
+                    ';
+        }
+
+        echo '
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-xs-6 col-sm-6 col-md-5 col-lg-5">Kinodienst <br>(nur im Notfall):</div>
+                ';
+
+        //If movie has NO emergency Worker, you should be possible to get in touch and if you aren't logged in you see that there is no worker
+        if (!$movieHasEmergencyWorker) {
+            echo '
+                                            <div class="col-xs-6 col-sm-6 col-md-7 col-lg-7">
+                    ';
+
+            if ($loggedIn) {
+                if ($movieAlreadyShowed) {
+                    echo '
+                                <button class="btn btn-info disabled" data-toggle="tooltip" data-placement="bottom"
+                                    title="Der Film wurde bereits gezeigt!">Melden</button>';
+                } else {
+                    echo '<a href="#modal_getEmergencyWorkerInTouch" data-toggle="tooltip" data-placement="bottom" title="Melde dich für den Kinodienst (nur im Notfall)">
+                                <button class="btn btn-info" data-toggle="modal" data-target="#modal_getEmergencyWorkerInTouch" data-movie-id="' . $item[0] . '" data-movie-name="' . $item[1] . '"
                                 >Melden</button></a>';
                 }
             } else {
@@ -127,15 +194,15 @@ if (isset($_SESSION['email'])) {
         } else {
             echo '
                                             <div class="col-xs-6 col-sm-6 col-md-7 col-lg-7">'
-                . $workerName;
+                . $emergencyWorkerName;
 
             if ($loggedIn) {
-                if ($workerUUID == $_SESSION['UUID']) {
+                if ($emergencyWorkerUUID == $_SESSION['UUID']) {
                     echo '
-                                                <a href="#modal_cancelGetInTouch" 
+                                                <a href="#modal_cancelEmergencyWorkerGetInTouchWithMovie" 
                                                     data-toggle="tooltip" data-placement="right" title="Entferne dich vom Kinodienst">
                                                     <button class="btn btn-default" 
-                                                        data-toggle="modal" data-target="#modal_cancelGetInTouch" 
+                                                        data-toggle="modal" data-target="#modal_cancelEmergencyWorkerGetInTouchWithMovie" 
                                                         data-movie-id="' . $UMID . '" data-movie-name="' . $movieName . '">
                                                             
                                                         <span class="glyphicon glyphicon-remove"></span>
@@ -277,14 +344,14 @@ if (isset($_SESSION['email'])) {
     </div>
 </div>
 
-<div class="modal fade" id="modal_getInTouch">
+<div class="modal fade" id="modal_getNormalWorkerInTouch">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title" id="modal_getInTouch_movieNameHEAD"></h4>
+                <h4 class="modal-title" id="modal_getNormalWorkerInTouch_movieNameHEAD"></h4>
             </div>
-            <form method="GET" action="./logic/getInTouchWithMovie.php">
+            <form method="GET" action="./logic/getNormalWorkerInTouchWithMovie.php">
                 <div class="modal-body">
                     <input type="text" name="UMID" hidden value=""/>
                     <div class="alert alert-info">
@@ -300,14 +367,56 @@ if (isset($_SESSION['email'])) {
     </div>
 </div>
 
-<div class="modal fade" id="modal_cancelGetInTouch">
+<div class="modal fade" id="modal_getEmergencyWorkerInTouch">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title" id="modal_cancelGetInTouch_movieNameHEAD"></h4>
+                <h4 class="modal-title" id="modal_getEmergencyWorkerInTouch_movieNameHEAD"></h4>
             </div>
-            <form method="GET" action="./logic/cancelGetInTouchWithMovie.php">
+            <form method="GET" action="./logic/getEmergencyWorkerInTouchWithMovie.php">
+                <div class="modal-body">
+                    <input type="text" name="UMID" hidden value=""/>
+                    <div class="alert alert-info">
+                        <strong>Info!</strong> Du kannst diesen Schritt jederzeit rückgängig machen!
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="reset" class="btn btn-danger" data-dismiss="modal">Abbrechen</button>
+                    <button type="submit" class="btn btn-success">Melden</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modal_cancelNormalWorkerGetInTouchWithMovie">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" id="modal_cancelNormalWorkerGetInTouch_movieNameHEAD"></h4>
+            </div>
+            <form method="GET" action="./logic/cancelNormalWorkerGetInTouchWithMovie.php">
+                <input type="text" name="UMID" hidden value=""/>
+                <div class="modal-footer">
+                    <button type="reset" class="btn btn-success" data-dismiss="modal">Abbrechen</button>
+                    <button type="submit" class="btn btn-danger">Abmelden</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal_cancelEmergencyWorkerGetInTouchWithMovie">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" id="modal_cancelEmergencyWorkerGetInTouch_movieNameHEAD"></h4>
+            </div>
+            <form method="GET" action="./logic/cancelEmergencyWorkerGetInTouchWithMovie.php">
                 <input type="text" name="UMID" hidden value=""/>
                 <div class="modal-footer">
                     <button type="reset" class="btn btn-success" data-dismiss="modal">Abbrechen</button>
@@ -358,20 +467,36 @@ if (isset($_SESSION['email'])) {
         document.getElementById('maxinput').innerText = "" + avcards;
     });
 
-    $('#modal_getInTouch').on('show.bs.modal', function (e) {
+    $('#modal_getNormalWorkerInTouch').on('show.bs.modal', function (e) {
         var movieId = $(e.relatedTarget).data('movie-id');
         $(e.currentTarget).find('input[name="UMID"]').val(movieId);
 
         var movieName = $(e.relatedTarget).data('movie-name');
-        document.getElementById('modal_getInTouch_movieNameHEAD').innerText = "Willst du dich wirklich für " + movieName + " melden?";
+        document.getElementById('modal_getNormalWorkerInTouch_movieNameHEAD').innerText = "Willst du dich wirklich für " + movieName + " melden?";
     });
 
-    $('#modal_cancelGetInTouch').on('show.bs.modal', function (e) {
+    $('#modal_getEmergencyWorkerInTouch').on('show.bs.modal', function (e) {
         var movieId = $(e.relatedTarget).data('movie-id');
         $(e.currentTarget).find('input[name="UMID"]').val(movieId);
 
         var movieName = $(e.relatedTarget).data('movie-name');
-        document.getElementById('modal_cancelGetInTouch_movieNameHEAD').innerText = "Willst du dich wirklich für " + movieName + " abmelden?";
+        document.getElementById('modal_getEmergencyWorkerInTouch_movieNameHEAD').innerText = "Willst du dich wirklich für " + movieName + " im Notfall melden?";
+    });
+
+    $('#modal_cancelNormalWorkerGetInTouchWithMovie').on('show.bs.modal', function (e) {
+        var movieId = $(e.relatedTarget).data('movie-id');
+        $(e.currentTarget).find('input[name="UMID"]').val(movieId);
+
+        var movieName = $(e.relatedTarget).data('movie-name');
+        document.getElementById('modal_cancelNormalWorkerGetInTouch_movieNameHEAD').innerText = "Willst du dich wirklich für " + movieName + " abmelden?";
+    });
+
+    $('#modal_cancelEmergencyWorkerGetInTouchWithMovie').on('show.bs.modal', function (e) {
+        var movieId = $(e.relatedTarget).data('movie-id');
+        $(e.currentTarget).find('input[name="UMID"]').val(movieId);
+
+        var movieName = $(e.relatedTarget).data('movie-name');
+        document.getElementById('modal_cancelEmergencyWorkerGetInTouch_movieNameHEAD').innerText = "Willst du dich wirklich für " + movieName + " abmelden?";
     });
 
     $('#modal_cancelBookedCards').on('show.bs.modal', function (e) {
