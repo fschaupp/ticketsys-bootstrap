@@ -6,15 +6,7 @@
  * Time: 18:00
  */
 
-if(!isset($_SESSION)) {
-    session_start();
-}
-
-if(!isset($_SESSION['email'])) {
-    //TODO: Add Alert loginFirst
-    header('Location: ../index.php?alert=loginFirst');
-    die();
-}
+include('ifNotLoggedInRedirectToIndex.php');
 
 $UUID = $_REQUEST['UUID'];
 $inputFirstname = $_REQUEST['inputFirstname'];
@@ -25,23 +17,23 @@ $inputPassword = $_REQUEST['inputPassword'];
 $inputPassword_again = $_REQUEST['inputPassword_again'];
 
 if(!isset($UUID) OR empty($UUID)) {
-    header('Location: ../index.php?alert=inputIsNotCorrect');
+    header('Location: ../index.php?alert=errorWhichIsImpossible');
     die();
 }
 if(!isset($inputFirstname) OR empty($inputFirstname)) {
-    header('Location: ../index.php?alert=inputIsNotCorrect');
+    header('Location: ../index.php?alert=errorWhichIsImpossible');
     die();
 }
 if(!isset($inputSurname) OR empty($inputSurname)) {
-    header('Location: ../index.php?alert=inputIsNotCorrect');
+    header('Location: ../index.php?alert=errorWhichIsImpossible');
     die();
 }
 if(!isset($inputEmail) OR empty($inputEmail)) {
-    header('Location: ../index.php?alert=inputIsNotCorrect');
+    header('Location: ../index.php?alert=errorWhichIsImpossible');
     die();
 }
 if(!isset($inputPassword_current) OR empty($inputPassword_current)) {
-    header('Location: ../index.php?alert=inputIsNotCorrect');
+    header('Location: ../index.php?alert=errorWhichIsImpossible');
     die();
 }
 
@@ -56,7 +48,7 @@ if(!isset($inputPassword) OR empty($inputPassword)) {
 }
 if(!isset($inputPassword_again) OR empty($inputPassword_again)) {
     if($change_password == true) {
-        header('Location: ../index.php?alert=inputIsNotCorrect');
+        header('Location: ../index.php?alert=passwordsAreNotEqual');
         die();
     }
 }
@@ -69,7 +61,6 @@ if(!isset($conn)) {
 
 foreach ($conn->query('SELECT UUID, password FROM users WHERE UUID="'.$UUID.'";') as $item) {
     if($item[1] != $hashed_password_current) {
-        //TODO: Add Alert passwordIsWrong
         header('Location: ../index.php?alert=passwordIsWrong');
         die();
     }
@@ -96,7 +87,7 @@ $conn->exec($sql);
 $_SESSION['email'] = $inputEmail;
 $_SESSION['firstname'] = $inputFirstname;
 
-header('Location: ../index.php?alert=editAccountSuccessful');
+header('Location: ../index.php?alert=successfulEditedAccount');
 die();
 
 

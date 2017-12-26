@@ -44,9 +44,19 @@ if(isset($_SESSION['email'])) {
                         <ul class="nav navbar-nav">
                     ';
 
+                    $isWorker = false;
                     foreach ($conn->query('SELECT UMID FROM movies WHERE workerUUID='.$_SESSION['UUID']) as $item) {
-                        echo '<li><a href="./cardService.php">Kinodienst</a></li>';
+                        $isWorker = true;
                         break;
+                    }
+
+                    foreach ($conn->query('SELECT UMID FROM movies WHERE emergencyWorkerUUID='.$_SESSION['UUID']) as $item) {
+                        $isWorker = true;
+                        break;
+                    }
+
+                    if($isWorker) {
+                        echo '<li><a href="./cardService.php">Kinodienst</a></li>';
                     }
 
                     echo '</ul>';

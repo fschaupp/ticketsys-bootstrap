@@ -11,6 +11,5 @@ if(!isset($_SESSION)) {
 }
 session_destroy();
 
-//TODO: add alert logoutSuccessful
-header('Location:../index.php?alert=logoutSuccessful');
+header('Location:../index.php?alert=successfulLoggedOut');
 die();

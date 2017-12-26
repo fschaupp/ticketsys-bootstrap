@@ -6,25 +6,13 @@
  * Time: 17:18
  */
 
-if(!isset($_SESSION)) {
-    session_start();
-}
-
-if(!isset($_SESSION['email'])) {
-    header('Location: ../index.php?alert=loginFirst');
-    die();
-} else {
-    if($_SESSION['rank'] != "administrator") {
-        header('Location: ../index.php?alert=permissionDenied');
-        die();
-    }
-}
+include('ifNotLoggedInRedirectToIndex.php');
+include('ifNotEnoughPermissionRedirectToIndex.php');
 
 $UUID = $_REQUEST['UUID'];
 
 if(!isset($UUID) OR empty($UUID)) {
-    //TODO: Add alert inputIsNotCorrect
-    header('Location: ../userManagement.php?alert=inputIsNotCorrect');
+    header('Location: ../userManagement.php?alert=errorWhichIsImpossible');
     die();
 }
 
@@ -32,10 +20,13 @@ if(!isset($conn)) {
     include "./connectToDatabase.php";
 }
 
+foreach ($conn->query('SELECT firstname, lastname FROM users WHERE UUID=' . $UUID . ';') as $item) {
+    $userName = $item[0] . ' ' . $item[1];
+}
+
 $conn->query('DELETE FROM users WHERE UUID='.$UUID);
 
-//TODO: Add Alert userSuccessfulDeleted
-header('Location: ../userManagement.php?alert=userSuccessfulDeleted');
+header('Location: ../userManagement.php?alert=successfulDeletedUser&userName='.$userName);
 die();
 
 

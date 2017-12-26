@@ -24,8 +24,11 @@ foreach ($conn->query('SELECT UMID FROM movies WHERE workerUUID=' . $_SESSION['U
     $isWorker = true;
     break;
 }
+foreach ($conn->query('SELECT UMID FROM movies WHERE emergencyWorkerUUID=' . $_SESSION['UUID']) as $item) {
+    $isWorker = true;
+    break;
+}
 if (!$isWorker) {
-    //TODO: Add alert youAreNotAWorker
     header('Location: ./index.php?alert=youAreNotAWorker');
     die();
 }

@@ -6,31 +6,23 @@
  * Time: 15:13
  */
 
-if(!isset($_SESSION)) {
-    session_start();
-}
-
-if(!isset($_SESSION['email'])) {
-    header('Location: ../index.php?alert=loginFirst');
-    die();
-}
+include('ifNotLoggedInRedirectToIndex.php');
 
 $UMID = $_REQUEST['UMID'];
 $inputCount = $_REQUEST['inputCount'];
 
 if(!isset($UMID) OR empty($UMID)) {
-    header('Location: ../index.php?alert=inputIsNotCorrect');
+    header('Location: ../index.php?alert=errorWhichIsImpossible');
     die();
 }
 
 if(!isset($inputCount) OR empty($inputCount)) {
-    header('Location: ../index.php?alert=inputIsNotCorrect');
+    header('Location: ../index.php?alert=errorWhichIsImpossible');
     die();
 }
 
 if(!is_numeric ($inputCount)) {
-    //TODO: Add Alert pleaseEnterANumber
-    header('Location: ../index.php?alert=pleaseEnterANumber');
+    header('Location: ../index.php?alert=errorWhichIsImpossible');
     die();
 }
 
@@ -41,7 +33,6 @@ $filter_options = array(
 );
 
 if(!(filter_var($inputCount, FILTER_VALIDATE_INT, $filter_options ) !== FALSE)) {
-    //TODO: Add Alert pleaseEnterAValidNumber
     header('Location: ../index.php?alert=pleaseEnterAValidNumber');
     die();
 }
@@ -50,14 +41,14 @@ if(!isset($conn)) {
     include 'connectToDatabase.php';
 }
 
-foreach ($conn->query('SELECT bookedCards FROM movies WHERE UMID='.$UMID.';') as $item) {
+foreach ($conn->query('SELECT bookedCards, name FROM movies WHERE UMID='.$UMID.';') as $item) {
     $alreadyBookedCards = $item[0];
+    $movieName = $item[1];
     break;
 }
 
 if(isset($alreadyBookedCards)) {
     if (($alreadyBookedCards + $inputCount) > 20) {
-        //TODO: Add Alert bookedTooManyCards
         header('Location: ../index.php?alert=bookedTooManyCards');
         die();
     }
@@ -87,8 +78,7 @@ if(isset($UBID) AND $UBID != null) {
 $sql = 'INSERT INTO bookings (UMID, UUID, count) VALUE ('.$UMID.', '.$_SESSION['UUID'].', '.$inputCount.');';
 $conn->exec($sql);
 
-//TODO: Add Alert successfulBookedCards UND count
-header('Location: ../index.php?alert=successfulBookedCards?count='.$inputCount);
+header('Location: ../index.php?alert=successfulBookedCards&count='.$inputCount.'&movieName='.$movieName);
 die();
 
 

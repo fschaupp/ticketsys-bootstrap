@@ -19,13 +19,12 @@ if(isset($_SESSION['email'])) {
 }
 
 if(!isset($email) OR empty($email)) {
-    //TODO: Add alert inputIsNotCorrect
-    header('Location: ../index.php?alert=inputIsNotCorrect');
+    header('Location: ../index.php?alert=errorWhichIsImpossible');
     die();
 }
 
 if(!isset($password) OR empty($password)) {
-    header('Location: ../index.php?alert=inputIsNotCorrect');
+    header('Location: ../index.php?alert=errorWhichIsImpossible');
     die();
 }
 
@@ -51,9 +50,7 @@ foreach ($conn->query('SELECT UUID, email, password, rank, firstname FROM users;
 }
 
 if(!$login_was_successful) {
-    //TODO: Add Alert credentialsAreWrong
     header('Location: ../index.php?alert=credentialsAreWrong');
 } else {
-    //TODO: Add Alert loginSuccessful
-    header('Location: ../index.php?alert=loginSuccessful');
+    header('Location: ../index.php?alert=successfulLoggedIn');
 }

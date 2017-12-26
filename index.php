@@ -12,6 +12,189 @@ $loggedIn = false;
 if (isset($_SESSION['email'])) {
     $loggedIn = true;
 }
+
+$alert = $_REQUEST['alert'];
+$alertExists = false;
+if(isset($alert) OR !empty($alert)) {
+    $alertExists = true;
+
+    $alertText = '';
+    $alertType = '';
+    $preAlertText = '';
+    switch ($alert) {
+        //Gehört auch zu userManagement und movieManagement
+        case 'errorWhichIsImpossible':
+            $alertType = 'danger';
+            $alertText = 'Ein Fehler ist aufgetreten, welcher bei der normalen Benutzung von ticketsys nicht auftreten kann';
+            break;
+
+        case 'loginFirst':
+            $alertType = 'danger';
+            $alertText = 'Bevor du die Aktion ausführen kannst, musst du dich zuerst anmelden.';
+            break;
+
+        case 'permissionDenied':
+            $alertType = 'danger';
+            $alertText = 'Du hast nicht genügend Berechtigungen um diese Aktion ausführen zu können.';
+            break;
+
+        case 'pleaseEnterAValidNumber':
+            $alertType = 'danger';
+            $alertText = 'Bitte gib eine Zahl zwischen 1 und 20 an.';
+            break;
+
+        case 'bookedTooManyCards':
+            $alertType = 'danger';
+            $alertText = 'Deine gebuchte Kartenanzahl übersteigt die Kapazität des Films';
+            break;
+
+        case 'successfulBookedCards':
+            $alertType = 'success';
+            $alertText = 'Du hast erfolgreich <strong>'.$_REQUEST['count'].'</strong> Karten für 
+                            <strong>'.$_REQUEST['movieName'].'</strong> gebucht.';
+            break;
+
+        case 'successfulCancelledBooking':
+            $alertType = 'success';
+            $alertText = 'Du hast erfolgreich deine Buchung für <strong>'.$_REQUEST['movieName'].'</strong> storniert.';
+            break;
+
+        case 'successfulCancelGetInTouch':
+            $alertType = 'success';
+            $alertText = 'Du hast dich als Arbeiter für <strong>'.$_REQUEST['movieName'].'</strong> abgemeldet.';
+            break;
+
+        case 'successfulGetInTouch':
+            $alertType = 'success';
+            $alertText = 'Du hast dich als Arbeiter für <strong>'.$_REQUEST['movieName'].'</strong> angemeldet.';
+            break;
+
+        case 'alreadyLoggedIn':
+            $alertType = 'warning';
+            $alertText = 'Du bist bereits angemeldet!';
+            break;
+
+        case 'credentialsAreWrong':
+            $alertType = 'danger';
+            $alertText = 'Deine Email-Adresse oder dein Passwort ist falsch. Falls du es vergessen hast melde dich bitte 
+            bei dem Administrator!';
+            break;
+
+        case 'successfulLoggedIn':
+            $alertType = 'success';
+            $alertText = 'Du hast dich erfolgreich angemeldet!';
+            break;
+
+        case 'firstnameOnly128Characters':
+            $alertType = 'danger';
+            $alertText = 'Dein Vorname darf nicht über 128 Zeichen lang sein!';
+            break;
+
+        case 'surnameOnly128Characters':
+            $alertType = 'danger';
+            $alertText = 'Dein Nachname darf nicht über 128 Zeichen lang sein!';
+            break;
+
+        case 'emailOnly128Characters':
+            $alertType = 'danger';
+            $alertText = 'Deine Email-Adresse darf nicht über 128 Zeichen lang sein!';
+            break;
+
+        case 'accountAlreadyExists':
+            $alertType = 'warning';
+            $alertText = 'Die Email-Adresse wurde bereits verwendet!';
+            break;
+
+        case 'successfulRegistered':
+            $alertType = 'success';
+            $alertText = 'Du hast dich erfolgreich regestriert. Jetzt nur mehr anmelden!';
+            break;
+
+        case 'successfulLoggedOut':
+            $alertType = 'success';
+            $alertText = 'Du hast die erfolgreich abgemeldet!';
+            break;
+
+        case 'youAreNotAWorker':
+            $alertType = 'warning';
+            $alertText = 'Du bist für keinen Kinodienst eingeteilt.';
+            break;
+
+            //Gehört auch zu Usermanagement
+        case 'passwordOnly512Characters':
+            $alertType = 'danger';
+            $alertText = 'Dein Passwort darf nicht länger als 512 Zeichen sein!';
+            break;
+
+        //Gehört in MovieManagement
+        case 'successfulCreatedMovie':
+            $alertType = 'success';
+            $alertText = 'Du hast erfolgreich <strong>'.$_REQUEST['movieName'].'</strong> erstellt.';
+            break;
+
+        case 'successfulDeletedMovie':
+            $alertType = 'success';
+            $alertText = 'Du hast erfolgreich <strong>'.$_REQUEST['movieName'].'</strong> gelöscht.';
+            break;
+
+        case 'successfulEditedMovie':
+            $alertType = 'success';
+            $alertText = 'Du hast erfolgreich <strong>'.$_REQUEST['movieName'].'</strong> bearbeitet.';
+            break;
+
+        case 'passwordIsWrong':
+            $alertType = 'danger';
+            $alertText = 'Dein eingegebenes Passwort ist falsch!';
+            break;
+
+        case 'successfulEditedAccount':
+            $alertType = 'success';
+            $alertText = 'Dein Profil wurde erfolgreich bearbeitet!';
+            break;
+
+            //Gehört in UserManagement
+        case 'successfulDeletedUser':
+            $alertType = 'success';
+            $alertText = 'Du hast erfolgreich <strong>'.$_REQUEST['userName'].'</strong> gelöscht.';
+            break;
+
+        case 'successfulEditedRank':
+            $alertType = 'success';
+            $alertText = 'Du hast erfolgreich den Rang von <strong>'.$_REQUEST['userName'].'</strong> geändert.';
+            break;
+
+        case 'successfulEditedUserPassword':
+            $alertType = 'success';
+            $alertText = 'Du hast erfolgreich das Passwort von <strong>'.$_REQUEST['userName'].'</strong> geändert.';
+            break;
+
+            //Muss auch zu MovieManagement hinzugefügt werden
+        case 'passwordsAreNotEqual':
+            $alertType = 'danger';
+            $alertText = 'Deine Passwörter stimmen nicht überein!';
+            break;
+
+        default:
+            $alertType = 'danger';
+            $alertText = 'Fehler: Konnte ['.$alert.'] nicht finden!';
+            break;
+    }
+
+    switch ($alertType) {
+        case 'danger':
+            $preAlertText = '<strong>Fehler! </strong>';
+            break;
+        case 'success':
+            $preAlertText = '<strong>Gut gemacht! </strong>';
+            break;
+        case 'warning':
+            $preAlertText = '<strong>Warnung! </strong>';
+            break;
+        default:
+            $preAlertText = '<strong>Info! </strong>';
+            break;
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -30,6 +213,13 @@ if (isset($_SESSION['email'])) {
 
 <div class="mycontainer">
     <?php
+    if($alertExists) {
+
+        echo '
+        <div class="alert alert-'.$alertType.'" role="alert">'.$preAlertText.$alertText.'</div>
+        ';
+    }
+
     $row_count = 0;
 
     foreach ($conn->query('SELECT UMID, name, date, trailerLink, workerUUID, bookedCards, emergencyWorkerUUID FROM movies ORDER BY date') as $item) {

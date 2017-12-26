@@ -6,36 +6,23 @@
  * Time: 18:08
  */
 
-if(!isset($_SESSION)) {
-    session_start();
-}
-
-if(!isset($_SESSION['email'])) {
-    header('Location: ../index.php?alert=loginFirst');
-    die();
-} else {
-    if($_SESSION['rank'] != "administrator") {
-        //TODO: Add alert permissionDenied
-        header('Location: ../index.php?alert=permissionDenied');
-        die();
-    }
-}
+include('ifNotLoggedInRedirectToIndex.php');
+include('ifNotEnoughPermissionRedirectToIndex.php');
 
 $inputMoviename = $_REQUEST['inputcMoviename'];
 $inputDate = $_REQUEST['inputcDate'];
 $inputTrailer = $_REQUEST['inputcTrailerlink'];
 
 if(!isset($inputMoviename) OR empty($inputMoviename)) {
-    //TODO: Add alert inputIsNotCorrect
-    header('Location: ../movieManagement.php?alert=inputIsNotCorrect');
+    header('Location: ../movieManagement.php?alert=errorWhichIsImpossible');
     die();
 }
 if(!isset($inputDate) OR empty($inputDate)) {
-    header('Location: ../movieManagement.php?alert=inputIsNotCorrect');
+    header('Location: ../movieManagement.php?alert=errorWhichIsImpossible');
     die();
 }
 if(!isset($inputTrailer) OR empty($inputTrailer)) {
-    header('Location: ../movieManagement.php?alert=inputIsNotCorrect');
+    header('Location: ../movieManagement.php?alert=errorWhichIsImpossible');
     die();
 }
 
@@ -56,6 +43,5 @@ $conn->query('
     VALUES ("' . $inputMoviename . '" , "' . $inputDate . '" , "' . $inputTrailer . '", 0)
 ');
 
-//TODO: Add alert movieSuccessfulCreated
-header('Location: ../movieManagement.php?alert=movieSuccessfulCreated');
+header('Location: ../movieManagement.php?alert=successfulCreatedMovie&movieName='.$inputMoviename);
 die();

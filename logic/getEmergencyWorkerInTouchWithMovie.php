@@ -6,20 +6,12 @@
  * Time: 15:23
  */
 
-if(!isset($_SESSION)) {
-    session_start();
-}
-
-if(!isset($_SESSION['email'])) {
-    header('Location: ../index.php?alert=loginFirst');
-    die();
-}
+include('ifNotLoggedInRedirectToIndex.php');
 
 $UMID = $_REQUEST['UMID'];
 
-
 if(!isset($UMID) OR empty($UMID)) {
-    header('Location: ../index.php?alert=inputIsNotCorrect');
+    header('Location: ../index.php?alert=errorWhichIsImpossible');
     die();
 }
 
@@ -27,9 +19,12 @@ if(!isset($conn)) {
     include 'connectToDatabase.php';
 }
 
+foreach ($conn->query('SELECT name FROM movies WHERE UMID=' . $UMID . ';') as $item) {
+    $movieName = $item[0];
+}
+
 $sql = 'UPDATE movies SET emergencyWorkerUUID=' . $_SESSION['UUID'] . ' WHERE UMID=' . $UMID . ';';
 $conn->exec($sql);
 
-//TODO: Add Alert successfulEmergencyWorkerGetInTouch
-header('Location: ../index.php?alert=successfulEmergencyWorkerGetInTouch');
+header('Location: ../index.php?alert=successfulGetInTouch&movieName='.$movieName);
 die();

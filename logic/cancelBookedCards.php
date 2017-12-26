@@ -6,19 +6,12 @@
  * Time: 11:33
  */
 
-if(!isset($_SESSION)) {
-    session_start();
-}
-
-if(!isset($_SESSION['email'])) {
-    header('Location: ../index.php?alert=loginFirst');
-    die();
-}
+include('ifNotLoggedInRedirectToIndex.php');
 
 $UMID = $_REQUEST['UMID'];
 
 if(!isset($UMID) OR empty($UMID)) {
-    header('Location: ../index.php?alert=inputIsNotCorrect');
+    header('Location: ../index.php?alert=errorWhichIsImpossible');
     die();
 }
 
@@ -39,8 +32,9 @@ if(isset($UBID)) {
         $sql = 'DELETE FROM bookings WHERE UBID=' . $UBID . ' AND UUID=' . $_SESSION['UUID'] . ';';
         $conn->exec($sql);
 
-        foreach ($conn->query('SELECT bookedCards FROM movies WHERE UMID=' . $UMID . ';') as $item) {
+        foreach ($conn->query('SELECT bookedCards, name FROM movies WHERE UMID=' . $UMID . ';') as $item) {
             $bookedCards = $item[0];
+            $movieName = $item[1];
         }
 
         if(isset($bookedCards) AND isset($count)) {
@@ -49,14 +43,13 @@ if(isset($UBID)) {
             $sql = 'UPDATE movies SET bookedCards=' . $newBookedCards . ' WHERE UMID='.$UMID.';';
             $conn->exec($sql);
 
-            //TODO: Add alert successfulCancelledBooking
-            header('Location: ../index.php?alert=successfulCancelledBooking');
+            header('Location: ../index.php?alert=successfulCancelledBooking&movieName='.$movieName);
         }
     } else {
-        header('Location: ../index.php?alert=thereIsNotBookingForThisFilm');
+        header('Location: ../index.php?alert=errorWhichIsImpossible');
     }
 } else {
-    header('Location: ../index.php?alert=thereIsNotBookingForThisFilm');
+    header('Location: ../index.php?alert=errorWhichIsImpossible');
 }
 
 die();
