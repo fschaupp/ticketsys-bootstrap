@@ -12,7 +12,7 @@ include('ifNotEnoughPermissionRedirectToIndex.php');
 $UMID = $_REQUEST['UMID'];
 
 if(!isset($UMID) OR empty($UMID)) {
-    header('Location: ../movieManagement.php?alert=errorWhichIsImpossible');
+    header('Location: ../movieManagement.php?alertReason=deleteMovie_isset_UMID');
     die();
 }
 
@@ -26,7 +26,7 @@ foreach ($conn->query('SELECT name FROM movies WHERE UMID=' . $UMID . ';') as $i
 
 $conn->query('DELETE FROM movies WHERE UMID='.$UMID);
 
-header('Location: ../movieManagement.php?alert=successfulDeletedMovie&movieName='.$movieName);
+header('Location: ../movieManagement.php?alertReason=deleteMovie_successful&movieName='.$movieName);
 die();
 
 

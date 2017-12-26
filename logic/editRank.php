@@ -13,11 +13,11 @@ $UUID = $_REQUEST['UUID'];
 $inputRank = $_REQUEST['inputeRank'];
 
 if(!isset($UUID) OR empty($UUID)) {
-    header('Location: ../userManagement.php?alert=errorWhichIsImpossible');
+    header('Location: ../userManagement.php?alertReason=editRank_isset_UUID');
     die();
 }
 if(!isset($inputRank) OR empty($inputRank)) {
-    header('Location: ../userManagement.php?alert=errorWhichIsImpossible');
+    header('Location: ../userManagement.php?alertReason=editRank_isset_rank');
     die();
 }
 
@@ -33,7 +33,7 @@ $sql = 'UPDATE users SET rank="'.$inputRank.'" WHERE UUID='.$UUID.';';
 
 $conn->exec($sql);
 
-header('Location: ../userManagement.php?alert=successfulEditedRank&userName='.$userName);
+header('Location: ../userManagement.php?alertReason=editRank_successful&userName='.$userName);
 die();
 
 

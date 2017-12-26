@@ -12,7 +12,7 @@ $UMID = $_REQUEST['UMID'];
 
 
 if(!isset($UMID) OR empty($UMID)) {
-    header('Location: ../index.php?alert=errorWhichIsImpossible');
+    header('Location: ../index.php?alertReason=getWorkerInTouchWithMovie_isset_UMID');
     die();
 }
 
@@ -27,5 +27,5 @@ foreach ($conn->query('SELECT name FROM movies WHERE UMID=' . $UMID . ';') as $i
 $sql = 'UPDATE movies SET workerUUID=' . $_SESSION['UUID'] . ' WHERE UMID=' . $UMID . ';';
 $conn->exec($sql);
 
-header('Location: ../index.php?alert=successfulGetInTouch&movieName='.$movieName);
+header('Location: ../index.php?alertReason=getWorkerInTouchWithMovie_successful&movieName='.$movieName);
 die();

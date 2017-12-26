@@ -12,17 +12,17 @@ $UMID = $_REQUEST['UMID'];
 $inputCount = $_REQUEST['inputCount'];
 
 if(!isset($UMID) OR empty($UMID)) {
-    header('Location: ../index.php?alert=errorWhichIsImpossible');
+    header('Location: ../index.php?alertReason=bookCards_isset_UMID');
     die();
 }
 
 if(!isset($inputCount) OR empty($inputCount)) {
-    header('Location: ../index.php?alert=errorWhichIsImpossible');
+    header('Location: ../index.php?alertReason=bookCards_isset_inputCount');
     die();
 }
 
 if(!is_numeric ($inputCount)) {
-    header('Location: ../index.php?alert=errorWhichIsImpossible');
+    header('Location: ../index.php?alertReason=bookCards_is_numeric_inputCount');
     die();
 }
 
@@ -33,7 +33,7 @@ $filter_options = array(
 );
 
 if(!(filter_var($inputCount, FILTER_VALIDATE_INT, $filter_options ) !== FALSE)) {
-    header('Location: ../index.php?alert=pleaseEnterAValidNumber');
+    header('Location: ../index.php?alertReason=bookCards_between_1_20');
     die();
 }
 
@@ -49,7 +49,7 @@ foreach ($conn->query('SELECT bookedCards, name FROM movies WHERE UMID='.$UMID.'
 
 if(isset($alreadyBookedCards)) {
     if (($alreadyBookedCards + $inputCount) > 20) {
-        header('Location: ../index.php?alert=bookedTooManyCards');
+        header('Location: ../index.php?alertReason=bookCards_booked_more_Cards_than_available');
         die();
     }
 } else {
@@ -78,7 +78,7 @@ if(isset($UBID) AND $UBID != null) {
 $sql = 'INSERT INTO bookings (UMID, UUID, count) VALUE ('.$UMID.', '.$_SESSION['UUID'].', '.$inputCount.');';
 $conn->exec($sql);
 
-header('Location: ../index.php?alert=successfulBookedCards&count='.$inputCount.'&movieName='.$movieName);
+header('Location: ../index.php?alertReason=bookCards_successful&bookedCards='.$inputCount.'&movieName='.$movieName);
 die();
 
 

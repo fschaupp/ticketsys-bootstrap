@@ -16,6 +16,8 @@ if (!isset($_SESSION['email'])) {
 if (!isset($conn)) {
     include "./logic/connectToDatabase.php";
 }
+
+include ('./alertSwitch.php');
 ?>
 
 <!DOCTYPE html>
@@ -32,6 +34,14 @@ if (!isset($conn)) {
 <body>
 <?php include 'navbar.php'; ?>
 <div class="mycontainer">
+    <?php
+    if(isset($alertText) && isset($alertType)) {
+
+        echo '
+        <div class="alert alert-'.$alertType.'" role="alert">'.$alertText.'</div>
+        ';
+    }
+    ?>
     <h1>Alle Benutzer</h1>
     <p>Hier findest du alle gespeicherten Benutzer</p>
 

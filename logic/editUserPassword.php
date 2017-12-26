@@ -14,25 +14,25 @@ $inputPassword = $_REQUEST['inputePassword'];
 $inputPassword_again = $_REQUEST['inputePassword_again'];
 
 if(!isset($UUID) OR empty($UUID)) {
-    header('Location: ../userManagement.php?alert=errorWhichIsImpossible');
+    header('Location: ../userManagement.php?alertReason=editUserPassword_isset_UUID');
     die();
 }
 if(!isset($inputPassword) OR empty($inputPassword)) {
-    header('Location: ../userManagement.php?alert=errorWhichIsImpossible');
+    header('Location: ../userManagement.php?alertReason=editUserPassword_isset_password');
     die();
 }
 if(!isset($inputPassword_again) OR empty($inputPassword_again)) {
-    header('Location: ../userManagement.php?alert=errorWhichIsImpossible');
+    header('Location: ../userManagement.php?alertReason=editUserPassword_isset_password_again');
     die();
 }
 
 if($inputPassword != $inputPassword_again) {
-    header('Location: ../userManagement.php?alert=passwordsAreNotEqual');
+    header('Location: ../userManagement.php?alertReason=editUserPassword_passwords_are_not_equal');
     die();
 }
 
 if(strlen($inputPassword) > 512) {
-    header('Location: ../userManagement.php?alert=passwordOnly512Characters');
+    header('Location: ../userManagement.php?alertReason=editUserPassword_passwords_only_512_characters');
     die();
 }
 
@@ -50,7 +50,7 @@ $sql = 'UPDATE users SET password="'.$hashed_password.'" WHERE UUID='.$UUID.';';
 
 $conn->exec($sql);
 
-header('Location: ../userManagement.php?alert=successfulEditedUserPassword&userName='.$userName);
+header('Location: ../userManagement.php?alertReason=editUserPassword_successful&userName='.$userName);
 die();
 
 

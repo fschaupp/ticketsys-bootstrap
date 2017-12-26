@@ -16,6 +16,8 @@ if (!isset($_SESSION['email'])) {
 if (!isset($conn)) {
     include "./logic/connectToDatabase.php";
 }
+
+include ('./alertSwitch.php');
 ?>
 
 <!DOCTYPE html>
@@ -33,6 +35,15 @@ if (!isset($conn)) {
 <?php include 'navbar.php'; ?>
 
 <div class="mycontainer">
+    <?php
+    if(isset($alertText) && isset($alertType)) {
+
+        echo '
+        <div class="alert alert-'.$alertType.'" role="alert">'.$alertText.'</div>
+        ';
+    }
+    ?>
+
     <h1>Alle Filme</h1>
     <button type="button" class="btn btn-success pull-right" data-toggle="modal" data-target="#modal_createMovie"
             style="margin-top: -30px">Film anlegen</button>

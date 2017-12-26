@@ -14,15 +14,15 @@ $inputDate = $_REQUEST['inputcDate'];
 $inputTrailer = $_REQUEST['inputcTrailerlink'];
 
 if(!isset($inputMoviename) OR empty($inputMoviename)) {
-    header('Location: ../movieManagement.php?alert=errorWhichIsImpossible');
+    header('Location: ../movieManagement.php?alertReason=createMovie_isset_moviename');
     die();
 }
 if(!isset($inputDate) OR empty($inputDate)) {
-    header('Location: ../movieManagement.php?alert=errorWhichIsImpossible');
+    header('Location: ../movieManagement.php?alertReason=createMovie_isset_date');
     die();
 }
 if(!isset($inputTrailer) OR empty($inputTrailer)) {
-    header('Location: ../movieManagement.php?alert=errorWhichIsImpossible');
+    header('Location: ../movieManagement.php?alertReason=createMovie_isset_trailer');
     die();
 }
 
@@ -43,5 +43,5 @@ $conn->query('
     VALUES ("' . $inputMoviename . '" , "' . $inputDate . '" , "' . $inputTrailer . '", 0)
 ');
 
-header('Location: ../movieManagement.php?alert=successfulCreatedMovie&movieName='.$inputMoviename);
+header('Location: ../movieManagement.php?alertReason=createMovie_successful&movieName='.$inputMoviename);
 die();

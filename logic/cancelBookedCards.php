@@ -11,7 +11,7 @@ include('ifNotLoggedInRedirectToIndex.php');
 $UMID = $_REQUEST['UMID'];
 
 if(!isset($UMID) OR empty($UMID)) {
-    header('Location: ../index.php?alert=errorWhichIsImpossible');
+    header('Location: ../index.php?alertReason=cancelBookedCards_isset_UMID');
     die();
 }
 
@@ -43,13 +43,13 @@ if(isset($UBID)) {
             $sql = 'UPDATE movies SET bookedCards=' . $newBookedCards . ' WHERE UMID='.$UMID.';';
             $conn->exec($sql);
 
-            header('Location: ../index.php?alert=successfulCancelledBooking&movieName='.$movieName);
+            header('Location: ../index.php?alertReason=cancelBookedCards_successful&movieName='.$movieName);
         }
     } else {
-        header('Location: ../index.php?alert=errorWhichIsImpossible');
+        header('Location: ../index.php?alertReason=cancelBookedCards_booking_does_not_exist');
     }
 } else {
-    header('Location: ../index.php?alert=errorWhichIsImpossible');
+    header('Location: ../index.php?alertReason=cancelBookedCards_booking_does_not_exist');
 }
 
 die();

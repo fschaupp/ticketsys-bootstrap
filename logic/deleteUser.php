@@ -12,7 +12,7 @@ include('ifNotEnoughPermissionRedirectToIndex.php');
 $UUID = $_REQUEST['UUID'];
 
 if(!isset($UUID) OR empty($UUID)) {
-    header('Location: ../userManagement.php?alert=errorWhichIsImpossible');
+    header('Location: ../userManagement.php?alertReason=deleteUser_isset_UUID');
     die();
 }
 
@@ -26,7 +26,7 @@ foreach ($conn->query('SELECT firstname, lastname FROM users WHERE UUID=' . $UUI
 
 $conn->query('DELETE FROM users WHERE UUID='.$UUID);
 
-header('Location: ../userManagement.php?alert=successfulDeletedUser&userName='.$userName);
+header('Location: ../userManagement.php?alertReason=deleteUser_successful&userName='.$userName);
 die();
 
 

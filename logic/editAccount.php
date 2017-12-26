@@ -8,7 +8,6 @@
 
 include('ifNotLoggedInRedirectToIndex.php');
 
-$UUID = $_REQUEST['UUID'];
 $inputFirstname = $_REQUEST['inputFirstname'];
 $inputSurname = $_REQUEST['inputSurname'];
 $inputEmail = $_REQUEST['inputEmail'];
@@ -16,24 +15,20 @@ $inputPassword_current = $_REQUEST['inputPassword_current'];
 $inputPassword = $_REQUEST['inputPassword'];
 $inputPassword_again = $_REQUEST['inputPassword_again'];
 
-if(!isset($UUID) OR empty($UUID)) {
-    header('Location: ../index.php?alert=errorWhichIsImpossible');
-    die();
-}
 if(!isset($inputFirstname) OR empty($inputFirstname)) {
-    header('Location: ../index.php?alert=errorWhichIsImpossible');
+    header('Location: ../index.php?alertReason=editAccount_isset_firstname');
     die();
 }
 if(!isset($inputSurname) OR empty($inputSurname)) {
-    header('Location: ../index.php?alert=errorWhichIsImpossible');
+    header('Location: ../index.php?alertReason=editAccount_isset_surname');
     die();
 }
 if(!isset($inputEmail) OR empty($inputEmail)) {
-    header('Location: ../index.php?alert=errorWhichIsImpossible');
+    header('Location: ../index.php?alertReason=editAccount_isset_email');
     die();
 }
 if(!isset($inputPassword_current) OR empty($inputPassword_current)) {
-    header('Location: ../index.php?alert=errorWhichIsImpossible');
+    header('Location: ../index.php?alertReason=editAccount_isset_password_current');
     die();
 }
 
@@ -48,7 +43,7 @@ if(!isset($inputPassword) OR empty($inputPassword)) {
 }
 if(!isset($inputPassword_again) OR empty($inputPassword_again)) {
     if($change_password == true) {
-        header('Location: ../index.php?alert=passwordsAreNotEqual');
+        header('Location: ../index.php?alertReason=editAccount_new_passwords_are_not_equal');
         die();
     }
 }
@@ -59,9 +54,9 @@ if(!isset($conn)) {
     include "./connectToDatabase.php";
 }
 
-foreach ($conn->query('SELECT UUID, password FROM users WHERE UUID="'.$UUID.'";') as $item) {
+foreach ($conn->query('SELECT UUID, password FROM users WHERE UUID="'.$_REQUEST['UUID'].'";') as $item) {
     if($item[1] != $hashed_password_current) {
-        header('Location: ../index.php?alert=passwordIsWrong');
+        header('Location: ../index.php?alertReason=editAccount_current_password_is_wrong');
         die();
     }
     break;
@@ -69,25 +64,25 @@ foreach ($conn->query('SELECT UUID, password FROM users WHERE UUID="'.$UUID.'";'
 
 if($change_password == true) {
     if ($inputPassword != $inputPassword_again) {
-        header('Location: ../index.php?alert=passwordsAreNotEqual');
+        header('Location: ../index.php?alertReason=editAccount_new_passwords_are_not_equal');
         die();
     }
 
     $hashed_password = hash('sha512', $inputPassword);
 
-    $sql = 'UPDATE users SET password="'.$hashed_password.'" WHERE UUID='. $UUID.';';
+    $sql = 'UPDATE users SET password="'.$hashed_password.'" WHERE UUID='. $_REQUEST['UUID'].';';
 
     $conn->exec($sql);
 }
 
-$sql = 'UPDATE users SET firstname="'.$inputFirstname.'", surname="'.$inputSurname.'", email="'.$inputEmail.'" WHERE UUID='. $UUID.';';
+$sql = 'UPDATE users SET firstname="'.$inputFirstname.'", surname="'.$inputSurname.'", email="'.$inputEmail.'" WHERE UUID='. $_REQUEST['UUID'].';';
 
 $conn->exec($sql);
 
 $_SESSION['email'] = $inputEmail;
 $_SESSION['firstname'] = $inputFirstname;
 
-header('Location: ../index.php?alert=successfulEditedAccount');
+header('Location: ../index.php?alert=editAccount_successful');
 die();
 
 

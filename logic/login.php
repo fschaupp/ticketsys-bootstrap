@@ -14,17 +14,17 @@ if(!isset($_SESSION)) {
 }
 
 if(isset($_SESSION['email'])) {
-    header('Location: ../index.php?alert=alreadyLoggedIn');
+    header('Location: ../index.php?alertReason=login_alreadyLoggedIn');
     die();
 }
 
 if(!isset($email) OR empty($email)) {
-    header('Location: ../index.php?alert=errorWhichIsImpossible');
+    header('Location: ../index.php?alertReason=login_isset_email');
     die();
 }
 
 if(!isset($password) OR empty($password)) {
-    header('Location: ../index.php?alert=errorWhichIsImpossible');
+    header('Location: ../index.php?alertReason=login_isset_password');
     die();
 }
 
@@ -50,7 +50,7 @@ foreach ($conn->query('SELECT UUID, email, password, rank, firstname FROM users;
 }
 
 if(!$login_was_successful) {
-    header('Location: ../index.php?alert=credentialsAreWrong');
+    header('Location: ../index.php?alertReason=login_credentials_wrong');
 } else {
-    header('Location: ../index.php?alert=successfulLoggedIn');
+    header('Location: ../index.php?alertReason=login_successful');
 }

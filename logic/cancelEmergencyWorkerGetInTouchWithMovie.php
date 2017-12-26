@@ -11,7 +11,7 @@ include('ifNotLoggedInRedirectToIndex.php');
 $UMID = $_REQUEST['UMID'];
 
 if(!isset($UMID) OR empty($UMID)) {
-    header('Location: ../index.php?alert=errorWhichIsImpossible');
+    header('Location: ../index.php?alertReason=cancelWorkerGetInTouchWithMovie_isset_UMID');
     die();
 }
 
@@ -23,9 +23,9 @@ foreach ($conn->query('SELECT name FROM movies WHERE UMID=' . $UMID . ';') as $i
     $movieName = $item[0];
 }
 
-$sql='UPDATE movies SET emergencyWorkerUUID=NULL WHERE UMID='.$UMID.' AND workerUUID='. $_SESSION['UUID'].';';
+$sql='UPDATE movies SET emergencyWorkerUUID=NULL WHERE UMID='.$UMID.' AND emergencyWorkerUUID='. $_SESSION['UUID'].';';
 $conn->exec($sql);
 
-header('Location: ../index.php?alert=successfulCancelGetInTouch&movieName='.$movieName);
+header('Location: ../index.php?alertReason=cancelWorkerGetInTouchWithMovie_successful&movieName='.$movieName);
 die();
 

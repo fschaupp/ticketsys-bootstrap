@@ -31,7 +31,8 @@ if(isset($_SESSION['email'])) {
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="index.php">BKE Ticketsystem</a>
-            <a class="navbar-brand" href="#" data-toggle="tooltip" data-placement="bottom" title="Es kann zu Bugs, Datenverlusten und Offline-Zeiten kommen!">
+            <a class="navbar-brand" href="#" data-toggle="tooltip" data-placement="bottom" title="Es kann zu Bugs, Datenverlusten und Offline-Zeiten kommen!
+                    Der Text wird noch überarbeitet!">
                 <span class="label label-warning">BETA</span>
             </a>
         </div>
@@ -118,11 +119,10 @@ if(isset($_SESSION['email'])) {
 <!-- Modal -->
 <?php
     if($loggedIn) {
-        foreach ($conn->query('SELECT UUID, email, firstname, surname FROM users WHERE UUID='.$_SESSION['UUID']) as $item) {
-            $UUID = $item[0];
-            $email = $item[1];
-            $firstname = $item[2];
-            $surname = $item[3];
+        foreach ($conn->query('SELECT email, firstname, surname FROM users WHERE UUID='.$_SESSION['UUID']) as $item) {
+            $email = $item[0];
+            $firstname = $item[1];
+            $surname = $item[2];
         }
 
         echo '
@@ -138,9 +138,7 @@ if(isset($_SESSION['email'])) {
                             <div class="modal-body">
                                 <div class="alert alert-info">
                                   <strong>Info!</strong> Wenn das "Neues Passwort" Feld leer ist, wird sich dein Passwort nicht ändern.
-                                </div>
-                                
-                                <input type="hidden" id="UUID" name="UUID" value="'.$UUID.'">
+                                </div>                       
 
                                 <div class="form-group">
                                     <label for="inputFirstname">Vorname:</label>
