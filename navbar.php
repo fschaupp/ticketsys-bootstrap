@@ -91,7 +91,7 @@ if(isset($_SESSION['email'])) {
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </button>
                             </a>
-                            <a href="./logic/logout.php">
+                            <a href="./logic/user/logout.php">
                                 <button type="submit" class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Abmelden"><span class="glyphicon glyphicon-log-out"></span></button>
                             </a>
                         ';
@@ -134,7 +134,7 @@ if(isset($_SESSION['email'])) {
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                             <h4 class="modal-title">Ändere deine Angaben</h4>
                         </div>
-                        <form action="./logic/editAccount.php" method="GET">
+                        <form action="./logic/user/editAccount.php" method="GET">
                             <div class="modal-body">
                                 <div class="alert alert-info">
                                   <strong>Info!</strong> Wenn das "Neues Passwort" Feld leer ist, wird sich dein Passwort nicht ändern.
@@ -202,7 +202,7 @@ if(isset($_SESSION['email'])) {
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                             <h4 class="modal-title">Melde dich bei dem BKE Ticketsystem an</h4>
                         </div>
-                        <form action="./logic/login.php" method="GET">
+                        <form action="./logic/user/login.php" method="POST">
                             <div class="modal-body">
                                 <div class="form-group">
                                     <label for="inputEmail_l">Email-Adresse:</label>
@@ -236,7 +236,7 @@ if(isset($_SESSION['email'])) {
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                             <h4 class="modal-title">Registriere dich bei dem BKE Ticketsystem</h4>
                         </div>
-                        <form action="./logic/register.php" method="GET">
+                        <form action="./logic/user/register.php" method="POST">
                             <div class="modal-body">
                                 <div class="form-group">
                                     <label for="inputFirstname">Vorname:</label>

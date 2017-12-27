@@ -6,17 +6,17 @@
  * Time: 15:23
  */
 
-include('ifNotLoggedInRedirectToIndex.php');
+include('../ifNotLoggedInRedirectToIndex.php');
 
 $UMID = $_REQUEST['UMID'];
 
 if(!isset($UMID) OR empty($UMID)) {
-    header('Location: ../index.php?alertReason=getWorkerInTouchWithMovie_isset_UMID');
+    header('Location: /index.php?alertReason=getWorkerInTouchWithMovie_isset_UMID');
     die();
 }
 
 if(!isset($conn)) {
-    include 'connectToDatabase.php';
+    include '../connectToDatabase.php';
 }
 
 foreach ($conn->query('SELECT name FROM movies WHERE UMID=' . $UMID . ';') as $item) {
@@ -26,5 +26,5 @@ foreach ($conn->query('SELECT name FROM movies WHERE UMID=' . $UMID . ';') as $i
 $sql = 'UPDATE movies SET emergencyWorkerUUID=' . $_SESSION['UUID'] . ' WHERE UMID=' . $UMID . ';';
 $conn->exec($sql);
 
-header('Location: ../index.php?alertReason=getWorkerInTouchWithMovie_successful&movieName='.$movieName);
+header('Location: /index.php?alertReason=getWorkerInTouchWithMovie_successful&movieName='.$movieName);
 die();

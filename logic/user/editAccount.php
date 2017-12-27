@@ -6,7 +6,7 @@
  * Time: 18:00
  */
 
-include('ifNotLoggedInRedirectToIndex.php');
+include('../ifNotLoggedInRedirectToIndex.php');
 
 $inputFirstname = $_REQUEST['inputFirstname'];
 $inputSurname = $_REQUEST['inputSurname'];
@@ -16,19 +16,19 @@ $inputPassword = $_REQUEST['inputPassword'];
 $inputPassword_again = $_REQUEST['inputPassword_again'];
 
 if(!isset($inputFirstname) OR empty($inputFirstname)) {
-    header('Location: ../index.php?alertReason=editAccount_isset_firstname');
+    header('Location: /index.php?alertReason=editAccount_isset_firstname');
     die();
 }
 if(!isset($inputSurname) OR empty($inputSurname)) {
-    header('Location: ../index.php?alertReason=editAccount_isset_surname');
+    header('Location: /index.php?alertReason=editAccount_isset_surname');
     die();
 }
 if(!isset($inputEmail) OR empty($inputEmail)) {
-    header('Location: ../index.php?alertReason=editAccount_isset_email');
+    header('Location: /index.php?alertReason=editAccount_isset_email');
     die();
 }
 if(!isset($inputPassword_current) OR empty($inputPassword_current)) {
-    header('Location: ../index.php?alertReason=editAccount_isset_password_current');
+    header('Location: /index.php?alertReason=editAccount_isset_password_current');
     die();
 }
 
@@ -43,7 +43,7 @@ if(!isset($inputPassword) OR empty($inputPassword)) {
 }
 if(!isset($inputPassword_again) OR empty($inputPassword_again)) {
     if($change_password == true) {
-        header('Location: ../index.php?alertReason=editAccount_new_passwords_are_not_equal');
+        header('Location: /index.php?alertReason=editAccount_new_passwords_are_not_equal');
         die();
     }
 }
@@ -51,12 +51,12 @@ if(!isset($inputPassword_again) OR empty($inputPassword_again)) {
 $hashed_password_current = hash('sha512', $inputPassword_current);
 
 if(!isset($conn)) {
-    include "./connectToDatabase.php";
+    include "../connectToDatabase.php";
 }
 
 foreach ($conn->query('SELECT UUID, password FROM users WHERE UUID="'.$_REQUEST['UUID'].'";') as $item) {
     if($item[1] != $hashed_password_current) {
-        header('Location: ../index.php?alertReason=editAccount_current_password_is_wrong');
+        header('Location: /index.php?alertReason=editAccount_current_password_is_wrong');
         die();
     }
     break;
@@ -64,7 +64,7 @@ foreach ($conn->query('SELECT UUID, password FROM users WHERE UUID="'.$_REQUEST[
 
 if($change_password == true) {
     if ($inputPassword != $inputPassword_again) {
-        header('Location: ../index.php?alertReason=editAccount_new_passwords_are_not_equal');
+        header('Location: /index.php?alertReason=editAccount_new_passwords_are_not_equal');
         die();
     }
 
@@ -82,7 +82,7 @@ $conn->exec($sql);
 $_SESSION['email'] = $inputEmail;
 $_SESSION['firstname'] = $inputFirstname;
 
-header('Location: ../index.php?alert=editAccount_successful');
+header('Location: /index.php?alert=editAccount_successful');
 die();
 
 

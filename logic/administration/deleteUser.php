@@ -6,18 +6,18 @@
  * Time: 17:18
  */
 
-include('ifNotLoggedInRedirectToIndex.php');
-include('ifNotEnoughPermissionRedirectToIndex.php');
+include('../ifNotLoggedInRedirectToIndex.php');
+include('../ifNotEnoughPermissionRedirectToIndex.php');
 
 $UUID = $_REQUEST['UUID'];
 
 if(!isset($UUID) OR empty($UUID)) {
-    header('Location: ../userManagement.php?alertReason=deleteUser_isset_UUID');
+    header('Location: /userManagement.php?alertReason=deleteUser_isset_UUID');
     die();
 }
 
 if(!isset($conn)) {
-    include "./connectToDatabase.php";
+    include "../connectToDatabase.php";
 }
 
 foreach ($conn->query('SELECT firstname, lastname FROM users WHERE UUID=' . $UUID . ';') as $item) {
@@ -26,7 +26,7 @@ foreach ($conn->query('SELECT firstname, lastname FROM users WHERE UUID=' . $UUI
 
 $conn->query('DELETE FROM users WHERE UUID='.$UUID);
 
-header('Location: ../userManagement.php?alertReason=deleteUser_successful&userName='.$userName);
+header('Location: /userManagement.php?alertReason=deleteUser_successful&userName='.$userName);
 die();
 
 

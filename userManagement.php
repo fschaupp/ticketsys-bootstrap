@@ -4,11 +4,11 @@ if (!isset($_SESSION)) {
 }
 
 if (!isset($_SESSION['email'])) {
-    header('Location: ../index.php?alert=loginFirst');
+    header('Location: ./index.php?alert=loginFirst');
     die();
 } else {
     if ($_SESSION['rank'] != "administrator") {
-        header('Location: ../index.php?alert=permissionDenied');
+        header('Location: ./index.php?alert=permissionDenied');
         die();
     }
 }
@@ -17,7 +17,7 @@ if (!isset($conn)) {
     include "./logic/connectToDatabase.php";
 }
 
-include ('./alertSwitch.php');
+include ('./logic/alertSwitch.php');
 ?>
 
 <!DOCTYPE html>
@@ -92,7 +92,7 @@ include ('./alertSwitch.php');
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">Passwort ändern:</h4>
             </div>
-            <form action="./logic/editUserPassword.php" method="GET">
+            <form action="./logic/administration/editUserPassword.php" method="POST">
                 <div class="modal-body">
                     <input type="text" name="UUID" hidden value=""/>
 
@@ -128,7 +128,7 @@ include ('./alertSwitch.php');
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">Rang ändern:</h4>
             </div>
-            <form action="./logic/editRank.php" method="GET">
+            <form action="./logic/administration/editRank.php" method="POST">
                 <div class="modal-body">
                     <input type="text" name="UUID" hidden value=""/>
 
@@ -156,7 +156,7 @@ include ('./alertSwitch.php');
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">Willst du diesen Benutzer wirklich löschen?</h4>
             </div>
-            <form method="GET" action="./logic/deleteUser.php">
+            <form method="POST" action="./logic/administration/deleteUser.php">
                 <input type="text" name="UUID" hidden value=""/>
                 <div class="modal-footer">
                     <button type="reset" class="btn btn-danger" data-dismiss="modal">Abbrechen</button>

@@ -14,24 +14,24 @@ if(!isset($_SESSION)) {
 }
 
 if(isset($_SESSION['email'])) {
-    header('Location: ../index.php?alertReason=login_alreadyLoggedIn');
+    header('Location: /index.php?alertReason=login_alreadyLoggedIn');
     die();
 }
 
 if(!isset($email) OR empty($email)) {
-    header('Location: ../index.php?alertReason=login_isset_email');
+    header('Location: /index.php?alertReason=login_isset_email');
     die();
 }
 
 if(!isset($password) OR empty($password)) {
-    header('Location: ../index.php?alertReason=login_isset_password');
+    header('Location: /index.php?alertReason=login_isset_password');
     die();
 }
 
 $hashed_password = hash('sha512', $password);
 
 if(!isset($conn)) {
-    include "./connectToDatabase.php";
+    include "../connectToDatabase.php";
 }
 
 $login_was_successful = false;
@@ -50,7 +50,7 @@ foreach ($conn->query('SELECT UUID, email, password, rank, firstname FROM users;
 }
 
 if(!$login_was_successful) {
-    header('Location: ../index.php?alertReason=login_credentials_wrong');
+    header('Location: /index.php?alertReason=login_credentials_wrong');
 } else {
-    header('Location: ../index.php?alertReason=login_successful');
+    header('Location: /index.php?alertReason=login_successful');
 }

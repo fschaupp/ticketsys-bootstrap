@@ -6,18 +6,18 @@
  * Time: 17:18
  */
 
-include('ifNotLoggedInRedirectToIndex.php');
-include('ifNotEnoughPermissionRedirectToIndex.php');
+include('../ifNotLoggedInRedirectToIndex.php');
+include('../ifNotEnoughPermissionRedirectToIndex.php');
 
 $UMID = $_REQUEST['UMID'];
 
 if(!isset($UMID) OR empty($UMID)) {
-    header('Location: ../movieManagement.php?alertReason=deleteMovie_isset_UMID');
+    header('Location: /movieManagement.php?alertReason=deleteMovie_isset_UMID');
     die();
 }
 
 if(!isset($conn)) {
-    include "./connectToDatabase.php";
+    include "../connectToDatabase.php";
 }
 
 foreach ($conn->query('SELECT name FROM movies WHERE UMID=' . $UMID . ';') as $item) {
@@ -26,7 +26,7 @@ foreach ($conn->query('SELECT name FROM movies WHERE UMID=' . $UMID . ';') as $i
 
 $conn->query('DELETE FROM movies WHERE UMID='.$UMID);
 
-header('Location: ../movieManagement.php?alertReason=deleteMovie_successful&movieName='.$movieName);
+header('Location: /movieManagement.php?alertReason=deleteMovie_successful&movieName='.$movieName);
 die();
 
 

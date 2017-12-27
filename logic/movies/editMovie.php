@@ -6,8 +6,8 @@
  * Time: 18:00
  */
 
-include('ifNotLoggedInRedirectToIndex.php');
-include('ifNotEnoughPermissionRedirectToIndex.php');
+include('../ifNotLoggedInRedirectToIndex.php');
+include('../ifNotEnoughPermissionRedirectToIndex.php');
 
 $UMID = $_REQUEST['UMID'];
 $inputMoviename = $_REQUEST['inputeMoviename'];
@@ -15,24 +15,24 @@ $inputDate = $_REQUEST['inputeDate'];
 $inputTrailerlink = $_REQUEST['inputeTrailerlink'];
 
 if(!isset($UMID) OR empty($UMID)) {
-    header('Location: ../movieManagement.php?alertReason=editMovie_isset_UMID');
+    header('Location: /movieManagement.php?alertReason=editMovie_isset_UMID');
     die();
 }
 if(!isset($inputMoviename) OR empty($inputMoviename)) {
-    header('Location: ../movieManagement.php?alertReason=editMovie_isset_moviename');
+    header('Location: /movieManagement.php?alertReason=editMovie_isset_moviename');
     die();
 }
 if(!isset($inputDate) OR empty($inputDate)) {
-    header('Location: ../movieManagement.php?alertReason=editMovie_isset_date');
+    header('Location: /movieManagement.php?alertReason=editMovie_isset_date');
     die();
 }
 if(!isset($inputTrailerlink) OR empty($inputTrailerlink)) {
-    header('Location: ../movieManagement.php?alertReason=editMovie_isset_trailer');
+    header('Location: /movieManagement.php?alertReason=editMovie_isset_trailer');
     die();
 }
 
 if(!isset($conn)) {
-    include "./connectToDatabase.php";
+    include "../connectToDatabase.php";
 }
 
 str_replace("ß", "&szlig;", $inputMoviename);
@@ -47,7 +47,7 @@ $sql = 'UPDATE movies SET name="'.$inputMoviename.'", date="'.$inputDate.'", tra
 
 $conn->exec($sql);
 
-header('Location: ../movieManagement.php?alertReason=editMovie_successful&movieName='.$inputMoviename);
+header('Location: /movieManagement.php?alertReason=editMovie_successful&movieName='.$inputMoviename);
 die();
 
 

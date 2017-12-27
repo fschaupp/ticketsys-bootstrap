@@ -13,7 +13,7 @@ if (isset($_SESSION['email'])) {
     $loggedIn = true;
 }
 
-include ('./alertSwitch.php');
+include ('./logic/alertSwitch.php');
 ?>
 
 <!DOCTYPE html>
@@ -322,7 +322,7 @@ include ('./alertSwitch.php');
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title" id="modal_bookCards_availableCardsHEAD"></h4>
             </div>
-            <form action="./logic/bookCards.php" method="GET">
+            <form action="./logic/booking/bookCards.php" method="POST">
                 <div class="modal-body">
                     <input type="text" name="UMID" hidden value=""/>
                     <div class="alert alert-info">
@@ -360,7 +360,7 @@ include ('./alertSwitch.php');
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title" id="modal_getNormalWorkerInTouch_movieNameHEAD"></h4>
             </div>
-            <form method="GET" action="./logic/getNormalWorkerInTouchWithMovie.php">
+            <form method="POST" action="./logic/worker/getNormalWorkerInTouchWithMovie.php">
                 <div class="modal-body">
                     <input type="text" name="UMID" hidden value=""/>
                     <div class="alert alert-info">
@@ -383,7 +383,7 @@ include ('./alertSwitch.php');
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title" id="modal_getEmergencyWorkerInTouch_movieNameHEAD"></h4>
             </div>
-            <form method="GET" action="./logic/getEmergencyWorkerInTouchWithMovie.php">
+            <form method="POST" action="./logic/worker/getEmergencyWorkerInTouchWithMovie.php">
                 <div class="modal-body">
                     <input type="text" name="UMID" hidden value=""/>
                     <div class="alert alert-info">
@@ -407,7 +407,7 @@ include ('./alertSwitch.php');
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title" id="modal_cancelNormalWorkerGetInTouch_movieNameHEAD"></h4>
             </div>
-            <form method="GET" action="./logic/cancelNormalWorkerGetInTouchWithMovie.php">
+            <form method="POST" action="./logic/worker/cancelNormalWorkerGetInTouchWithMovie.php">
                 <input type="text" name="UMID" hidden value=""/>
                 <div class="modal-footer">
                     <button type="reset" class="btn btn-success" data-dismiss="modal">Abbrechen</button>
@@ -425,7 +425,7 @@ include ('./alertSwitch.php');
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title" id="modal_cancelEmergencyWorkerGetInTouch_movieNameHEAD"></h4>
             </div>
-            <form method="GET" action="./logic/cancelEmergencyWorkerGetInTouchWithMovie.php">
+            <form method="POST" action="./logic/worker/cancelEmergencyWorkerGetInTouchWithMovie.php">
                 <input type="text" name="UMID" hidden value=""/>
                 <div class="modal-footer">
                     <button type="reset" class="btn btn-success" data-dismiss="modal">Abbrechen</button>
@@ -444,7 +444,7 @@ include ('./alertSwitch.php');
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title" id="modal_cancelBooking_movieNameHEAD"></h4>
             </div>
-            <form method="GET" action="./logic/cancelBookedCards.php">
+            <form method="POST" action="./logic/booking/cancelBookedCards.php">
                 <div class="modal-body">
                     <input type="text" name="UMID" hidden value="">
                     <div class="alert alert-info">

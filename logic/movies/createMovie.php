@@ -6,28 +6,28 @@
  * Time: 18:08
  */
 
-include('ifNotLoggedInRedirectToIndex.php');
-include('ifNotEnoughPermissionRedirectToIndex.php');
+include('../ifNotLoggedInRedirectToIndex.php');
+include('../ifNotEnoughPermissionRedirectToIndex.php');
 
 $inputMoviename = $_REQUEST['inputcMoviename'];
 $inputDate = $_REQUEST['inputcDate'];
 $inputTrailer = $_REQUEST['inputcTrailerlink'];
 
 if(!isset($inputMoviename) OR empty($inputMoviename)) {
-    header('Location: ../movieManagement.php?alertReason=createMovie_isset_moviename');
+    header('Location: /movieManagement.php?alertReason=createMovie_isset_moviename');
     die();
 }
 if(!isset($inputDate) OR empty($inputDate)) {
-    header('Location: ../movieManagement.php?alertReason=createMovie_isset_date');
+    header('Location: /movieManagement.php?alertReason=createMovie_isset_date');
     die();
 }
 if(!isset($inputTrailer) OR empty($inputTrailer)) {
-    header('Location: ../movieManagement.php?alertReason=createMovie_isset_trailer');
+    header('Location: /movieManagement.php?alertReason=createMovie_isset_trailer');
     die();
 }
 
 if(!isset($conn)) {
-    include "./connectToDatabase.php";
+    include "../connectToDatabase.php";
 }
 
 str_replace("ß", "&szlig;", $inputMoviename);
@@ -43,5 +43,5 @@ $conn->query('
     VALUES ("' . $inputMoviename . '" , "' . $inputDate . '" , "' . $inputTrailer . '", 0)
 ');
 
-header('Location: ../movieManagement.php?alertReason=createMovie_successful&movieName='.$inputMoviename);
+header('Location: /movieManagement.php?alertReason=createMovie_successful&movieName='.$inputMoviename);
 die();

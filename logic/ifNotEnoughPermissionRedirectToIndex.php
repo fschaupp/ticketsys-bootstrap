@@ -7,6 +7,6 @@
  */
 
 if($_SESSION['rank'] != "administrator") {
-    header('Location: ../index.php?alertReason=permissionDenied');
+    header('Location: /index.php?alertReason=permissionDenied');
     die();
 }

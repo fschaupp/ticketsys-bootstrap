@@ -6,23 +6,23 @@
  * Time: 15:13
  */
 
-include('ifNotLoggedInRedirectToIndex.php');
+include('../ifNotLoggedInRedirectToIndex.php');
 
 $UMID = $_REQUEST['UMID'];
 $inputCount = $_REQUEST['inputCount'];
 
 if(!isset($UMID) OR empty($UMID)) {
-    header('Location: ../index.php?alertReason=bookCards_isset_UMID');
+    header('Location: /index.php?alertReason=bookCards_isset_UMID');
     die();
 }
 
 if(!isset($inputCount) OR empty($inputCount)) {
-    header('Location: ../index.php?alertReason=bookCards_isset_inputCount');
+    header('Location: /index.php?alertReason=bookCards_isset_inputCount');
     die();
 }
 
 if(!is_numeric ($inputCount)) {
-    header('Location: ../index.php?alertReason=bookCards_is_numeric_inputCount');
+    header('Location: /index.php?alertReason=bookCards_is_numeric_inputCount');
     die();
 }
 
@@ -33,12 +33,12 @@ $filter_options = array(
 );
 
 if(!(filter_var($inputCount, FILTER_VALIDATE_INT, $filter_options ) !== FALSE)) {
-    header('Location: ../index.php?alertReason=bookCards_between_1_20');
+    header('Location: /index.php?alertReason=bookCards_between_1_20');
     die();
 }
 
 if(!isset($conn)) {
-    include 'connectToDatabase.php';
+    include '../connectToDatabase.php';
 }
 
 foreach ($conn->query('SELECT bookedCards, name FROM movies WHERE UMID='.$UMID.';') as $item) {
@@ -49,7 +49,7 @@ foreach ($conn->query('SELECT bookedCards, name FROM movies WHERE UMID='.$UMID.'
 
 if(isset($alreadyBookedCards)) {
     if (($alreadyBookedCards + $inputCount) > 20) {
-        header('Location: ../index.php?alertReason=bookCards_booked_more_Cards_than_available');
+        header('Location: t/index.php?alertReason=bookCards_booked_more_Cards_than_available');
         die();
     }
 } else {
@@ -78,7 +78,7 @@ if(isset($UBID) AND $UBID != null) {
 $sql = 'INSERT INTO bookings (UMID, UUID, count) VALUE ('.$UMID.', '.$_SESSION['UUID'].', '.$inputCount.');';
 $conn->exec($sql);
 
-header('Location: ../index.php?alertReason=bookCards_successful&bookedCards='.$inputCount.'&movieName='.$movieName);
+header('Location: /index.php?alertReason=bookCards_successful&bookedCards='.$inputCount.'&movieName='.$movieName);
 die();
 
 

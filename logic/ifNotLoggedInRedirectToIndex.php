@@ -11,6 +11,6 @@ if(!isset($_SESSION)) {
 }
 
 if(!isset($_SESSION['email'])) {
-    header('Location: ../index.php?alertReason=loginFirst');
+    header('Location: /index.php?alertReason=loginFirst');
     die();
 }

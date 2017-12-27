@@ -54,7 +54,7 @@ if (!$isWorker) {
 
     <?php
 
-    foreach ($conn->query('SELECT UMID, name, date FROM movies WHERE workerUUID=' . $_SESSION['UUID'] . ' ORDER BY date;') as $movies) {
+    foreach ($conn->query('SELECT UMID, name, date FROM movies WHERE workerUUID=' . $_SESSION['UUID'] . ' OR emergencyWorkerUUID='.$_SESSION['UUID'].' ORDER BY date;') as $movies) {
         $UMID = $movies[0];
         $movieName = $movies[1];
         $movieDate = $movies[2];

@@ -11,5 +11,5 @@ if(!isset($_SESSION)) {
 }
 session_destroy();
 
-header('Location:../index.php?alertReason=logout_successful');
+header('Location:/index.php?alertReason=logout_successful');
 die();
