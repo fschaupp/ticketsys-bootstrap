@@ -134,7 +134,7 @@ if(isset($_SESSION['email'])) {
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                             <h4 class="modal-title">Ändere deine Angaben</h4>
                         </div>
-                        <form action="./logic/user/editAccount.php" method="GET">
+                        <form action="./logic/user/editAccount.php" method="POST">
                             <div class="modal-body">
                                 <div class="alert alert-info">
                                   <strong>Info!</strong> Wenn das "Neues Passwort" Feld leer ist, wird sich dein Passwort nicht ändern.
