@@ -109,7 +109,7 @@ if(isset($_SESSION['email'])) {
 
 <div class="navbar navbar-default navbar-fixed-bottom">
     <div class="container">
-        <p class="navbar-text pull-left">© Dominik Dafert 2017</p>
+        <p class="navbar-text pull-left">© Dominik Dafert 2017 - 2018</p>
 
         <p class="navbar-text pull-right"><a href="#" data-toggle="modal" data-target="#modal_help" >Hilfe</a></p>
     </div>
