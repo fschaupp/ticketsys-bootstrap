@@ -6,7 +6,7 @@
  * Time: 20:27
  */
 
-if(isset($_REQUEST['alertReason'])) {
+if (isset($_REQUEST['alertReason'])) {
     $alertType = null;
     $alertText = null;
 
@@ -34,8 +34,8 @@ if(isset($_REQUEST['alertReason'])) {
             break;
         case 'bookCards_successful':
             $alertType = 'success';
-            $alertText = '<strong>Gebucht!</strong> Du hast erfolgreich <strong>'.$_REQUEST['bookedCards'].'</strong>
-                            Karten für <strong>'.$_REQUEST['movieName'].'</strong> gebucht.';
+            $alertText = '<strong>Gebucht!</strong> Du hast erfolgreich <strong>' . $_REQUEST['bookedCards'] . '</strong>
+                            Karten für <strong>' . $_REQUEST['movieName'] . '</strong> gebucht.';
             break;
         case 'cancelBookedCards_isset_UMID':
             $alertType = 'danger';
@@ -49,7 +49,7 @@ if(isset($_REQUEST['alertReason'])) {
         case 'cancelBookedCards_successful':
             $alertType = 'success';
             $alertText = '<strong>Storniert!</strong> Du hast erfolgreich deine Reservierung von 
-                            <strong>'.$_REQUEST['movieName'].'</strong> storniert.';
+                            <strong>' . $_REQUEST['movieName'] . '</strong> storniert.';
             break;
         case 'cancelWorkerGetInTouchWithMovie_isset_UMID':
             $alertType = 'danger';
@@ -59,7 +59,7 @@ if(isset($_REQUEST['alertReason'])) {
         case 'cancelWorkerGetInTouchWithMovie_successful':
             $alertType = 'success';
             $alertText = '<strong>Entfernung als Arbeiter erfolgreich!</strong> Du hast dich erfolgreich als Arbeiter
-                            für <strong>'.$_REQUEST['movieName'].'</strong> abgemeldet.';
+                            für <strong>' . $_REQUEST['movieName'] . '</strong> abgemeldet.';
             break;
         case 'createMovie_isset_moviename':
             $alertType = 'danger';
@@ -75,7 +75,7 @@ if(isset($_REQUEST['alertReason'])) {
             break;
         case 'createMovie_successful':
             $alertType = 'success';
-            $alertText = '<strong>Film erstellt! '.$_REQUEST['movieName'].'</strong> wurde erfolgreich erstellt.';
+            $alertText = '<strong>Film erstellt! ' . $_REQUEST['movieName'] . '</strong> wurde erfolgreich erstellt.';
             break;
         case 'deleteMovie_isset_UMID':
             $alertType = 'danger';
@@ -83,7 +83,7 @@ if(isset($_REQUEST['alertReason'])) {
             break;
         case 'deleteMovie_successful':
             $alertType = 'success';
-            $alertText = '<strong>Film gelöscht! '.$_REQUEST['movieName'].'</strong> wurde erfolgreich gelöscht.';
+            $alertText = '<strong>Film gelöscht! ' . $_REQUEST['movieName'] . '</strong> wurde erfolgreich gelöscht.';
             break;
         case 'deleteUser_isset_UUID':
             $alertType = 'danger';
@@ -91,7 +91,7 @@ if(isset($_REQUEST['alertReason'])) {
             break;
         case 'deleteUser_successful':
             $alertType = 'success';
-            $alertText = '<strong>Benutzer gelöscht! '.$_REQUEST['userName'].'</strong> wurde erfolgreich gelöscht.';
+            $alertText = '<strong>Benutzer gelöscht! ' . $_REQUEST['userName'] . '</strong> wurde erfolgreich gelöscht.';
             break;
         case 'editAccount_isset_firstname':
             $alertType = 'danger';
@@ -139,7 +139,7 @@ if(isset($_REQUEST['alertReason'])) {
             break;
         case 'editMovie_successful':
             $alertType = 'success';
-            $alertText = '<strong>Film bearbeitet! '.$_REQUEST['movieName'].'</strong> wurde erfolgreich bearbeitet!';
+            $alertText = '<strong>Film bearbeitet! ' . $_REQUEST['movieName'] . '</strong> wurde erfolgreich bearbeitet!';
             break;
         case 'editRank_isset_UUID':
             $alertType = 'danger';
@@ -151,7 +151,7 @@ if(isset($_REQUEST['alertReason'])) {
             break;
         case 'editRank_successful':
             $alertType = 'success';
-            $alertText = '<strong>Rang bearbeitet!</strong> Der Rang von <strong>'.$_REQUEST['userName'].'</strong>
+            $alertText = '<strong>Rang bearbeitet!</strong> Der Rang von <strong>' . $_REQUEST['userName'] . '</strong>
                             wurde bearbeitet.';
             break;
         case 'editUserPassword_isset_UUID':
@@ -177,7 +177,7 @@ if(isset($_REQUEST['alertReason'])) {
         case 'editUserPassword_successful':
             $alertType = 'success';
             $alertText = '<strong>Passwort bearbeitet!</strong> Das Passwort von 
-                            <strong>'.$_REQUEST['userName'].'</strong> wurde bearbeitet!';
+                            <strong>' . $_REQUEST['userName'] . '</strong> wurde bearbeitet!';
             break;
         case 'getWorkerInTouchWithMovie_isset_UMID':
             $alertType = 'danger';
@@ -187,7 +187,7 @@ if(isset($_REQUEST['alertReason'])) {
         case 'getWorkerInTouchWithMovie_successful':
             $alertType = 'success';
             $alertText = '<strong>Erfolgreich als Arbeiter eingetragen!</strong> Du wurdest erfolgreich als Arbeiter 
-                                für '.$_REQUEST['movieName'].' eingetragen!';
+                                für ' . $_REQUEST['movieName'] . ' eingetragen!';
             break;
         case 'permissionDenied':
             $alertType = 'danger';
@@ -272,7 +272,15 @@ if(isset($_REQUEST['alertReason'])) {
             break;
         default:
             $alertType = 'danger';
-            $alertText = 'Unbekannter Alert Type wurde gefunden: '.$_REQUEST['alertReason'];
+            $alertText = 'Unbekannter Alert Type wurde gefunden: ' . $_REQUEST['alertReason'];
             break;
     }
+
+    echo '
+        <div class="alert alert-' . $alertType . ' alert-dismissable fade in" role="alert">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            ' . $alertText . '
+        </div>
+        ';
+
 }
