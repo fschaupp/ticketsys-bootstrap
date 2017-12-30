@@ -17,7 +17,7 @@ if (!isset($conn)) {
     include "./logic/connectToDatabase.php";
 }
 
-include ('./logic/alertSwitch.php');
+include ('./languages/german.php');
 ?>
 
 <!DOCTYPE html>
@@ -27,7 +27,7 @@ include ('./logic/alertSwitch.php');
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Tickets - Filmverwaltung</title>
+    <title><?php echo $string_title_first . $string_title_movieManagement; ?></title>
 
     <?php include 'header.php'; ?>
 </head>
@@ -36,38 +36,42 @@ include ('./logic/alertSwitch.php');
 
 <div class="mycontainer">
     <?php
-    if(isset($alertText) && isset($alertType)) {
-
-        echo '
-        <div class="alert alert-'.$alertType.'" role="alert">'.$alertText.'</div>
-        ';
-    }
+    include ('./logic/alertSwitch.php');
     ?>
 
-    <h1>Alle Filme</h1>
+    <h1><?php echo $string_movieManagement_header; ?></h1>
     <button type="button" class="btn btn-success pull-right" data-toggle="modal" data-target="#modal_createMovie"
-            style="margin-top: -30px">Film anlegen</button>
-    <p>Hier findest du alle gespeicherten Filme</p>
+            style="margin-top: -30px"><?php echo $string_movieManagement_button_create_movie; ?></button>
+    <p><?php echo $string_movieManagement_subheader; ?></p>
 
     <div class="table-responsive">
         <table class="table table-bordered table-hover">
             <thead>
             <tr>
-                <th>Filmname</th>
-                <th>Gebuchte Karten</th>
-                <th>Datum</th>
-                <th>Trailer</th>
-                <th>Arbeiter</th>
-                <th>Aktionen</th>
+                <th><?php echo $string_movieManagement_table_header_movie_name; ?></th>
+                <th><?php echo $string_movieManagement_table_header_booked_cards; ?></th>
+                <th><?php echo $string_movieManagement_table_header_date; ?></th>
+                <th><?php echo $string_movieManagement_table_header_trailer; ?></th>
+                <th><?php echo $string_movieManagement_table_header_worker; ?></th>
+                <th><?php echo $string_movieManagement_table_header_worker_emergency; ?></th>
+                <th><?php echo $string_movieManagement_table_header_actions; ?></th>
             </tr>
             </thead>
             <tbody>
             <?php
-            foreach ($conn->query('SELECT UMID, name, date, trailerLink, workerUUID, bookedCards FROM movies ORDER BY date') as $item) {
-                $workerName = "Nicht eingeteilt";
+            foreach ($conn->query('SELECT UMID, name, date, trailerLink, workerUUID, bookedCards, emergencyWorkerUUID FROM movies ORDER BY date') as $item) {
+                $workerName =  $string_movieManagement_table_body_no_worker;
+                $emergencyWorkerName = $string_movieManagement_table_body_no_worker;
                 if (isset($item[4])) {
                     foreach ($conn->query('SELECT firstname, surname, UUID FROM users WHERE UUID=' . $item[4]) as $users) {
                         $workerName = $users[0] . ' ' . $users[1];
+                        break;
+                    }
+                }
+
+                if(isset($item[6])) {
+                    foreach ($conn->query('SELECT firstname, surname, UUID FROM users WHERE UUID=' . $item[6]) as $users) {
+                        $emergencyWorkerName = $users[0] . ' ' . $users[1];
                         break;
                     }
                 }
@@ -88,16 +92,21 @@ include ('./logic/alertSwitch.php');
                 echo '<td>' . $del . $item[1] . $delend . '</td>';
                 echo '<td>' . $del . $item[5] . $delend . '</td>';
                 echo '<td>' . $del . $formattedDate . $delend . '</td>';
-                echo '<td><a href="'. $item[3] . '" target="_blank" style="margin-right: 5px;"><button type="button" class="btn btn-primary">Trailer</button></a>' . $del . $item[3] . $delend . '</td>';
+                echo '<td><a href="'. $item[3] . '" target="_blank" style="margin-right: 5px;">
+                            <button type="button" class="btn btn-primary">'. $string_movieManagement_table_body_trailer .'</button>
+                          </a>' . $del . $item[3] . $delend . '
+                      </td>';
                 echo '<td>' . $del . $workerName . $delend . '</td>';
+                echo '<td>' . $del . $emergencyWorkerName . $delend . '</td>';
                 echo '<td>
-                        <a href="#editMovie" data-toggle="modal" data-target="#modal_editMovie" class="btn btn-success btn-md" data-movie-id="'.$item[0].'" data-movie-name="'.$item[1].'"
-                                data-movie-trailer="'.$item[3].'">
-                            <span class="glyphicon glyphicon-pencil"></span> Bearbeiten
+                        <a href="#editMovie" data-toggle="modal" data-target="#modal_editMovie" class="btn btn-success btn-md" 
+                                data-movie-id="'.$item[0].'" data-movie-name="'.$item[1].'" data-movie-trailer="'.$item[3].'">
+                            <span class="glyphicon glyphicon-pencil"></span> '. $string_movieManagement_table_body_actions_edit .'
                         </a>
                                         
                         <a href="#deleteMovie" data-toggle="modal" data-target="#modal_deleteMovie" class="btn btn-danger btn-md" data-movie-id="' . $item[0] . '">
-                            <span class="glyphicon glyphicon-trash"></span> Löschen</a>
+                            <span class="glyphicon glyphicon-trash"></span> '. $string_movieManagement_table_body_actions_delete .'
+                        </a>
                       </td>';
 
                 echo '</tr>';
@@ -114,35 +123,37 @@ include ('./logic/alertSwitch.php');
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Lege einen neuen Film an:</h4>
+                <h4 class="modal-title"><?php echo $string_movieManagement_modal_create_movie_title; ?></h4>
             </div>
             <form action="./logic/movies/createMovie.php" method="POST">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="inputcMoviename">Filmname:</label>
+                        <label for="inputcMoviename"><?php echo $string_movieManagement_modal_movie_name; ?></label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-film"></i></span>
-                            <input required type="text" class="form-control" id="inputcMoviename" name="inputcMoviename" placeholder="Filmname" autofocus>
+                            <input required type="text" class="form-control" id="inputcMoviename" name="inputcMoviename"
+                                   placeholder="<?php echo $string_movieManagement_modal_movie_name; ?>" autofocus>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="inputcDate">Datum:</label>
+                        <label for="inputcDate"><?php echo $string_movieManagement_modal_date; ?></label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                             <input required type="date" class="form-control" id="inputcDate" name="inputcDate">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="inputcTrailerlink">Trailer:</label>
+                        <label for="inputcTrailerlink"><?php echo $string_movieManagement_modal_trailer; ?></label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-link"></i></span>
-                            <input required type="url" class="form-control" id="inputcTrailerlink" name="inputcTrailerlink" placeholder="https://www.youtube.com/watch?v=C0Mx4vKMGx4">
+                            <input required type="url" class="form-control" id="inputcTrailerlink" name="inputcTrailerlink"
+                                   placeholder="https://www.youtube.com/watch?v=C0Mx4vKMGx4">
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Abbrechen</button>
-                    <button type="submit" class="btn btn-success">Anlegen</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"><?php echo $string_cancel; ?></button>
+                    <button type="submit" class="btn btn-success"><?php echo $string_movieManagement_modal_create_movie_success; ?></button>
                 </div>
             </form>
         </div>
@@ -155,28 +166,28 @@ include ('./logic/alertSwitch.php');
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Film bearbeiten:</h4>
+                <h4 class="modal-title"><?php echo $string_movieManagement_modal_edit_movie_title; ?></h4>
             </div>
             <form action="./logic/movies/editMovie.php" method="POST">
                 <div class="modal-body">
                     <input type="text" name="UMID" hidden value=""/>
 
                     <div class="form-group">
-                        <label for="inputeMoviename">Filmname:</label>
+                        <label for="inputeMoviename"><?php echo $string_movieManagement_modal_create_movie_title; ?></label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-film"></i></span>
                             <input required type="text" class="form-control" id="inputeMoviename" name="inputeMoviename" value=""/>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="inputeDate">Datum:</label>
+                        <label for="inputeDate"><?php echo $string_movieManagement_modal_date; ?></label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                             <input required type="date" class="form-control" id="inputeDate" name="inputeDate"/>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="inputeTrailerlink">Trailer:</label>
+                        <label for="inputeTrailerlink"><?php echo $string_movieManagement_modal_trailer; ?></label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-link"></i></span>
                             <input required type="url" class="form-control" id="inputeTrailerlink" name="inputeTrailerlink" value=""/>
@@ -184,8 +195,8 @@ include ('./logic/alertSwitch.php');
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Abbrechen</button>
-                    <button type="submit" class="btn btn-success">Speichern</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"><?php echo $string_cancel; ?></button>
+                    <button type="submit" class="btn btn-success"><?php echo $string_movieManagement_modal_edit_movie_success; ?></button>
                 </div>
             </form>
         </div>
@@ -197,13 +208,13 @@ include ('./logic/alertSwitch.php');
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Willst du den Film wirklich löschen?</h4>
+                <h4 class="modal-title"><?php echo $string_movieManagement_modal_delete_movie_title; ?></h4>
             </div>
             <form method="POST" action="./logic/movies/deleteMovie.php">
                 <input type="text" name="UMID" hidden value=""/>
                 <div class="modal-footer">
-                    <button type="reset" class="btn btn-danger" data-dismiss="modal">Abbrechen</button>
-                    <button type="submit" class="btn btn-success" name="edit">Löschen</button>
+                    <button type="reset" class="btn btn-danger" data-dismiss="modal"><?php echo $string_cancel; ?></button>
+                    <button type="submit" class="btn btn-success" name="edit"><?php echo $string_movieManagement_modal_delete_movie_success; ?></button>
                 </div>
             </form>
         </div>

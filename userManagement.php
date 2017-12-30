@@ -13,11 +13,11 @@ if (!isset($_SESSION['email'])) {
     }
 }
 
+include ('./languages/german.php');
+
 if (!isset($conn)) {
     include "./logic/connectToDatabase.php";
 }
-
-include ('./logic/alertSwitch.php');
 ?>
 
 <!DOCTYPE html>
@@ -27,7 +27,7 @@ include ('./logic/alertSwitch.php');
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Tickets - Benutzerverwaltung</title>
+    <title><?php echo $string_title_first . $string_title_userManagement; ?></title>
 
     <?php include 'header.php'; ?>
 </head>
@@ -35,24 +35,19 @@ include ('./logic/alertSwitch.php');
 <?php include 'navbar.php'; ?>
 <div class="mycontainer">
     <?php
-    if(isset($alertText) && isset($alertType)) {
-
-        echo '
-        <div class="alert alert-'.$alertType.'" role="alert">'.$alertText.'</div>
-        ';
-    }
+    include ('./logic/alertSwitch.php');
     ?>
-    <h1>Alle Benutzer</h1>
-    <p>Hier findest du alle gespeicherten Benutzer</p>
+    <h1><?php echo $string_userManagement_header; ?></h1>
+    <p><?php echo $string_userManagement_subheader; ?> </p>
 
     <div class="table-responsive">
         <table class="table table-bordered table-hover">
             <thead>
             <tr>
-                <th>Name</th>
-                <th>Email-Adresse</th>
-                <th>Rang</th>
-                <th>Aktionen</th>
+                <th><?php echo $string_userManagement_table_header_firstname_and_surname; ?></th>
+                <th><?php echo $string_userManagement_table_header_email; ?></th>
+                <th><?php echo $string_userManagement_table_header_rank; ?></th>
+                <th><?php echo $string_userManagement_table_header_actions; ?></th>
             </tr>
             </thead>
             <tbody>
@@ -63,17 +58,23 @@ include ('./logic/alertSwitch.php');
                 echo '<td>'. $item[1] . ' ' . $item[2] .'</td>';
                 echo '<td><a href="mailto:'.$item[3].'">'. $item[3] .'</a></td>';
                 echo '<td>'. $item[4] .
-                        '<a href="#editRank" data-toggle="modal" data-target="#modal_editRank" class="btn btn-default btn-md" data-user-id="'.$item[0].'" 
-                            style="margin-left: 5px;">
-                            <span class="glyphicon glyphicon-pencil"></span></a>
+                        '<a href="#editRank" data-toggle="modal" data-target="#modal_editRank" class="btn btn-default btn-md"
+                         data-user-id="'.$item[0].'" style="margin-left: 5px;">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                         </a>
                       </td>';
                 echo '<td>
-                        <a href="#editUserPassword" data-toggle="modal" data-target="#modal_editUserPassword" class="btn btn-success btn-md" data-user-id="'.$item[0].'">
-                            <span class="glyphicon glyphicon-pencil"></span> Passwort ändern
+                        <a href="#editUserPassword" data-toggle="modal" data-target="#modal_editUserPassword" 
+                                class="btn btn-success btn-md" data-user-id="'.$item[0].'">
+                            <span class="glyphicon glyphicon-pencil"></span> 
+                            '. $string_userManagement_table_body_actions_change_password .'
                         </a>
                                         
-                        <a href="#deleteUser" data-toggle="modal" data-target="#modal_deleteUser" class="btn btn-danger btn-md" data-user-id="' . $item[0] . '">
-                            <span class="glyphicon glyphicon-trash"></span> Löschen</a>
+                        <a href="#deleteUser" data-toggle="modal" data-target="#modal_deleteUser" 
+                                class="btn btn-danger btn-md" data-user-id="' . $item[0] . '">
+                            <span class="glyphicon glyphicon-trash"></span> 
+                            ' . $string_userManagement_table_body_actions_delete . '
+                        </a>
                       </td>';
 
                 echo '</tr>';
@@ -90,21 +91,25 @@ include ('./logic/alertSwitch.php');
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Passwort ändern:</h4>
+                <h4 class="modal-title"><?php echo $string_userManagement_modal_edit_password_title; ?></h4>
             </div>
             <form action="./logic/administration/editUserPassword.php" method="POST">
                 <div class="modal-body">
                     <input type="text" name="UUID" hidden value=""/>
 
                     <div class="form-group">
-                        <label for="inputePassword">Passwort:</label>
+                        <label for="inputePassword">
+                            <?php echo $string_userManagement_modal_edit_password_password; ?>
+                        </label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
                             <input required type="password" class="form-control" id="inputePassword" name="inputePassword" placeholder="Passwort"/>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="inputePassword_again">Passwort bestätigen:</label>
+                        <label for="inputePassword_again">
+                            <?php echo $string_userManagement_modal_edit_password_confirm; ?>
+                        </label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
                             <input required type="password" class="form-control" id="inputePassword_again" name="inputePassword_again" placeholder="Passwort wiederholen"/>
@@ -112,8 +117,8 @@ include ('./logic/alertSwitch.php');
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Abbrechen</button>
-                    <button type="submit" class="btn btn-success">Ändern</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"><?php echo $string_cancel; ?></button>
+                    <button type="submit" class="btn btn-success"><?php echo $string_userManagement_modal_edit_password_success; ?></button>
                 </div>
             </form>
         </div>
@@ -126,14 +131,16 @@ include ('./logic/alertSwitch.php');
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Rang ändern:</h4>
+                <h4 class="modal-title"><?php echo $string_userManagement_modal_edit_rank_title; ?></h4>
             </div>
             <form action="./logic/administration/editRank.php" method="POST">
                 <div class="modal-body">
                     <input type="text" name="UUID" hidden value=""/>
 
                     <div class="form-group">
-                        <label for="inputeRank">Rang:</label>
+                        <label for="inputeRank">
+                            <?php echo $string_userManagement_modal_edit_rank_rank; ?>
+                        </label>
                         <select class="form-control" id="inputeRank" name="inputeRank">
                             <option>user</option>
                             <option>administrator</option>
@@ -141,8 +148,8 @@ include ('./logic/alertSwitch.php');
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Abbrechen</button>
-                    <button type="submit" class="btn btn-success">Ändern</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"><?php echo $string_cancel; ?></button>
+                    <button type="submit" class="btn btn-success"><?php echo $string_userManagement_modal_edit_rank_success; ?></button>
                 </div>
             </form>
         </div>
@@ -154,13 +161,13 @@ include ('./logic/alertSwitch.php');
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Willst du diesen Benutzer wirklich löschen?</h4>
+                <h4 class="modal-title"><?php echo $string_userManagement_modal_delete_user_title; ?></h4>
             </div>
             <form method="POST" action="./logic/administration/deleteUser.php">
                 <input type="text" name="UUID" hidden value=""/>
                 <div class="modal-footer">
-                    <button type="reset" class="btn btn-danger" data-dismiss="modal">Abbrechen</button>
-                    <button type="submit" class="btn btn-success">Löschen</button>
+                    <button type="reset" class="btn btn-danger" data-dismiss="modal"><?php echo $string_cancel; ?></button>
+                    <button type="submit" class="btn btn-success"><?php echo $string_userManagement_modal_delete_user_success; ?></button>
                 </div>
             </form>
         </div>

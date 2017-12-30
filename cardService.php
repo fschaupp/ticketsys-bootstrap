@@ -32,6 +32,8 @@ if (!$isWorker) {
     header('Location: ./index.php?alert=youAreNotAWorker');
     die();
 }
+
+include ('./languages/german.php');
 ?>
 
 <!DOCTYPE html>
@@ -41,7 +43,7 @@ if (!$isWorker) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Tickets - Kinodienst</title>
+    <title><?php echo $string_title_first . $string_title_cardService; ?></title>
 
     <?php include 'header.php'; ?>
 </head>
@@ -49,8 +51,12 @@ if (!$isWorker) {
 
 <?php include 'navbar.php'; ?>
 <div class="mycontainer">
-    <h1>Kinodienst</h1>
-    <p>Hier findest du alle Reservierungen in welchen du Kinodienst hast.</p>
+    <?php
+    include ('./logic/alertSwitch.php');
+    ?>
+
+    <h1><?php echo $string_card_service_header; ?></h1>
+    <p><?php echo $string_card_service_subheader; ?></p>
 
     <?php
 
@@ -86,8 +92,8 @@ if (!$isWorker) {
                                 <table class="table table-bordered table-hover">
                                     <thead>
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Kartenanzahl</th>
+                                            <th>'. $string_card_service_table_header_movie_name .'</th>
+                                            <th>'. $string_card_service_table_header_booked_cards .'</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -111,7 +117,7 @@ if (!$isWorker) {
                             </div>
                 ';
         } else {
-            echo 'Ohh... Derzeit exestieren noch keine Reservierung für deine Filme! :(';
+            echo $string_card_service_there_are_no_bookings;
         }
 
         echo '

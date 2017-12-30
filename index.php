@@ -13,7 +13,7 @@ if (isset($_SESSION['email'])) {
     $loggedIn = true;
 }
 
-include ('./logic/alertSwitch.php');
+include ('./languages/german.php');
 ?>
 
 <!DOCTYPE html>
@@ -23,7 +23,7 @@ include ('./logic/alertSwitch.php');
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Tickets</title>
+    <title><?php echo $string_title_first . $string_title_home; ?></title>
 
     <?php include 'header.php'; ?>
 </head>
@@ -32,12 +32,7 @@ include ('./logic/alertSwitch.php');
 
 <div class="mycontainer">
     <?php
-    if(isset($alertText) && isset($alertType)) {
-
-        echo '
-        <div class="alert alert-'.$alertType.'" role="alert">'.$alertText.'</div>
-        ';
-    }
+    include ('./logic/alertSwitch.php');
 
     $row_count = 0;
 
@@ -101,24 +96,26 @@ include ('./logic/alertSwitch.php');
                                 <ul class="list-group">
                                     <li class="list-group-item">
                                         <div class="row">
-                                            <div class="col-xs-6 col-sm-6 col-md-5 col-lg-5">Datum:</div>
+                                            <div class="col-xs-6 col-sm-6 col-md-5 col-lg-5">'.$string_home_date.'</div>
                                             <div class="col-xs-6 col-sm-6 col-md-7 col-lg-7">' . $formattedDate . '</div>
                                         </div>
                                     </li>
                                     <li class="list-group-item">
                                         <div class="row">
-                                            <div class="col-xs-6 col-sm-6 col-md-5 col-lg-5">Trailer:</div>
+                                            <div class="col-xs-6 col-sm-6 col-md-5 col-lg-5">'.$string_home_trailer.'</div>
                                             <div class="col-xs-6 col-sm-6 col-md-7 col-lg-7">
                                                 <a href="' . $movieTrailerLink . '" target="_blank" 
-                                                    data-toggle="tooltip" data-placement="top" title="Link zum Trailer">
-                                                    <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-new-window" aria-label="Öffnen"></span></button>
+                                                    data-toggle="tooltip" data-placement="top" title="'.$string_home_trailer_button_tooltip.'">
+                                                    <button type="button" class="btn btn-primary">
+                                                        <span class="glyphicon glyphicon-new-window"></span>
+                                                    </button>
                                                 </a>
                                             </div>
                                         </div>
                                     </li>
                                     <li class="list-group-item">
                                         <div class="row">
-                                            <div class="col-xs-6 col-sm-6 col-md-5 col-lg-5">Kinodienst:</div>
+                                            <div class="col-xs-6 col-sm-6 col-md-5 col-lg-5">'.$string_home_cardService.'</div>
                 ';
 
         //If movie has NO worker, you should be possible to get in touch and if you aren't logged in you see that there is no worker
@@ -131,14 +128,15 @@ include ('./logic/alertSwitch.php');
                 if ($movieAlreadyShowed) {
                     echo '
                                 <button class="btn btn-info disabled" data-toggle="tooltip" data-placement="bottom"
-                                    title="Der Film wurde bereits gezeigt!">Melden</button>';
+                                    title="'.$string_home_cardService_button_tooltip_already_showed.'">'.$string_home_cardService_button_text.'</button>';
                 } else {
-                    echo '<a href="#modal_getNormalWorkerInTouch" data-toggle="tooltip" data-placement="bottom" title="Melde dich für den Kinodienst">
-                                <button class="btn btn-info" data-toggle="modal" data-target="#modal_getNormalWorkerInTouch" data-movie-id="' . $item[0] . '" data-movie-name="' . $item[1] . '"
-                                >Melden</button></a>';
+                    echo '<a href="#modal_getNormalWorkerInTouch" data-toggle="tooltip" data-placement="bottom" 
+                                title="'.$string_home_cardService_button_tooltip.'">
+                            <button class="btn btn-info" data-toggle="modal" data-target="#modal_getNormalWorkerInTouch"
+                                data-movie-id="' . $item[0] . '" data-movie-name="' . $item[1] . '">'.$string_home_cardService_button_text.'</button></a>';
                 }
             } else {
-                echo 'Nicht eingeteilt';
+                echo $string_home_cardService_no_one_assigned;
             }
             echo '
                                             </div>
@@ -153,9 +151,9 @@ include ('./logic/alertSwitch.php');
                 if ($workerUUID == $_SESSION['UUID']) {
                     echo '
                                                 <a href="#modal_cancelNormalWorkerGetInTouchWithMovie" 
-                                                    data-toggle="tooltip" data-placement="right" title="Entferne dich vom Kinodienst">
-                                                    <button class="btn btn-default" 
-                                                        data-toggle="modal" data-target="#modal_cancelNormalWorkerGetInTouchWithMovie" 
+                                                    data-toggle="tooltip" data-placement="right" title="'.$string_home_cardService_remove_button_tooltip.'">
+                                                    <button class="btn btn-default" data-toggle="modal" 
+                                                        data-target="#modal_cancelNormalWorkerGetInTouchWithMovie" 
                                                         data-movie-id="' . $UMID . '" data-movie-name="' . $movieName . '">
                                                             
                                                         <span class="glyphicon glyphicon-remove"></span>
@@ -174,7 +172,7 @@ include ('./logic/alertSwitch.php');
                                     </li>
                                     <li class="list-group-item">
                                         <div class="row">
-                                            <div class="col-xs-6 col-sm-6 col-md-5 col-lg-5">Kinodienst <br>(nur im Notfall):</div>
+                                            <div class="col-xs-6 col-sm-6 col-md-5 col-lg-5">'.$string_home_emergencyCardService.'</div>
                 ';
 
         //If movie has NO emergency Worker, you should be possible to get in touch and if you aren't logged in you see that there is no worker
@@ -187,14 +185,17 @@ include ('./logic/alertSwitch.php');
                 if ($movieAlreadyShowed) {
                     echo '
                                 <button class="btn btn-info disabled" data-toggle="tooltip" data-placement="bottom"
-                                    title="Der Film wurde bereits gezeigt!">Melden</button>';
+                                    title="'.$string_home_cardService_button_tooltip_already_showed.'">'.$string_home_cardService_button_text.'</button>';
                 } else {
-                    echo '<a href="#modal_getEmergencyWorkerInTouch" data-toggle="tooltip" data-placement="bottom" title="Melde dich für den Kinodienst (nur im Notfall)">
-                                <button class="btn btn-info" data-toggle="modal" data-target="#modal_getEmergencyWorkerInTouch" data-movie-id="' . $item[0] . '" data-movie-name="' . $item[1] . '"
-                                >Melden</button></a>';
+                    echo '<a href="#modal_getEmergencyWorkerInTouch" data-toggle="tooltip" data-placement="bottom" 
+                                title="'.$string_home_emergencyCardService_button_tooltip.'">
+                            <button class="btn btn-info" data-toggle="modal" data-target="#modal_getEmergencyWorkerInTouch"
+                                data-movie-id="' . $item[0] . '" data-movie-name="' . $item[1] . '">'.$string_home_cardService_button_text.'
+                            </button>
+                          </a>';
                 }
             } else {
-                echo 'Nicht eingeteilt';
+                echo $string_home_cardService_no_one_assigned;
             }
             echo '
                                             </div>
@@ -209,9 +210,10 @@ include ('./logic/alertSwitch.php');
                 if ($emergencyWorkerUUID == $_SESSION['UUID']) {
                     echo '
                                                 <a href="#modal_cancelEmergencyWorkerGetInTouchWithMovie" 
-                                                    data-toggle="tooltip" data-placement="right" title="Entferne dich vom Kinodienst">
-                                                    <button class="btn btn-default" 
-                                                        data-toggle="modal" data-target="#modal_cancelEmergencyWorkerGetInTouchWithMovie" 
+                                                        data-toggle="tooltip" data-placement="right" 
+                                                        title="'.$string_home_cardService_remove_button_tooltip.'">
+                                                    <button class="btn btn-default" data-toggle="modal" 
+                                                        data-target="#modal_cancelEmergencyWorkerGetInTouchWithMovie" 
                                                         data-movie-id="' . $UMID . '" data-movie-name="' . $movieName . '">
                                                             
                                                         <span class="glyphicon glyphicon-remove"></span>
@@ -233,7 +235,7 @@ include ('./logic/alertSwitch.php');
             echo '
                                     <li class="list-group-item">
                                         <div class="row">
-                                            <div class="col-xs-6 col-sm-6 col-md-5 col-lg-5">Freie Karten:</div>
+                                            <div class="col-xs-6 col-sm-6 col-md-5 col-lg-5">'.$string_home_available_cards.'</div>
                                             <div class="col-xs-6 col-sm-6 col-md-7 col-lg-7">' . $availableCards . '</div>
                                         </div>
                                     </li>
@@ -253,7 +255,7 @@ include ('./logic/alertSwitch.php');
                 echo '
                                     <li class="list-group-item">
                                         <div class="row">
-                                            <div class="col-xs-6 col-sm-6 col-md-5 col-lg-5">Geb. Karten:</div>
+                                            <div class="col-xs-6 col-sm-6 col-md-5 col-lg-5">'.$string_home_booked_cards.'</div>
                                             <div class="col-xs-6 col-sm-6 col-md-7 col-lg-7">' . $userBookedCardsCount . '</div>
                                         </div>
                                     </li>        
@@ -269,27 +271,30 @@ include ('./logic/alertSwitch.php');
 
         if ($loggedIn) {
             if ($availableCards == 0) {
-                echo '<button class="btn btn-success disabled" data-toggle="tooltip" data-placement="bottom"
-                                    title="Es sind keine freien Karten zur Reservierung verfügbar">Ausgebucht</button>';
+                echo '<button class="btn btn-danger disabled" data-toggle="tooltip" data-placement="bottom"
+                                    title="'.$string_home_booking_fully_booked_tooltip.'">'.$string_home_booking_fully_booked.'</button>';
             } else if ($movieAlreadyShowed) {
-                echo '<button class="btn btn-success disabled" data-toggle="tooltip" data-placement="bottom"
-                                    title="Der Film wurde bereits gezeigt!">Nicht reservierbar</button>';
+                echo '<button class="btn btn-danger disabled" data-toggle="tooltip" data-placement="bottom"
+                                    title="'.$string_home_booking_already_been_shown_tooltip.'">'.$string_home_booking_already_been_shown.'</button>';
             } else {
                 echo '<a href="#modal_bookCards"  class="btn btn-success" data-toggle="modal" data-target="#modal_bookCards" 
-                        data-movie-id="' . $item[0] . '" data-availablecards="' . $availableCards . '">Reservieren</a>';
+                        data-movie-id="' . $item[0] . '" data-availablecards="' . $availableCards . '">'.$string_home_booking.'</a>';
             }
 
             if (isset($userHasBookedForThisMovie)) {
                 if ($userHasBookedForThisMovie) {
-                    echo '<a href="#modal_cancelBookedCards" class="btn btn-warning" data-toggle="modal" data-target="#modal_cancelBookedCards" 
-                                    data-movie-id="' . $item[0] . '" data-movie-name="' . $item[1] . '" style="float: right">Buchung stornieren</a>';
+                    echo '<a href="#modal_cancelBookedCards" class="btn btn-warning" data-toggle="modal" 
+                                data-target="#modal_cancelBookedCards" data-movie-id="' . $item[0] . '" 
+                                data-movie-name="' . $item[1] . '" style="float: right">'.$string_home_cancel_booking.'</a>';
                     $UBID = null;
                 }
             }
 
         } else {
-            echo '<a href="#" data-toggle="tooltip" data-placement="bottom" title="Du bist noch nicht angemeldet!">
-                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal_login">Reservieren</button></a>';
+            echo '<a href="#" data-toggle="tooltip" data-placement="bottom" title="'.$string_home_booking_tooltip.'">
+                    <button type="button" class="btn btn-success" data-toggle="modal" 
+                        data-target="#modal_login">'.$string_home_booking.'</button>
+                  </a>';
         }
 
         echo ' 
@@ -326,12 +331,10 @@ include ('./logic/alertSwitch.php');
                 <div class="modal-body">
                     <input type="text" name="UMID" hidden value=""/>
                     <div class="alert alert-info">
-                        <strong>Info!</strong> Karten sind in erster Linie für Vereinsmitglieder. Sollten kurz vor
-                        Kinobeginn noch Karten frei sein, können diese jederzeit an Freunde
-                        oder Familienmitglieder weitergeben werden!
+                        <?php echo $string_home_modal_book_cards_alert; ?>
                     </div>
                     <div class="form-group">
-                        <label for="inputCount">Kartenanzahl:</label>
+                        <label for="inputCount"><?php echo $string_home_modal_book_cards_number_of_cards; ?></label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-play"></i></span>
                             <input required type="text" class="form-control" id="inputCount" name="inputCount"
@@ -345,8 +348,8 @@ include ('./logic/alertSwitch.php');
                     <b id="modal_bookCards_availableCardsDIV"></b>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Abbrechen</button>
-                    <button type="submit" class="btn btn-success" autofocus>Reservieren</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"><?php echo $string_cancel; ?></button>
+                    <button type="submit" class="btn btn-success" autofocus><?php echo $string_home_modal_book_cards_button_success; ?></button>
                 </div>
             </form>
         </div>
@@ -364,12 +367,12 @@ include ('./logic/alertSwitch.php');
                 <div class="modal-body">
                     <input type="text" name="UMID" hidden value=""/>
                     <div class="alert alert-info">
-                        <strong>Info!</strong> Du kannst diesen Schritt jederzeit rückgängig machen!
+                        <?php echo $string_home_modal_get_in_touch_alert; ?>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="reset" class="btn btn-danger" data-dismiss="modal">Abbrechen</button>
-                    <button type="submit" class="btn btn-success">Melden</button>
+                    <button type="reset" class="btn btn-danger" data-dismiss="modal"><?php echo $string_cancel; ?></button>
+                    <button type="submit" class="btn btn-success"><?php echo $string_home_modal_get_in_touch_button_success; ?></button>
                 </div>
             </form>
         </div>
@@ -387,12 +390,12 @@ include ('./logic/alertSwitch.php');
                 <div class="modal-body">
                     <input type="text" name="UMID" hidden value=""/>
                     <div class="alert alert-info">
-                        <strong>Info!</strong> Du kannst diesen Schritt jederzeit rückgängig machen!
+                        <?php echo $string_home_modal_get_in_touch_alert; ?>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="reset" class="btn btn-danger" data-dismiss="modal">Abbrechen</button>
-                    <button type="submit" class="btn btn-success">Melden</button>
+                    <button type="reset" class="btn btn-danger" data-dismiss="modal"><?php echo $string_cancel; ?></button>
+                    <button type="submit" class="btn btn-success"><?php echo $string_home_modal_get_in_touch_button_success; ?></button>
                 </div>
             </form>
         </div>
@@ -410,8 +413,8 @@ include ('./logic/alertSwitch.php');
             <form method="POST" action="./logic/worker/cancelNormalWorkerGetInTouchWithMovie.php">
                 <input type="text" name="UMID" hidden value=""/>
                 <div class="modal-footer">
-                    <button type="reset" class="btn btn-success" data-dismiss="modal">Abbrechen</button>
-                    <button type="submit" class="btn btn-danger">Abmelden</button>
+                    <button type="reset" class="btn btn-success" data-dismiss="modal"><?php echo $string_cancel; ?></button>
+                    <button type="submit" class="btn btn-danger"><?php echo $string_home_modal_cancel_get_in_touch_button_success; ?></button>
                 </div>
             </form>
         </div>
@@ -428,8 +431,8 @@ include ('./logic/alertSwitch.php');
             <form method="POST" action="./logic/worker/cancelEmergencyWorkerGetInTouchWithMovie.php">
                 <input type="text" name="UMID" hidden value=""/>
                 <div class="modal-footer">
-                    <button type="reset" class="btn btn-success" data-dismiss="modal">Abbrechen</button>
-                    <button type="submit" class="btn btn-danger">Abmelden</button>
+                    <button type="reset" class="btn btn-success" data-dismiss="modal"><?php echo $string_cancel; ?></button>
+                    <button type="submit" class="btn btn-danger"><?php echo $string_home_modal_cancel_get_in_touch_button_success; ?></button>
                 </div>
             </form>
         </div>
@@ -448,12 +451,12 @@ include ('./logic/alertSwitch.php');
                 <div class="modal-body">
                     <input type="text" name="UMID" hidden value="">
                     <div class="alert alert-info">
-                        <strong>Info!</strong> Wenn du mehrere Karten reserviert hast, werden diese auch storniert!
+                        <?php echo $string_home_modal_cancel_booked_cards_alert; ?>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="reset" class="btn btn-success" data-dismiss="modal">Abbrechen</button>
-                    <button type="submit" class="btn btn-danger">Stornieren</button>
+                    <button type="reset" class="btn btn-success" data-dismiss="modal"><?php echo $string_cancel; ?></button>
+                    <button type="submit" class="btn btn-danger"><?php echo $string_home_modal_cancel_booked_cards_button_success; ?></button>
                 </div>
             </form>
         </div>
@@ -469,8 +472,8 @@ include ('./logic/alertSwitch.php');
 
         var avcards = $(e.relatedTarget).data('availablecards');
 
-        document.getElementById('modal_bookCards_availableCardsDIV').innerText = "Freie Karten: " + avcards;
-        document.getElementById('modal_bookCards_availableCardsHEAD').innerText = "Reserviere Karten - Freie Karten: " + avcards;
+        document.getElementById('modal_bookCards_availableCardsDIV').innerText = "<?php echo $string_home_modal_book_cards_available_cards; ?>" + avcards;
+        document.getElementById('modal_bookCards_availableCardsHEAD').innerText = "<?php echo $string_home_modal_book_cards_title; ?>" + avcards;
 
         document.getElementById('inputCount').setAttribute('max', "" + avcards);
         document.getElementById('maxinput').innerText = "" + avcards;
@@ -481,7 +484,8 @@ include ('./logic/alertSwitch.php');
         $(e.currentTarget).find('input[name="UMID"]').val(movieId);
 
         var movieName = $(e.relatedTarget).data('movie-name');
-        document.getElementById('modal_getNormalWorkerInTouch_movieNameHEAD').innerText = "Willst du dich wirklich für " + movieName + " melden?";
+        document.getElementById('modal_getNormalWorkerInTouch_movieNameHEAD').innerText =
+            "<?php echo $string_home_modal_get_in_touch_title_1; ?>" + movieName + "<?php echo $string_home_modal_get_in_touch_title_2; ?>";
     });
 
     $('#modal_getEmergencyWorkerInTouch').on('show.bs.modal', function (e) {
@@ -489,7 +493,8 @@ include ('./logic/alertSwitch.php');
         $(e.currentTarget).find('input[name="UMID"]').val(movieId);
 
         var movieName = $(e.relatedTarget).data('movie-name');
-        document.getElementById('modal_getEmergencyWorkerInTouch_movieNameHEAD').innerText = "Willst du dich wirklich für " + movieName + " im Notfall melden?";
+        document.getElementById('modal_getEmergencyWorkerInTouch_movieNameHEAD').innerText =
+            "<?php echo $string_home_modal_get_in_touch_title_1; ?>" + movieName + "<?php echo $string_home_modal_get_in_touch_title_2; ?>";
     });
 
     $('#modal_cancelNormalWorkerGetInTouchWithMovie').on('show.bs.modal', function (e) {
@@ -497,7 +502,8 @@ include ('./logic/alertSwitch.php');
         $(e.currentTarget).find('input[name="UMID"]').val(movieId);
 
         var movieName = $(e.relatedTarget).data('movie-name');
-        document.getElementById('modal_cancelNormalWorkerGetInTouch_movieNameHEAD').innerText = "Willst du dich wirklich für " + movieName + " abmelden?";
+        document.getElementById('modal_cancelNormalWorkerGetInTouch_movieNameHEAD').innerText =
+            "<?php echo $string_home_modal_cancel_get_in_touch_title_1; ?>" + movieName + "<?php echo $string_home_modal_cancel_get_in_touch_title_2; ?>";
     });
 
     $('#modal_cancelEmergencyWorkerGetInTouchWithMovie').on('show.bs.modal', function (e) {
@@ -505,7 +511,8 @@ include ('./logic/alertSwitch.php');
         $(e.currentTarget).find('input[name="UMID"]').val(movieId);
 
         var movieName = $(e.relatedTarget).data('movie-name');
-        document.getElementById('modal_cancelEmergencyWorkerGetInTouch_movieNameHEAD').innerText = "Willst du dich wirklich für " + movieName + " abmelden?";
+        document.getElementById('modal_cancelEmergencyWorkerGetInTouch_movieNameHEAD').innerText =
+            "<?php echo $string_home_modal_cancel_get_in_touch_title_1; ?>" + movieName + "<?php echo $string_home_modal_cancel_get_in_touch_title_2; ?>";
     });
 
     $('#modal_cancelBookedCards').on('show.bs.modal', function (e) {
@@ -513,7 +520,8 @@ include ('./logic/alertSwitch.php');
         $(e.currentTarget).find('input[name="UMID"]').val(movieId);
 
         var movieName = $(e.relatedTarget).data('movie-name');
-        document.getElementById('modal_cancelBooking_movieNameHEAD').innerText = "Willst du die Reservierungen für " + movieName + " stornieren?";
+        document.getElementById('modal_cancelBooking_movieNameHEAD').innerText =
+            "<?php echo $string_home_modal_cancel_booked_cards_title_1; ?>" + movieName + "<?php echo $string_home_modal_cancel_booked_cards_title_2; ?>";
     });
 
     function checkValue() {
