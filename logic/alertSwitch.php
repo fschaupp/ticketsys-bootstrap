@@ -21,7 +21,7 @@ if (isset($_REQUEST['alertReason'])) {
             break;
         case 'bookCards_is_numeric_inputCount':
             $alertType = 'danger';
-            $alertText = '<strong>Buchung abgebrochen!</strong> bookCards - inputCount ist keine Zahl!';
+            $alertText = '<strong>Buchung abgebrochen!</strong> Bitte gib eine Zahl, aus Buchstaben und Umlauten kann man schwer eine Zahl auslesen!';
             break;
         case 'bookCards_between_1_20':
             $alertType = 'danger';
