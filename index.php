@@ -106,7 +106,7 @@ include ('./languages/german.php');
                                             <div class="col-xs-6 col-sm-6 col-md-7 col-lg-7">
                                                 <a href="' . $movieTrailerLink . '" target="_blank" 
                                                     data-toggle="tooltip" data-placement="top" title="'.$string_home_trailer_button_tooltip.'">
-                                                    <button type="button" class="btn btn-primary">
+                                                    <button type="button" class="btn btn-info">
                                                         <span class="glyphicon glyphicon-new-window"></span>
                                                     </button>
                                                 </a>
@@ -132,7 +132,7 @@ include ('./languages/german.php');
                 } else {
                     echo '<a href="#modal_getNormalWorkerInTouch" data-toggle="tooltip" data-placement="bottom" 
                                 title="'.$string_home_cardService_button_tooltip.'">
-                            <button class="btn btn-info" data-toggle="modal" data-target="#modal_getNormalWorkerInTouch"
+                            <button class="btn btn-primary" data-toggle="modal" data-target="#modal_getNormalWorkerInTouch"
                                 data-movie-id="' . $item[0] . '" data-movie-name="' . $item[1] . '">'.$string_home_cardService_button_text.'</button></a>';
                 }
             } else {
@@ -189,7 +189,7 @@ include ('./languages/german.php');
                 } else {
                     echo '<a href="#modal_getEmergencyWorkerInTouch" data-toggle="tooltip" data-placement="bottom" 
                                 title="'.$string_home_emergencyCardService_button_tooltip.'">
-                            <button class="btn btn-info" data-toggle="modal" data-target="#modal_getEmergencyWorkerInTouch"
+                            <button class="btn btn-primary" data-toggle="modal" data-target="#modal_getEmergencyWorkerInTouch"
                                 data-movie-id="' . $item[0] . '" data-movie-name="' . $item[1] . '">'.$string_home_cardService_button_text.'
                             </button>
                           </a>';
@@ -413,8 +413,8 @@ include ('./languages/german.php');
             <form method="POST" action="./logic/worker/cancelNormalWorkerGetInTouchWithMovie.php">
                 <input type="text" name="UMID" hidden value=""/>
                 <div class="modal-footer">
-                    <button type="reset" class="btn btn-success" data-dismiss="modal"><?php echo $string_cancel; ?></button>
-                    <button type="submit" class="btn btn-danger"><?php echo $string_home_modal_cancel_get_in_touch_button_success; ?></button>
+                    <button type="reset" class="btn btn-danger" data-dismiss="modal"><?php echo $string_cancel; ?></button>
+                    <button type="submit" class="btn btn-success"><?php echo $string_home_modal_cancel_get_in_touch_button_success; ?></button>
                 </div>
             </form>
         </div>
@@ -431,8 +431,8 @@ include ('./languages/german.php');
             <form method="POST" action="./logic/worker/cancelEmergencyWorkerGetInTouchWithMovie.php">
                 <input type="text" name="UMID" hidden value=""/>
                 <div class="modal-footer">
-                    <button type="reset" class="btn btn-success" data-dismiss="modal"><?php echo $string_cancel; ?></button>
-                    <button type="submit" class="btn btn-danger"><?php echo $string_home_modal_cancel_get_in_touch_button_success; ?></button>
+                    <button type="reset" class="btn btn-danger" data-dismiss="modal"><?php echo $string_cancel; ?></button>
+                    <button type="submit" class="btn btn-success"><?php echo $string_home_modal_cancel_get_in_touch_button_success; ?></button>
                 </div>
             </form>
         </div>
@@ -455,8 +455,8 @@ include ('./languages/german.php');
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="reset" class="btn btn-success" data-dismiss="modal"><?php echo $string_cancel; ?></button>
-                    <button type="submit" class="btn btn-danger"><?php echo $string_home_modal_cancel_booked_cards_button_success; ?></button>
+                    <button type="reset" class="btn btn-danger" data-dismiss="modal"><?php echo $string_cancel; ?></button>
+                    <button type="submit" class="btn btn-success"><?php echo $string_home_modal_cancel_booked_cards_button_success; ?></button>
                 </div>
             </form>
         </div>

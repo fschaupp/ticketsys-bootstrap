@@ -65,7 +65,7 @@ if (!isset($conn)) {
                       </td>';
                 echo '<td>
                         <a href="#editUserPassword" data-toggle="modal" data-target="#modal_editUserPassword" 
-                                class="btn btn-success btn-md" data-user-id="'.$item[0].'">
+                                class="btn btn-warning btn-md" data-user-id="'.$item[0].'">
                             <span class="glyphicon glyphicon-pencil"></span> 
                             '. $string_userManagement_table_body_actions_change_password .'
                         </a>

@@ -297,27 +297,27 @@ if(isset($_SESSION['email'])) {
 
             <div class="modal-body">
                 <div class="panel panel-primary">
-                    <div class="panel-heading">Wann hole ich meine frisch bestellten Karten?</div>
-                    <div class="panel-body">Sobald du Karten bestellt hast und der große Tag gekommen ist holst
-                        du die Karten einfach zwischen 20:40 - 20:45 ab.
-                    </div>
-                </div>
-
-                <div class="panel panel-primary">
-                    <div class="panel-heading">Und wo hole ich die Karten wenn ich schon pünktlich sein muss?</div>
-                    <div class="panel-body">Ganz einfach, warte vor dem Eisentor der Kanzlerwiese.
+                    <div class="panel-heading">Wo hole ich die Karten ab?</div>
+                    <div class="panel-body">Ganz einfach, warte vor dem Eisentor der Kanzlerwiese bei der Judengasse.
                         Damit du auch ganz sicher hinfindest, hier die Koordinaten:
                         <a target="_blank" href="https://www.google.at/maps/place/48%C2%B038'38.1%22N+15%C2%B048'52.8%22E/@48.643908,15.8124843,17z/data=!3m1!4b1!4m5!3m4!1s0x0:0x0!8m2!3d48.643908!4d15.814673">
                             48.643908, 15.814673
                         </a>
                     </div>
                 </div>
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Und wann hole ich meine  bestellten Karten?</div>
+                    <div class="panel-body">Sobald du Karten bestellt hast und der große Tag gekommen ist, holst
+                        du die Karten einfach zwischen 20:40 - 20:45 ab.
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <a href="http://lmgtfy.com/?q=Lesen+lernen" target="_blank">
-                    <button class="btn btn-warning">Ich kann nicht lesen</button>
+                    <button class="btn btn-danger">Ich kann nicht lesen</button>
                 </a>
-                <button class="btn btn-primary" data-dismiss="modal">Verstanden oder zumindest durchgelesen</button>
+                <button class="btn btn-success" data-dismiss="modal">Verstanden oder zumindest durchgelesen</button>
             </div>
         </div>
     </div>

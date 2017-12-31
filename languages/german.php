@@ -83,6 +83,7 @@ $string_movieManagement_table_body_actions_edit = 'Bearbeiten';
 $string_movieManagement_table_body_actions_delete = 'Löschen';
 
 $string_movieManagement_modal_movie_name = 'Filmname:';
+$string_movieManagement_modal_movie_name_placeholder = 'Filmname';
 $string_movieManagement_modal_date = 'Datum: ';
 $string_movieManagement_modal_trailer = 'Trailer: ';
 

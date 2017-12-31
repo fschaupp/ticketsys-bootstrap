@@ -93,13 +93,13 @@ include ('./languages/german.php');
                 echo '<td>' . $del . $item[5] . $delend . '</td>';
                 echo '<td>' . $del . $formattedDate . $delend . '</td>';
                 echo '<td><a href="'. $item[3] . '" target="_blank" style="margin-right: 5px;">
-                            <button type="button" class="btn btn-primary">'. $string_movieManagement_table_body_trailer .'</button>
+                            <button type="button" class="btn btn-info">'. $string_movieManagement_table_body_trailer .'</button>
                           </a>' . $del . $item[3] . $delend . '
                       </td>';
                 echo '<td>' . $del . $workerName . $delend . '</td>';
                 echo '<td>' . $del . $emergencyWorkerName . $delend . '</td>';
                 echo '<td>
-                        <a href="#editMovie" data-toggle="modal" data-target="#modal_editMovie" class="btn btn-success btn-md" 
+                        <a href="#editMovie" data-toggle="modal" data-target="#modal_editMovie" class="btn btn-warning btn-md" 
                                 data-movie-id="'.$item[0].'" data-movie-name="'.$item[1].'" data-movie-trailer="'.$item[3].'">
                             <span class="glyphicon glyphicon-pencil"></span> '. $string_movieManagement_table_body_actions_edit .'
                         </a>
@@ -132,7 +132,7 @@ include ('./languages/german.php');
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-film"></i></span>
                             <input required type="text" class="form-control" id="inputcMoviename" name="inputcMoviename"
-                                   placeholder="<?php echo $string_movieManagement_modal_movie_name; ?>" autofocus>
+                                   placeholder="<?php echo $string_movieManagement_modal_movie_name_placeholder; ?>" autofocus>
                         </div>
                     </div>
                     <div class="form-group">
