@@ -1,6 +1,6 @@
 
 \.idea/
 
-adminer\.php
+adminer.php
 
-logic/connectToDatabase\.php
+logic/connectToDatabase.php
