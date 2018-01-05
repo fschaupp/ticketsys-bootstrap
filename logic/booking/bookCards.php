@@ -14,16 +14,21 @@ $inputCount = $_REQUEST['inputCount'];
 if(!isset($UMID) OR empty($UMID)) {
     header('Location: /index.php?alertReason=bookCards_isset_UMID');
     die();
+} else {
+    if(!is_numeric($UMID)) {
+        header('Location: /index.php?alertReason=bookCards_isset_UMID');
+        die();
+    }
 }
 
 if(!isset($inputCount) OR empty($inputCount)) {
     header('Location: /index.php?alertReason=bookCards_isset_inputCount');
     die();
-}
-
-if(!is_numeric ($inputCount)) {
-    header('Location: /index.php?alertReason=bookCards_is_numeric_inputCount');
-    die();
+} else {
+    if(!is_numeric($inputCount)) {
+        header('Location: /index.php?alertReason=bookCards_is_numeric_inputCount');
+        die();
+    }
 }
 
 $filter_options = array(
@@ -41,15 +46,19 @@ if(!isset($conn)) {
     include '../connectToDatabase.php';
 }
 
-foreach ($conn->query('SELECT bookedCards, name FROM movies WHERE UMID='.$UMID.';') as $item) {
-    $alreadyBookedCards = $item[0];
-    $movieName = $item[1];
+$stmt = $conn->prepare('SELECT bookedCards, name FROM movies WHERE UMID = :UMID;');
+$stmt->bindParam(':UMID', $UMID);
+$stmt->execute();
+
+while($row = $stmt->fetch()) {
+    $alreadyBookedCards = $row[0];
+    $movieName = $row[1];
     break;
 }
 
 if(isset($alreadyBookedCards)) {
     if (($alreadyBookedCards + $inputCount) > 20) {
-        header('Location: t/index.php?alertReason=bookCards_booked_more_Cards_than_available');
+        header('Location: /index.php?alertReason=bookCards_booked_more_Cards_than_available');
         die();
     }
 } else {
@@ -58,27 +67,38 @@ if(isset($alreadyBookedCards)) {
 
 $newBookedCards = $alreadyBookedCards + $inputCount;
 
-$sql = 'UPDATE movies SET bookedCards='.$newBookedCards.' WHERE UMID='.$UMID.';';
-$conn->exec($sql);
+$stmt = $conn->prepare('UPDATE movies SET bookedCards = :bookedCards WHERE UMID = :UMID;');
+$stmt->bindParam(':bookedCards', $newBookedCards);
+$stmt->bindParam(':UMID', $UMID);
+$stmt->execute();
 
 //Checking if user already booked cards, if yes the old will be added to the new and deleted
 $oldCount = 0;
-foreach ($conn->query('SELECT UBID, count FROM bookings WHERE UMID='.$UMID.' AND UUID='.$_SESSION['UUID'].';') as $item) {
-    $UBID = $item[0];
-    $oldCount = $item[1];
+
+$stmt = $conn->prepare('SELECT UBID, count FROM bookings WHERE UMID = :UMID AND UUID = :UUID;');
+$stmt->bindParam(':UMID', $UMID);
+$stmt->bindParam(':UUID', $_SESSION['UUID']);
+$stmt->execute();
+
+while($row = $stmt->fetch()) {
+    $UBID = $row[0];
+    $oldCount = $row[1];
     break;
 }
 
 if(isset($UBID) AND $UBID != null) {
     $inputCount += $oldCount;
-    $sql = 'DELETE FROM bookings WHERE UBID='.$UBID.';';
-    $conn->exec($sql);
+
+    $stmt = $conn->prepare('DELETE FROM bookings WHERE UBID = :UBID;');
+    $stmt->bindParam(':UBID', $UBID);
+    $stmt->execute();
 }
 
-$sql = 'INSERT INTO bookings (UMID, UUID, count) VALUE ('.$UMID.', '.$_SESSION['UUID'].', '.$inputCount.');';
-$conn->exec($sql);
+$stmt = $conn->prepare('INSERT INTO bookings (UMID, UUID, count) VALUE (:UMID, :UUID, :count);');
+$stmt->bindParam(':UMID', $UMID);
+$stmt->bindParam(':UUID', $_SESSION['UUID']);
+$stmt->bindParam(':count', $inputCount);
+$stmt->execute();
 
 header('Location: /index.php?alertReason=bookCards_successful&bookedCards='.$inputCount.'&movieName='.$movieName);
 die();
-
-

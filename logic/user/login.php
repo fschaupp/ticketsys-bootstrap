@@ -36,17 +36,19 @@ if(!isset($conn)) {
 
 $login_was_successful = false;
 
-foreach ($conn->query('SELECT UUID, email, password, rank, firstname FROM users;') as $item) {
-    if($item[1] == $email && $item[2] == $hashed_password) {
-        //Session registrieren
-        $_SESSION['UUID'] = $item[0];
-        $_SESSION['email'] = $item[1];
-        $_SESSION['rank'] = $item[3];
-        $_SESSION['firstname'] = $item[4];
+$stmt = $conn->prepare('SELECT UUID, email, firstname, password, rank FROM users WHERE email = :email AND password = :password;');
+$stmt->bindParam(':email', $email);
+$stmt->bindParam(':password', $hashed_password);
+$stmt->execute();
 
-        $login_was_successful = true;
-        break;
-    }
+while($row = $stmt->fetch()) {
+    $_SESSION['UUID'] = $row[0];
+    $_SESSION['email'] = $row[1];
+    $_SESSION['firstname'] = $row[2];
+    $_SESSION['rank'] = $row[4];
+
+    $login_was_successful = true;
+    break;
 }
 
 if(!$login_was_successful) {

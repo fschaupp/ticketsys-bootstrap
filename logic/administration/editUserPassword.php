@@ -16,7 +16,13 @@ $inputPassword_again = $_REQUEST['inputePassword_again'];
 if(!isset($UUID) OR empty($UUID)) {
     header('Location: /userManagement.php?alertReason=editUserPassword_isset_UUID');
     die();
+} else {
+    if(!is_numeric($UUID)) {
+        header('Location: /index.php?alertReason=editUserPassword_isset_UUID');
+        die();
+    }
 }
+
 if(!isset($inputPassword) OR empty($inputPassword)) {
     header('Location: /userManagement.php?alertReason=editUserPassword_isset_password');
     die();
@@ -42,16 +48,19 @@ if(!isset($conn)) {
     include "../connectToDatabase.php";
 }
 
-foreach ($conn->query('SELECT firstname, lastname FROM users WHERE UUID=' . $UUID . ';') as $item) {
-    $userName = $item[0] . ' ' . $item[1];
+$stmt = $conn->prepare('SELECT firstname, lastname FROM users WHERE UUID = :UUID;');
+$stmt->bindParam(':UUID', $UUID);
+$stmt->execute();
+
+while($row = $stmt->fetch()) {
+    $userName = $row[0] . ' ' . $row[1];
+    break;
 }
 
-$sql = 'UPDATE users SET password="'.$hashed_password.'" WHERE UUID='.$UUID.';';
-
-$conn->exec($sql);
+$stmt = $conn->prepare('UPDATE users SET password = :password WHERE UUID = :UUID;');
+$stmt->bindParam(':UUID', $UUID);
+$stmt->bindParam(':password', $hashed_password);
+$stmt->execute();
 
 header('Location: /userManagement.php?alertReason=editUserPassword_successful&userName='.$userName);
 die();
-
-
-

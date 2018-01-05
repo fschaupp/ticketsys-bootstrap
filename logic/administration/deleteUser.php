@@ -14,19 +14,30 @@ $UUID = $_REQUEST['UUID'];
 if(!isset($UUID) OR empty($UUID)) {
     header('Location: /userManagement.php?alertReason=deleteUser_isset_UUID');
     die();
+} else {
+    if(!is_numeric($UUID)) {
+        header('Location: /index.php?alertReason=deleteUser_isset_UUID');
+        die();
+    }
 }
 
 if(!isset($conn)) {
     include "../connectToDatabase.php";
 }
 
-foreach ($conn->query('SELECT firstname, lastname FROM users WHERE UUID=' . $UUID . ';') as $item) {
-    $userName = $item[0] . ' ' . $item[1];
+
+$stmt = $conn->prepare('SELECT firstname, lastname FROM users WHERE UUID = :UUID;');
+$stmt->bindParam(':UUID', $_SESSION['UUID']);
+$stmt->execute();
+
+while($row = $stmt->fetch()) {
+    $userName = $row[0] . ' ' . $row[1];
+    break;
 }
 
-$conn->query('DELETE FROM users WHERE UUID='.$UUID);
+$stmt = $conn->prepare('DELETE FROM users WHERE UUID = :UUID;');
+$stmt->bindParam(':UUID', $_SESSION['UUID']);
+$stmt->execute();
 
 header('Location: /userManagement.php?alertReason=deleteUser_successful&userName='.$userName);
 die();
-
-

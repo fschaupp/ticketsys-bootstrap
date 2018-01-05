@@ -251,11 +251,7 @@ if (isset($_REQUEST['alertReason'])) {
             break;
         case 'register_password_over_512_characters':
             $alertType = 'danger';
-            $alertText = '<strong>Registrierung fehlgeschlagen!</strong> Das Passwort darf nicht länger als 128 Zeichen sein!';
-            break;
-        case 'register_isset_password_again':
-            $alertType = 'danger';
-            $alertText = '<strong>Registrierung fehlgeschlagen!</strong> register - password_again wurde nicht gesetzt!';
+            $alertText = '<strong>Registrierung fehlgeschlagen!</strong> Das Passwort darf nicht länger als 512 Zeichen sein!';
             break;
         case 'register_passwords_are_not_equal':
             $alertType = 'danger';

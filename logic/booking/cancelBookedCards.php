@@ -13,35 +13,52 @@ $UMID = $_REQUEST['UMID'];
 if(!isset($UMID) OR empty($UMID)) {
     header('Location: /index.php?alertReason=cancelBookedCards_isset_UMID');
     die();
+} else {
+    if(!is_numeric($UMID)) {
+        header('Location: /index.php?alertReason=cancelBookedCards_isset_UMID');
+        die();
+    }
 }
 
 if(!isset($conn)) {
     include '../connectToDatabase.php';
 }
 
-foreach ($conn->query('SELECT UBID FROM bookings WHERE UMID='. $UMID . ' AND UUID='. $_SESSION['UUID'] .';') as $item) {
-    $UBID = $item[0];
+$stmt = $conn->prepare('SELECT UBID, count FROM bookings WHERE UMID = :UMID AND UUID = :UUID;');
+$stmt->bindParam(':UMID', $UMID);
+$stmt->bindParam(':UUID', $_SESSION['UUID']);
+$stmt->execute();
+
+while($row = $stmt->fetch()) {
+    $UBID = $row[0];
+    $count = $row[1];
+    break;
 }
 
-if(isset($UBID)) {
+if(isset($UBID) AND isset($count)) {
     if($UBID != null) {
-        foreach ($conn->query('SELECT count FROM bookings WHERE UBID=' . $UBID . ';') as $item) {
-            $count = $item[0];
+        $stmt = $conn->prepare('DELETE FROM bookings WHERE UBID = :UBID;');
+        $stmt->bindParam(':UBID', $UBID);
+        $stmt->execute();
+
+        $stmt = $conn->prepare('SELECT bookedCards, name FROM movies WHERE UMID = :UMID;');
+        $stmt->bindParam(':UMID', $UMID);
+        $stmt->execute();
+
+
+        while($row = $stmt->fetch()) {
+            $bookedCards = $row[0];
+            $movieName = $row[1];
+            break;
         }
 
-        $sql = 'DELETE FROM bookings WHERE UBID=' . $UBID . ' AND UUID=' . $_SESSION['UUID'] . ';';
-        $conn->exec($sql);
-
-        foreach ($conn->query('SELECT bookedCards, name FROM movies WHERE UMID=' . $UMID . ';') as $item) {
-            $bookedCards = $item[0];
-            $movieName = $item[1];
-        }
-
-        if(isset($bookedCards) AND isset($count)) {
+        if(isset($bookedCards) AND isset($movieName)) {
             $newBookedCards = $bookedCards - $count;
 
-            $sql = 'UPDATE movies SET bookedCards=' . $newBookedCards . ' WHERE UMID='.$UMID.';';
-            $conn->exec($sql);
+            $stmt = $conn->prepare('UPDATE movies SET bookedCards = :bookedCards WHERE UMID = :UMID;');
+            $stmt->bindParam(':bookedCards', $newBookedCards);
+            $stmt->bindParam(':UMID', $UMID);
+            $stmt->execute();
 
             header('Location: /index.php?alertReason=cancelBookedCards_successful&movieName='.$movieName);
         }

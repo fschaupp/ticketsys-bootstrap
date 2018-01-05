@@ -30,18 +30,11 @@ if(!isset($conn)) {
     include "../connectToDatabase.php";
 }
 
-str_replace("ß", "&szlig;", $inputMoviename);
-str_replace("ä", "&auml;", $inputMoviename);
-str_replace("Ä", "&Auml;", $inputMoviename);
-str_replace("ü", "&uuml;", $inputMoviename);
-str_replace("Ü", "&Uuml;", $inputMoviename);
-str_replace("ö", "&ouml;", $inputMoviename);
-str_replace("Ö", "&Ouml;", $inputMoviename);
-
-$conn->query('
-  INSERT INTO movies(name, date, trailerLink, bookedCards)
-    VALUES ("' . $inputMoviename . '" , "' . $inputDate . '" , "' . $inputTrailer . '", 0)
-');
+$stmt = $conn->prepare('INSERT INTO movies(name, date, trailerLink, bookedCards) VALUE (:name, :date, :trailer, 0);');
+$stmt->bindParam(':name', $inputMoviename);
+$stmt->bindParam(':date', $inputDate);
+$stmt->bindParam(':trailer', $inputTrailer);
+$stmt->execute();
 
 header('Location: /movieManagement.php?alertReason=createMovie_successful&movieName='.$inputMoviename);
 die();

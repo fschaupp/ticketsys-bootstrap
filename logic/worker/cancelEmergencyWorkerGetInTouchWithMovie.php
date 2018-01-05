@@ -13,19 +13,30 @@ $UMID = $_REQUEST['UMID'];
 if(!isset($UMID) OR empty($UMID)) {
     header('Location: /index.php?alertReason=cancelWorkerGetInTouchWithMovie_isset_UMID');
     die();
+} else {
+    if(!is_numeric($UMID)) {
+        header('Location: /index.php?alertReason=cancelWorkerGetInTouchWithMovie_isset_UMID');
+        die();
+    }
 }
 
 if(!isset($conn)) {
     include '../connectToDatabase.php';
 }
 
-foreach ($conn->query('SELECT name FROM movies WHERE UMID=' . $UMID . ';') as $item) {
-    $movieName = $item[0];
+$stmt = $conn->prepare('SELECT name FROM movies WHERE UMID = :UMID;');
+$stmt->bindParam(':UMID', $UMID);
+$stmt->execute();
+
+while($row = $stmt->fetch()) {
+    $movieName = $row[0];
+    break;
 }
 
-$sql='UPDATE movies SET emergencyWorkerUUID=NULL WHERE UMID='.$UMID.' AND emergencyWorkerUUID='. $_SESSION['UUID'].';';
-$conn->exec($sql);
+$stmt = $conn->prepare('UPDATE movies SET emergencyWorkerUUID = NULL WHERE UMID = :UMID AND emergencyWorkerUUID = :UUID;');
+$stmt->bindParam(':UMID', $UMID);
+$stmt->bindParam(':UUID', $_SESSION['UUID']);
+$stmt->execute();
 
 header('Location: /index.php?alertReason=cancelWorkerGetInTouchWithMovie_successful&movieName='.$movieName);
 die();
-

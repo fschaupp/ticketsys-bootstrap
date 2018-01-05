@@ -58,12 +58,9 @@ if(strlen($inputPassword) > 512) {
 }
 
 if(!isset($inputPassword_again) OR empty($inputPassword_again)) {
-    header('Location: /index.php?alertReason=register_isset_password_again');
+    header('Location: /index.php?alertReason=register_isset_password');
     die();
 }
-
-$inputFirstname = preg_replace("/[^a-zA-Z0-9]/", "", $inputFirstname);
-$inputSurname = preg_replace("/[^a-zA-Z0-9]/", "", $inputSurname);
 
 if($inputPassword != $inputPassword_again) {
     header('Location: /index.php?alertReason=register_passwords_are_not_equal');
@@ -76,18 +73,22 @@ if(!isset($conn)) {
     include "../connectToDatabase.php";
 }
 
-foreach ($conn->query('SELECT email FROM users WHERE email="'.$inputEmail.'";') as $item) {
-    if($item[0] == $inputEmail) {
-        header('Location: /index.php?alertReason=register_account_already_exist');
-        die();
-    }
-    break;
+$stmt = $conn->prepare('SELECT email FROM users WHERE email = :email;');
+$stmt->bindParam(':email', $inputEmail);
+$stmt->execute();
+$isAlreadyUsed = $stmt->rowCount();
+
+if($isAlreadyUsed > 0) {
+    header('Location: /index.php?alertReason=register_account_already_exist');
+    die();
 }
 
-$conn->query('
-  INSERT INTO users(firstname, surname, password, email, rank)
-    VALUES ("' . $inputFirstname . '" , "' . $inputSurname . '" , "' . $hashed_password . '", "' . $inputEmail . '", "user")
-');
+$stmt = $conn->prepare('INSERT INTO users(firstname, surname, password, email, rank) VALUE (:firstname, :surname, :password, :email, "rank");');
+$stmt->bindParam(':firstname', $inputFirstname);
+$stmt->bindParam(':surname', $inputSurname);
+$stmt->bindParam(':password', $hashed_password);
+$stmt->bindParam(':email', $inputEmail);
+$stmt->execute();
 
 header('Location: /index.php?alertReason=register_successful');
 die();
