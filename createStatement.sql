@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS bookings(
   UUID INT    NOT NULL,
   UMID INT    NOT NULL,
 
-  count TINYINT NOT NULL check(number >= 0 and number <= 20),
+  count TINYINT NOT NULL,
 
   PRIMARY KEY(UBID),
   FOREIGN KEY (UUID) REFERENCES users(UUID) ON DELETE CASCADE,
@@ -50,7 +50,7 @@ INSERT INTO movies(name, date, trailerLink) VALUE ("Matrix Reloaded", "2018-02-2
 INSERT INTO movies(name, date, trailerLink) VALUE ("Kevin allein zuhause", "2018-03-01 00:00:00", "https://google.com");
 INSERT INTO movies(name, date, trailerLink) VALUE ("Kevin allein zuhause 2", "2018-03-02 00:00:00", "https://google.com");
 INSERT INTO movies(name, date, trailerLink) VALUE ("Kevin allein zuhause 3", "2018-03-03 00:00:00", "https://google.com");
-INSERT INTO movies(name, date, trailerLink) VALUE ("Zur&uuml;ck in die Zukunft 1", "2018-03-04 00:00:00", "https://google.com");
+INSERT INTO movies(name, date, trailerLink) VALUE ("Zurück in die Zukunft 1", "2018-03-04 00:00:00", "https://google.com");
 
-INSERT INTO movies(name, date, trailerLink) VALUE ("Zur&uuml;ck in die Zukunft 2", "2018-03-08 00:00:00", "https://google.com");
-INSERT INTO movies(name, date, trailerLink) VALUE ("Zur&uuml;ck in die Zukunft 3", "2018-03-09 00:00:00", "https://google.com");
+INSERT INTO movies(name, date, trailerLink) VALUE ("Zurück in die Zukunft 2", "2018-03-08 00:00:00", "https://google.com");
+INSERT INTO movies(name, date, trailerLink) VALUE ("Zurück in die Zukunft 3", "2018-03-09 00:00:00", "https://google.com");
