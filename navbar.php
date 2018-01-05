@@ -169,17 +169,17 @@ if(isset($_SESSION['email'])) {
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="inputPassword">Neues Passwort:</label>
+                                    <label for="inputPassword_new_password">Neues Passwort:</label>
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                                        <input type="password" class="form-control" id="inputPassword" name="inputPassword" placeholder="Neues Passwort eingeben">
+                                        <input type="password" class="form-control" id="inputPassword_new_password" name="inputPassword_new_password" placeholder="Neues Passwort eingeben">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="inputPassword_again">Neues Passwort wiederholen:</label>
+                                    <label for="inputPassword_new_password_again">Neues Passwort wiederholen:</label>
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                                        <input type="password" class="form-control" id="inputPassword_again" name="inputPassword_again" placeholder="Neues Passwort wiederholen">
+                                        <input type="password" class="form-control" id="inputPassword_new_password_again" name="inputPassword_new_password_again" placeholder="Neues Passwort wiederholen">
                                     </div>
                                 </div>
                             </div>
