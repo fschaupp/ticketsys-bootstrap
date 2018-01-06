@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: dafnik
- * Date: 27.12.17
- * Time: 17:20
- */
 
 $string_title_first = 'Tickets - ';
 $string_title_home = 'Home';
